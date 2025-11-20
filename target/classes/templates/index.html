@@ -14,26 +14,30 @@
     <title>KPPRO-Ai2k-LK</title>
 </head>
 <body>
-<section>
+<div class="row">
+    <section>
 
-    <article>
-        <h1 th:text="${'Hello ' + name}"></h1>
-<div class="card">
-    <ul>
+        <article>
+            <h1 th:text="${'Hello ' + name}"></h1>
+            <div class="card" th:each="item : ${list}">
+                <h3 th:text="${item.title}"></h3>
+                <p th:text="${item.description}"></p>
+            </div>
 
-        <li th:each="i : ${items}">
-            <strong th:text="${i.title}"></strong> -
-            <span th:text="${i.description}"></span>
-            (<span th:text="${i.done}"></span>)
-        </li>
-            <!-- <a th:text="${i.title}" th:href="@{'/detail/' + ${i.index}}"></a> -->
 
-    </ul>
+        </article>
+    </section>
+    <aside>
+        <ul>
+            <li th:each="item : ${list}">
+                <a th:text="${item.title}" th:href="@{/detail/{id}(id=${item.id})}"></a>
+            </li>
 
+        </ul>
+    </aside>
 </div>
 <h1>Hello /*/</h1>
 <p>What's going on??</p>
-    </article>
-</section>
+
 </body>
 </html>

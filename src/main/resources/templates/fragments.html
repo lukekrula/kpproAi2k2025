@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Define a fragment that accepts one parameter: item -->
+<div th:fragment="itemCard(item)">
+    <div class="card">
+        <h3 th:text="${item.title}">Title</h3>
+        <p th:text="${item.description}">Description</p>
+        <a th:href="@{/detail/{id}(id=${item.id})}">Detail</a>
+    </div>
+</div>
+</body>
+</html>
