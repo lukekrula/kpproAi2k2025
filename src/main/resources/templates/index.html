@@ -39,8 +39,9 @@
 <h1 th:text="${'Hello ' + name}"></h1>
 <div class="card">
     <ul>
-        <a th:text="${item}" th:href="@{'/detail/' + ${iter.index}}"><li th:each="item : ${list}" th:text="${item}"></li></a>
-
+        <li th:each="item, iter: ${list}">
+            <a th:text="${item}" th:href="@{'/detail/' + ${iter.index}}"></a>
+        </li>
     </ul>
 
 </div>

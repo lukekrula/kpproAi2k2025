@@ -5,14 +5,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public interface ItemService {
-    Item getItem(long Id);
-    void saveItem(Item item);
-    void deleteItem(long Id);
-    void updateItem(Item item);
+    Item get(long id);
+    void save(Item item);
+    void delete(long id);
+    void update(Item item);
     List<Item> getAll();
-
-
 }
