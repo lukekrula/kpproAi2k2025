@@ -14,37 +14,33 @@ import java.util.ArrayList;
 @Controller
 public class MainController {
 
-
-
     private ItemService itemService;
+
     @Autowired
     public MainController(ItemService itemService) {
         this.itemService = itemService;
     }
 
-
     @GetMapping("/")
     public String index(Model model) {
-        String name = "Moje jmeno";
+        model.addAttribute("list", itemService.getAll());
         return "index";
+    }
+
+    @GetMapping("/detail/{id}")
+    public String detail(Model model, @PathVariable int id) {
+        Item item = itemService.get(id);
+        if(item != null) {
+            model.addAttribute("item", item);
+            return "detail";
+        }else{
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/test")
     @ResponseBody
-    public String test(){
-        return "response body test - ne4um";
-    }
-
-    @GetMapping("/detail/{index}")
-    public String detail(Model model, @PathVariable int id){
-        Item item = itemService.getItem(id);
-        if(item!=null){
-            model.addAttribute("item",item);
-            return "detail";
-        }
-        else {
-            return "redirect";
-        }
-
+    public String test() {
+        return "nečum";
     }
 }

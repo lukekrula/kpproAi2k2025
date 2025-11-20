@@ -1,10 +1,16 @@
 package cz.uhk.kppro.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "items")
 public class Item {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
     private String description;
-    private Boolean done = false;
+    private boolean done = false;
 
     public long getId() {
         return id;
@@ -30,11 +36,11 @@ public class Item {
         this.description = description;
     }
 
-    public Boolean getDone() {
+    public boolean isDone() {
         return done;
     }
 
-    public void setDone(Boolean done) {
+    public void setDone(boolean done) {
         this.done = done;
     }
 }
