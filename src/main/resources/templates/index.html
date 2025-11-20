@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1{
+            background-color: midnightblue;
+            color: white;
+            max-width: 50%;
+            border-radius: 50px;
+            padding: 35px;
+        }
+
+        p{
+            background-color: darkolivegreen;
+            font-size: 38px;
+            font-weight: bolder;
+            color: black;
+            max-width: 50%;
+            border-radius: 50px;
+            padding: 35px;
+        }
+        .card{
+            max-width: 50%;
+            background-color: darkolivegreen;
+            font-size: 28px;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="${'Hello ' + name}"></h1>
+<div class="card">
+    <ul>
+        <a th:text="${item}" th:href="@{'/detail/' + ${iter.index}}"><li th:each="item : ${list}" th:text="${item}"></li></a>
+
+    </ul>
+
+</div>
+<h1>Hello /*/</h1>
+<p>What's going on??</p>
+</body>
+</html>
