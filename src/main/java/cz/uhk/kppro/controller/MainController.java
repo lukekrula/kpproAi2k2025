@@ -41,6 +41,6 @@ public class MainController {
     @GetMapping("/test")
     @ResponseBody
     public String test() {
-        return "index";
+        return "/test";
     }
 }
