@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name='description' content=''>
+    <meta name='keywords' content='spolek'>
+    <meta name='author' content='Ludek Krula'>
+    <meta name='robots' content='all'>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv='X-UA-Compatible' content='IE=edge'> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>KPPRO-Ai2k-LK</title>
+</head>
+<body>
+<div class="row">
+    <section>
+        <div class="card">
+            <form th:action="@{/login}" method="post">
+                <input type="text" name="username"/>
+                <input type="password" name="password"/>
+                <button type="submit">Login</button>
+            </form>
+
+        </div>
+
+    </section>
+
+</div>
+<h1>Hello /*/</h1>
+<p>What's going on??</p>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logged user</title>
+    <link rel="stylesheet" th:href="@{/css/login-style.css}"/>
+</head>
+<body>
+<main class="card" role="main" aria-labelledby="signin-title">
+
+    <div class="brand">
+        <div class="logo" aria-hidden>
+            D
+        </div>
+        <div>
+            <h1 id="signin-title">List of Items</h1>
+            <p class="lead">Continue to the list</p>
+        </div>
+    </div>
+
+    <a th:href="@{/items/}" class="btn">Go to item list</a>
+
+</main>
+</body>
+
+</html>

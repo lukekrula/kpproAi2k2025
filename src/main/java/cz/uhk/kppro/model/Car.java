@@ -1,6 +1,9 @@
 package cz.uhk.kppro.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +14,14 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @NotEmpty(message = "udfhudsh")
+    @Size(min = 3, max = 50)
     private String title;
+
+    @NotBlank
     private String licencePlate;
+
     private boolean done = false;
 
     @OneToMany(mappedBy = "car")

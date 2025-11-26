@@ -1,0 +1,83 @@
+package cz.uhk.kppro.security;
+
+import cz.uhk.kppro.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public SecurityConfig(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        // restricted access to folders according to role
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/super/**").hasRole("SUPER_USER")
+                        .requestMatchers("/user/**").hasRole("USER")
+                        // folders static and images are public
+                        .requestMatchers("/css/**", "/images/**").permitAll()
+                        // login required for all other requests
+                        .anyRequest().authenticated()
+                )
+
+                .formLogin((form) -> form
+                        .loginPage("/login") // Custom login page
+                        .loginProcessingUrl("/login") // Form submission URL
+                        .successHandler((request, response, authentication) -> {
+                            var authorities = authentication.getAuthorities();
+                            if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                                response.sendRedirect("/admin/administration");
+                            } else if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
+                                response.sendRedirect("/logged");
+                            } else {
+                                response.sendRedirect("/");
+                            }
+                        })
+                        .failureUrl("/login?error")       // failure redirect
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .permitAll()
+                )
+                .exceptionHandling((exceptions) -> exceptions
+                        .accessDeniedHandler(accessDeniedHandler()));
+
+        return http.build();
+    }
+
+
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            response.sendRedirect("/403");
+        };
+    }
+}

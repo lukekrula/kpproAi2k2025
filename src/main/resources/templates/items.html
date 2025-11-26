@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name='description' content=''>
+    <meta name='keywords' content='spolek'>
+    <meta name='author' content='Ludek Krula'>
+    <meta name='robots' content='all'>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv='X-UA-Compatible' content='IE=edge'> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>KPPRO-Ai2k-LK</title>
+</head>
+<body>
+<div class="page">
+    <header>
+        <h1>Items overview</h1>
+        <p class="subtitle">List of all items</p>
+    </header>
+
+
+    <main>
+        <div class="table-wrap">
+            <table class="nice-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item, iterStat : ${list}">
+                    <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${item.title}">Title</td>
+                    <td th:text="${item.description}">Description</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+
+    <footer>
+        <small>Luděk Krůla - Ai2k</small>
+    </footer>
+</div>
+</body>
+</html>
