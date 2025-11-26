@@ -2,9 +2,11 @@ package cz.uhk.kppro.controller;
 
 import cz.uhk.kppro.model.Car;
 import cz.uhk.kppro.service.CarService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -37,7 +39,11 @@ public class CarController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Car item) {
+    public String save(@Valid Car item, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("item", item);
+            return "cars_edit";
+        }
         carService.save(item);
         return "redirect:/cars/";
     }
