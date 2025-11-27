@@ -1,9 +1,8 @@
 package cz.uhk.kppro.repository;
-
 import cz.uhk.kppro.model.Community;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.Optional;
 
-@Repository
-public interface CommunityRepository extends JpaRepository<Community, Long> {
+public interface CommunityRepository extends MongoRepository<Community, String> {
+    Optional<Community> findByIdNumber(String idNumber);
 }
