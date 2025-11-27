@@ -55,7 +55,7 @@ public class ItemController {
         Item item = itemService.get(id);
         if(item != null) {
             model.addAttribute("item", item);
-            return "items_detail";
+            return "detail";
         }else{
             return "redirect:/items/";
         }
