@@ -82,10 +82,10 @@ body {
 .editor input,
 .editor textarea{
     color: white;
-    border-radius: 15px;
+    border-radius: 10px;
     min-height: 30px;
     background-color: var(--scent);
-    box-shadow: 0 1px 13px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 1px 7px var(--scent);
     min-width: 300px;
     border: none;
     padding-left: 15px;
