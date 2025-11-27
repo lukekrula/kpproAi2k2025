@@ -1,17 +1,37 @@
 :root {
     /* Hlavní zelená paleta – svěží, ale elegantní */
-    --bg: #0a1808;                  /* téměř černozelená pozadí stránky */
-    --primary: #224422;             /* tmavší zelená pro pozadí karty/tabulky */
-    --primary-light: #2e7d32;        /* střední zelená (původní darker) */
-    --accent: #68b159;              /* svěžší zelená pro zvýraznění a hover */
-    --accent-hover: #7cc96e;        /* ještě světlejší při hoveru */
-    --light-bg: #d5ffd5;            /* velmi světlá zelenkavá pro řádky */
-    --text: #e8fde7;                /* téměř bílý text na tmavém */
-    --text-muted: #a0d6a0;          /* jemnější zelený text */
-    --border: #3a9a44;              /* výraznější zelená pro okraje */
+    --bg: #0a1808; /* téměř černozelená pozadí stránky */
+    --primary: #224422; /* tmavší zelená pro pozadí karty/tabulky */
+    --primary-light: #2e7d32; /* střední zelená (původní darker) */
+    --accent: #68b159; /* svěžší zelená pro zvýraznění a hover */
+    --accent-hover: #7cc96e; /* ještě světlejší při hoveru */
+    --light-bg: #d5ffd5; /* velmi světlá zelenkavá pro řádky */
+    --text: #e8fde7; /* téměř bílý text na tmavém */
+    --text-muted: #a0d6a0; /* jemnější zelený text */
+    --border: #3a9a44; /* výraznější zelená pro okraje */
     --shadow: rgba(0, 0, 0, 0.4);
     --gradient-start: #0f2a10;
     --gradient-end: #1a471e;
+
+    --primary-background: #a8d5a1;
+    /* Main background color */
+    --darker-background: #2e7d32;
+    /* header - footer background*/
+    --mid-background: #68b159;
+    /* #ad82c2; */
+    /* nav bar background*/
+    --shadow: #587752;
+    /* header - footer background*/
+    --text-shadow: #0c4700;
+    --text-light: #d5ffd5;
+    /* header - footer background*/
+    --img-border: white;
+    --shadow-hover: rgba(0, 0, 0, 0.2);
+    --text-dark: #333333;
+    --card: #0c4700;
+    --muted: #687366;
+    --decent: #2e7d32;
+    --scent: #a8d5a1;
 }
 
 body {
@@ -29,9 +49,22 @@ body {
     min-height: 100vh;
 }
 
+#searchbox {
+    color: white;
+    border-radius: 15px;
+    min-height: 30px;
+    background-color: var(--scent);
+    box-shadow: 0 1px 13px rgba(255, 255, 255, 0.4);
+    min-width: 300px;
+    border: none;
+    padding-left: 15px;
+    font-weight: 600;
+
+}
+
 .table-wrap {
     margin-top: 24px;
-    background: var(--primary);                    /* tmavší zelená pozadí */
+    background: var(--primary); /* tmavší zelená pozadí */
     border-radius: 16px;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
     overflow: hidden;
@@ -46,7 +79,7 @@ body {
 }
 
 .nice-table thead th {
-    background: var(--primary-light);              /* střední zelená hlavička */
+    background: var(--primary-light); /* střední zelená hlavička */
     color: white;
     text-align: left;
     padding: 16px 18px;
@@ -57,13 +90,13 @@ body {
     position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .nice-table tbody td {
     padding: 16px 18px;
     vertical-align: middle;
-    background: var(--light-bg);                    /* světloučký zelenkavý řádek */
+    background: var(--light-bg); /* světloučký zelenkavý řádek */
     color: #1a3a1a;
     transition: all 0.25s ease;
 }
@@ -82,7 +115,11 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(104, 177, 89, 0.25);
     border-radius: 8px;
-    td:first-child { color: var(--accent-hover); font-weight: 700; }
+
+    td:first-child {
+        color: var(--accent-hover);
+        font-weight: 700;
+    }
 }
 
 /* První sloupec (číslo/pořadí) – zvýrazněný */
@@ -100,7 +137,9 @@ body {
 
 /* Responsivní režim – karty místo tabulky */
 @media (max-width: 640px) {
-    .nice-table thead { display: none; }
+    .nice-table thead {
+        display: none;
+    }
 
     .nice-table tbody tr {
         display: block;
@@ -108,7 +147,7 @@ body {
         background: var(--primary-light);
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     }
 
     .nice-table tbody td {
@@ -116,10 +155,12 @@ body {
         padding: 12px 16px;
         background: transparent;
         color: var(--text);
-        border-bottom: 1px solid rgba(215,255,215,0.3);
+        border-bottom: 1px solid rgba(215, 255, 215, 0.3);
     }
 
-    .nice-table tbody td:first-child { display: none; }
+    .nice-table tbody td:first-child {
+        display: none;
+    }
 
     .nice-table tbody td::before {
         content: attr(data-label);
@@ -132,5 +173,9 @@ body {
         letter-spacing: 0.5px;
     }
 
-    .nice-table tbody td:last-child { border-bottom: none; }
+    .nice-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+
 }
