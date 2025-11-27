@@ -1,73 +1,25 @@
 package cz.uhk.kppro.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.ManyToMany;
+import lombok.Getter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Document(collection = "communities")
 public class Community {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private String id;
     private String name;
 
-    private String idNumber;
-
-    private LocalDate foundingDate;
-
-    /**
-     * TODO crete members list, activityList, partnerList//
-     */
-
-    @ElementCollection
-    private List<String> membersList;
-
-    public List<String> getActivityList() {
-        return activityList;
+    public String getId() {
+        return id;
     }
 
-    public void setActivityList(List<String> activityList) {
-        this.activityList = activityList;
-    }
-
-    @ElementCollection
-    private List<String> activityList;
-
-    public List<String> getPartnerList() {
-        return partnerList;
-    }
-
-    public void setPartnerList(List<String> partnerList) {
-        this.partnerList = partnerList;
-    }
-
-    @ElementCollection
-    private List<String> partnerList;
-
-    public List<String> getMembersList() {
-        return membersList;
-    }
-
-    public void setMembersList(List<String> membersList) {
-        this.membersList = membersList;
-    }
-
-    public LocalDate getFoundingDate() {
-        return foundingDate;
-    }
-
-    public void setFoundingDate(LocalDate foundingDate) {
-        this.foundingDate = foundingDate;
-    }
-
-    public String getIdNumber() {
-        return idNumber;
-    }
-
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -78,11 +30,47 @@ public class Community {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
+    public String getIdNumber() {
+        return idNumber;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
     }
+
+    public LocalDate getFoundingDate() {
+        return foundingDate;
+    }
+
+    public void setFoundingDate(LocalDate foundingDate) {
+        this.foundingDate = foundingDate;
+    }
+
+    private String idNumber;
+    private LocalDate foundingDate;
+
+    @Getter
+    @ManyToMany(mappedBy = "community")
+    private List<Member> members = new ArrayList<>();
+
+    public void setMembers(List<Member> members) {
+        this.members = members;
+    }
+
+    @Getter
+    @ManyToMany(mappedBy = "community")
+    public List<Activity> activities = new ArrayList<>();
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
+    }
+
+    @Getter
+    @ManyToMany(mappedBy = "community")
+    public List<Partner> partners = new ArrayList<>();
+
+    public void setPartners(List<Partner> partners) {
+        this.partners = partners;
+    }
+
 }

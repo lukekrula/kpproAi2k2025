@@ -22,7 +22,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public Community getById(Long id) {
-        return communityRepository.findById(id)
+        return communityRepository.findById(String.valueOf(id))
                 .orElseThrow(() -> new RuntimeException("Community not found"));
     }
 
@@ -37,14 +37,14 @@ public class CommunityServiceImpl implements CommunityService {
         db.setName(community.getName());
         db.setIdNumber(community.getIdNumber());
         db.setFoundingDate(community.getFoundingDate());
-        db.setMembersList(community.getMembersList());
-        db.setActivityList(community.getActivityList());
-        db.setPartnerList(community.getPartnerList());
+        db.setMembers(community.getMembers());
+        db.setActivities(community.getActivities());
+        db.setPartners(community.getPartners());
         return communityRepository.save(db);
     }
 
     @Override
     public void delete(Long id) {
-        communityRepository.deleteById(id);
+        communityRepository.deleteById(String.valueOf(id));
     }
 }
