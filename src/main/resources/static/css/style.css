@@ -62,6 +62,19 @@ body {
 
 }
 
+.btn {
+    margin-top: 6px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent), var(--decent));
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform .08s ease, box-shadow .08s ease
+}
+
 .table-wrap {
     margin-top: 24px;
     background: var(--primary); /* tmavší zelená pozadí */

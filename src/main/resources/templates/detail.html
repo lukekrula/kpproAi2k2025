@@ -14,20 +14,24 @@
     <title>KPPRO-Ai2k-LK</title>
 </head>
 <body>
-<section>
-
-    <article>
+<div class="page">
+    <header>
+        <h1><h1 th:text="${'Details for item no: ' + id}"></h1></h1>
+        <p class="subtitle">Detailed info:</p>
+    </header>
+    <main>
 
         <div class="card">
-            <h1 th:text="${'Tohle je ' + id}"></h1>
+
             <h1 th:text="${item.title}">Item Title</h1>
             <p th:text="${item.description}">Item Description</p>
-            <p>Status: <span th:text="${item.done} ? 'Done' : 'Not done'"></span></p>
+            <p>Status: <span th:text="${item.done} ? 'Done &#9989;' : 'Not done &#10060;'"></span></p>
         </div>
-        <button>edit</button>
+
+        <a th:href="@{/user/edit}" class="btn">Edit</a>
         <a th:href="@{/items/}" class="btn">Go to item list</a>
 
-    </article>
-</section>
+    </main>
+</div>
 </body>
 </html>
