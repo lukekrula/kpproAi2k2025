@@ -5,13 +5,13 @@ import java.util.List;
 
 public interface CommunityService {
 
-    Community create(Community community);
-
-    Community getById(Long id);
+    Community create(Community c);
 
     List<Community> getAll();
 
-    Community update(Long id, Community community);
+    Community getById(String id);
 
-    void delete(Long id);
+    Community update(String id, Community c);
+
+    void delete(String id);
 }

@@ -10,34 +10,34 @@ import java.util.List;
 @RequestMapping("/api/communities")
 public class CommunityController {
 
-    private final CommunityService communityService;
+    private final CommunityService service;
 
-    public CommunityController(CommunityService communityService) {
-        this.communityService = communityService;
+    public CommunityController(CommunityService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public Community create(@RequestBody Community community) {
-        return communityService.create(community);
-    }
-
-    @GetMapping("/{id}")
-    public Community getById(@PathVariable Long id) {
-        return communityService.getById(id);
+    public Community create(@RequestBody Community c) {
+        return service.create(c);
     }
 
     @GetMapping
-    public List<Community> getAll() {
-        return communityService.getAll();
+    public List<Community> all() {
+        return service.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public Community one(@PathVariable String id) {
+        return service.getById(id);
     }
 
     @PutMapping("/{id}")
-    public Community update(@PathVariable Long id, @RequestBody Community community) {
-        return communityService.update(id, community);
+    public Community update(@PathVariable String id, @RequestBody Community c) {
+        return service.update(id, c);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        communityService.delete(id);
+    public void delete(@PathVariable String id) {
+        service.delete(id);
     }
 }
