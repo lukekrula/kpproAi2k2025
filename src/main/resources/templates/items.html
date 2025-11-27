@@ -33,7 +33,8 @@
                 </tr>
                 </thead>
                 <tbody id="itemList">
-                <tr th:each="item, iterStat : ${list}">
+                <tr th:each="item, iterStat : ${list}"     th:attr="onclick=|window.location.href='/items/detail/' + ${item.id}|"
+                    style="cursor:pointer">
                     <td th:text="${iterStat.count}">1</td>
                     <td th:text="${item.title}">Title</td>
                     <td th:text="${item.description}">Description</td>
