@@ -73,4 +73,15 @@ public class Community {
         this.partners = partners;
     }
 
+    public List<Member> getMembersList() {
+    return members;
+    }
+
+    public List<Activity> getActivityList() {
+    return activities;
+    }
+
+    public List<Partner> getPartnerList() {
+    return partners;
+    }
 }

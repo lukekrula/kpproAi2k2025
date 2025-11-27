@@ -9,42 +9,44 @@ import java.util.List;
 @Service
 public class CommunityServiceImpl implements CommunityService {
 
-    private final CommunityRepository communityRepository;
+    private final CommunityRepository repo;
 
-    public CommunityServiceImpl(CommunityRepository communityRepository) {
-        this.communityRepository = communityRepository;
+    public CommunityServiceImpl(CommunityRepository repo) {
+        this.repo = repo;
     }
 
     @Override
-    public Community create(Community community) {
-        return communityRepository.save(community);
-    }
-
-    @Override
-    public Community getById(Long id) {
-        return communityRepository.findById(String.valueOf(id))
-                .orElseThrow(() -> new RuntimeException("Community not found"));
+    public Community create(Community c) {
+        return repo.save(c);
     }
 
     @Override
     public List<Community> getAll() {
-        return communityRepository.findAll();
+        return repo.findAll();
     }
 
     @Override
-    public Community update(Long id, Community community) {
-        Community db = getById(id);
-        db.setName(community.getName());
-        db.setIdNumber(community.getIdNumber());
-        db.setFoundingDate(community.getFoundingDate());
-        db.setMembers(community.getMembers());
-        db.setActivities(community.getActivities());
-        db.setPartners(community.getPartners());
-        return communityRepository.save(db);
+    public Community getById(String id) {
+        return repo.findById(id).orElse(null);
     }
 
     @Override
-    public void delete(Long id) {
-        communityRepository.deleteById(String.valueOf(id));
+    public Community update(String id, Community c) {
+        Community existing = getById(id);
+        if (existing == null) return null;
+
+        existing.setName(c.getName());
+        existing.setIdNumber(c.getIdNumber());
+        existing.setFoundingDate(c.getFoundingDate());
+        existing.setMembers(c.getMembersList());
+        existing.setActivities(c.getActivityList());
+        existing.setPartners(c.getPartnerList());
+
+        return repo.save(existing);
+    }
+
+    @Override
+    public void delete(String id) {
+        repo.deleteById(id);
     }
 }
