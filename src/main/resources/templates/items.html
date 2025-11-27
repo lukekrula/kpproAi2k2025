@@ -22,7 +22,7 @@
 
 
     <main>
-        <input type="text" id="searchBox" placeholder="Search by title">
+        <input type="text" id="searchbox" placeholder="Search by title">
         <div class="table-wrap">
             <table class="nice-table">
                 <thead>
@@ -60,7 +60,7 @@
     </ul>
 
     <script>
-        document.getElementById('searchBox').addEventListener('keyup', function() {
+        document.getElementById('searchbox').addEventListener('keyup', function() {
             let filter = this.value.toLowerCase();
             document.querySelectorAll('#itemList tr').forEach(li => {
                 li.style.display = li.textContent.toLowerCase().includes(filter) ? '' : 'none';
