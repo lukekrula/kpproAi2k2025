@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Item</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="page">
+    <main>
+        <div class="list">
+            <div class="card">
+                <h1><h1 th:text="${'Details for item no: ' + id}"></h1></h1>
+                <p class="subtitle">Detailed info:</p>
+            </div>
+            <div class="card">
+                <h1 th:text="${'Editing item no: ' + item.id}">Edit Item</h1>
+                <p class="subtitle">Update item details below:</p>
+            </div>
+        </div>
+        <div class="list warn-table-wrap">
+            <div class="warn-card">
+                <h3>Actual values</h3>
+                <h1 th:text="${item.title}">Edit item</h1>
+                <p th:text="${item.description}">Item Description</p>
+                <p>EEEEEE Status: <span th:text="${item.done} ? 'Done &#9989;' : 'Not done &#10060;'"></span>
+                </p>
+
+            </div>
+            <div class="warn-card">
+                <h3>New values</h3>
+                <form th:action="@{/items/save}" th:object="${item}" method="post" class="card">
+                    <!-- hidden id field ensures updates go to the same entity -->
+                    <input type="hidden" th:field="*{id}"/>
+
+                    <div class="editor">
+                        <label for="title">Title</label>
+                        <input id="title" type="text" th:field="*{title}" required/>
+                    </div>
+
+                    <div class="editor">
+                        <label for="description">Description</label>
+                        <textarea id="description" th:field="*{description}" rows="4"></textarea>
+                    </div>
+
+                    <div class="editor">
+                        <label for="done">Done</label>
+                        <input id="done" type="checkbox" th:field="*{done}"/>
+                    </div>
+                    <div class="btn-wrap">
+                        <button type="submit" class="btn warn-btn">Save</button>
+                        <a th:href="@{/items/detail/{id}(id=${item.id})}" class="btn">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+</div>
+</body>
+</html>
