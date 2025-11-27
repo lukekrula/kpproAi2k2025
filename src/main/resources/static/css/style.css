@@ -32,6 +32,12 @@
     --muted: #687366;
     --decent: #2e7d32;
     --scent: #a8d5a1;
+    --warn-primary: #443c22;
+    --warn-light: #7d6d2e;
+    --warn-accent: #b19559;
+    --alert-primary: #442222;
+    --alert-light: #7d2e2e;
+    --alert-accent: #b15959;
 }
 
 body {
@@ -48,8 +54,33 @@ body {
     padding: 28px;
     min-height: 100vh;
 }
+.list{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
-#searchbox {
+.warn-card{
+    padding: 10px;
+}
+
+.editor{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    border-width: 0 0 3px 0;
+    border-style: solid;
+    border-color: var(--scent);
+}
+
+.editor > label {
+    padding-right: 15px;
+}
+
+#searchbox,
+.editor input,
+.editor textarea{
     color: white;
     border-radius: 15px;
     min-height: 30px;
@@ -60,6 +91,19 @@ body {
     padding-left: 15px;
     font-weight: 600;
 
+}
+#done{
+    min-width: 30px;
+}
+
+.btn-wrap{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.btn-wrap > .btn {
+    margin-left: 15px;
 }
 
 .btn {
@@ -75,6 +119,10 @@ body {
     transition: transform .08s ease, box-shadow .08s ease
 }
 
+.warn-btn {
+    background: linear-gradient(90deg, var(--warn-accent), var(--warn-light));
+}
+
 .table-wrap {
     margin-top: 24px;
     background: var(--primary); /* tmavší zelená pozadí */
@@ -82,6 +130,24 @@ body {
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     border: 1px solid var(--border);
+}
+
+.warn-table-wrap {
+    margin-top: 24px;
+    background: var(--warn-primary); /* tmavší zelená pozadí */
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border: 1px solid var(--warn-light);
+}
+
+.alarm-table-wrap {
+    margin-top: 24px;
+    background: var(--alert-primary); /* tmavší zelená pozadí */
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border: 1px solid var(--alert-light);
 }
 
 .nice-table {

@@ -36,11 +36,15 @@ public class ItemController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(Model model, @PathVariable long id) {
-
-        model.addAttribute("item", itemService.get(id));
-        return "items_edit";
+    public String edit(Model model, @PathVariable Long id) {
+        Item item = itemService.get(id);
+        if (item == null) {
+            return "redirect:/items/";
+        }
+        model.addAttribute("item", item);
+        return "edit";
     }
+
 
     @PostMapping("/save")
     public String save(@ModelAttribute Item item) {

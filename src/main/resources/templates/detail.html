@@ -28,7 +28,7 @@
             <p>Status: <span th:text="${item.done} ? 'Done &#9989;' : 'Not done &#10060;'"></span></p>
         </div>
 
-        <a th:href="@{/user/edit}" class="btn">Edit</a>
+        <a th:href="@{/items/edit/{id}(id=${item.id})}" class="btn">Edit</a>
         <a th:href="@{/items/}" class="btn">Go to item list</a>
 
     </main>
