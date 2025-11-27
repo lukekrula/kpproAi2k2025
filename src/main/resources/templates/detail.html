@@ -25,6 +25,7 @@
             <p>Status: <span th:text="${item.done} ? 'Done' : 'Not done'"></span></p>
         </div>
         <button>edit</button>
+        <a th:href="@{/items/}" class="btn">Go to item list</a>
 
     </article>
 </section>
