@@ -30,6 +30,11 @@ public class MainController {
         return "/map";
     }
 
+    @GetMapping("/items/arch")
+    public String arch() {
+        return "/architecture";
+    }
+
 
 
 
