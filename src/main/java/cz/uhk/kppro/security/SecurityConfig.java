@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/super/**").hasRole("SUPER_USER")
                         .requestMatchers("/user/**").hasRole("USER")
                         // folders static and images are public
-                        .requestMatchers("/css/**", "/images/**").permitAll()
+                        .requestMatchers("/css/**", "/images/**", "/data/**").permitAll()
                         // login required for all other requests
                         .anyRequest().authenticated()
                 )

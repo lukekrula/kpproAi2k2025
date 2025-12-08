@@ -1,0 +1,38 @@
+:root {
+    /* Base theme - yellow/orange palette */
+    --bg: #1a1000; /* Dark orange/brown background */
+    --primary: #443822; /* Keeping original (neutral brown) */
+    --primary-light: #d4a017; /* Golden yellow */
+    --accent: #ff9800; /* Orange accent */
+    --accent-hover: #ffb142; /* Brighter orange on hover */
+    --light-bg: #fff9e6; /* Very light yellow background */
+    --text: #fff8e1; /* Warm off-white text */
+    --text-muted: #ffcc80; /* Muted orange text */
+    --border: #ff8f00; /* Orange border */
+    --shadow: rgba(139, 69, 19, 0.4); /* Brown shadow */
+    --gradient-start: #352105;
+    --gradient-end: #8b4513;
+
+    /* Component colors */
+    --primary-background: #ffeaa7; /* Soft yellow */
+    --darker-background: #ff9800; /* Orange header/footer */
+    --mid-background: #ffb142; /* Brighter orange nav */
+    --shadow: #b8860b; /* Golden brown shadow */
+    --text-shadow: #8b4513; /* Brown text shadow */
+    --text-light: #fff9e6; /* Light yellow text */
+    --img-border: #fff3e0;
+    --shadow-hover: rgba(255, 152, 0, 0.3);
+    --text-dark: #3e2723; /* Dark brown text */
+    --card: #ff8f00; /* Orange card */
+    --muted: #a1887f; /* Brownish gray */
+    --decent: #ff9800; /* Decent orange */
+    --scent: #ffd54f; /* Light yellow */
+
+    /* Alert/Warning colors (adjusted for consistency) */
+    --warn-primary: #443822; /* Keeping original */
+    --warn-light: #ffb300; /* Amber warning */
+    --warn-accent: #ffca28; /* Light amber */
+    --alert-primary: #bf360c; /* Deep orange-red */
+    --alert-light: #ff5722; /* Bright orange-red */
+    --alert-accent: #ff8a65; /* Light orange-red */
+}

@@ -1,0 +1,41 @@
+:root {
+    /* Hlavní zelená paleta – svěží, ale elegantní */
+    --bg: #0a1808; /* téměř černozelená pozadí stránky */
+    --primary: #224422; /* tmavší zelená pro pozadí karty/tabulky */
+    --primary-light: #2e7d32; /* střední zelená (původní darker) */
+    --accent: #68b159; /* svěžší zelená pro zvýraznění a hover */
+    --accent-hover: #7cc96e; /* ještě světlejší při hoveru */
+    --light-bg: #d5ffd5; /* velmi světlá zelenkavá pro řádky */
+    --text: #e8fde7; /* téměř bílý text na tmavém */
+    --text-muted: #a0d6a0; /* jemnější zelený text */
+    --border: #3a9a44; /* výraznější zelená pro okraje */
+    --shadow: rgba(0, 0, 0, 0.4);
+    --gradient-start: #0f2a10;
+    --gradient-end: #1a471e;
+
+    --primary-background: #a8d5a1;
+    /* Main background color */
+    --darker-background: #2e7d32;
+    /* header - footer background*/
+    --mid-background: #68b159;
+    /* #ad82c2; */
+    /* nav bar background*/
+    --shadow: #587752;
+    /* header - footer background*/
+    --text-shadow: #0c4700;
+    --text-light: #d5ffd5;
+    /* header - footer background*/
+    --img-border: white;
+    --shadow-hover: rgba(0, 0, 0, 0.2);
+    --text-dark: #333333;
+    --card: #0c4700;
+    --muted: #687366;
+    --decent: #2e7d32;
+    --scent: #a8d5a1;
+    --warn-primary: #443c22;
+    --warn-light: #7d6d2e;
+    --warn-accent: #b19559;
+    --alert-primary: #442222;
+    --alert-light: #7d2e2e;
+    --alert-accent: #b15959;
+}

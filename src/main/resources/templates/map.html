@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GeoJSON Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <style>
+        #map {
+            height: 95vh;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+<div id="map"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    // Create the map
+    const map = L.map("map");
+
+    // Add OpenStreetMap tiles
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+    }).addTo(map);
+
+    // Load GeoJSON from your Spring Boot API
+    fetch("http://localhost:8080/api/geo")
+        .then(r => r.json())
+        .then(data => {
+
+            // Convert coordinates from EPSG:3857 to EPSG:4326
+            function convertCoords(coords) {
+                return coords.map(ring =>
+                    ring.map(coord => {
+                        const p = L.Projection.SphericalMercator.unproject({ x: coord[0], y: coord[1] });
+                        return [p.lng, p.lat];
+                    })
+                );
+            }
+
+            const converted = {
+                type: "FeatureCollection",
+                features: data.features.map(f => ({
+                    ...f,
+                    geometry: {
+                        type: f.geometry.type,
+                        coordinates: convertCoords(f.geometry.coordinates)
+                    }
+                }))
+            };
+
+            // Add to map
+            const layer = L.geoJSON(converted, {
+                style: {
+                    color: "#0066ff",
+                    weight: 2,
+                    fillColor: "#3399ff",
+                    fillOpacity: 0.4
+                },
+                onEachFeature: (feature, layer) => {
+                    layer.bindPopup(`
+                    <b>${feature.properties.nazev_vusc}</b><br>
+                    Dotací: ${feature.properties.poc_dotaci}<br>
+                    Finance: ${feature.properties.finance.toLocaleString()} Kč
+                `);
+                }
+            }).addTo(map);
+
+            map.fitBounds(layer.getBounds());
+        })
+        .catch(err => console.error(err));
+
+</script>
+</body>
+</html>
