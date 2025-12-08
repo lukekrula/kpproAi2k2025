@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GeoJSON Map with Layers</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <style>
+        #map { height: 95vh; width: 100%; }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+
+
+    const map = L.map("map").setView([50.2, 15.9], 8);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+    }).addTo(map);
+
+
+
+    // Helper to load any GeoJSON and return a layer
+    function loadLayer(url, options) {
+        return fetch(url)
+            .then(r => r.json())
+            .then(data => {
+                return L.geoJSON(data, {
+                    pointToLayer: (feature, latlng) => {
+                        if (feature.properties && feature.properties.x && feature.properties.y) {
+                            return L.marker([feature.properties.y, feature.properties.x], options.markerOptions);
+                        }
+                        return L.marker(latlng, options.markerOptions);
+                    },
+                    coordsToLatLng: coords => {
+                        // For polygons: convert EPSG:3857 meters to lat/lng
+                        const point = L.Projection.SphericalMercator.unproject({ x: coords[0], y: coords[1] });
+                        return L.latLng(point.lat, point.lng);
+                    },
+                    style: feature => {
+                        if (feature.geometry.type.includes("Polygon")) {
+                            return options.style;
+                        }
+                    },
+                    onEachFeature: (feature, layer) => {
+                        layer.bindPopup(`
+            <b>${feature.properties?.nazev || feature.properties?.regionName || "Unnamed"}</b><br>
+            ${feature.properties?.popis || ""}
+          `);
+                    }
+                });
+            });
+    }
+
+
+    // Load all datasets
+    Promise.all([
+        loadLayer("http://localhost:8080/api/arch", {
+            markerOptions: { icon: L.icon({
+                    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+                    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41]
+                }) }
+        }),
+        loadLayer("http://localhost:8080/api/nature", {
+            style: { color: "green", weight: 2, fillColor: "#99ff99", fillOpacity: 0.4 }
+        }),
+        loadLayer("http://localhost:8080/api/region", {
+            style: { color: "orange", weight: 2, fillColor: "#ffcc99", fillOpacity: 0.4 }
+        })
+    ]).then(([archLayer, natureLayer, regionsLayer]) => {
+        // Add them to map
+        archLayer.addTo(map);
+        natureLayer.addTo(map);
+        regionsLayer.addTo(map);
+
+        // Fit bounds to all
+        const group = L.featureGroup([archLayer, natureLayer, regionsLayer]);
+        map.fitBounds(group.getBounds());
+
+        // Add layer control
+        L.control.layers(null, {
+            "Architecture": archLayer,
+            "Nature": natureLayer,
+            "Regions": regionsLayer
+        }).addTo(map);
+    });
+
+    // Center + zoom
+    map.setView([50.3, 16.1], 9);
+
+    // Or fit to bounding box
+    const kraloveBounds = L.latLngBounds(
+        [49.9, 15.6], // southwest corner
+        [50.6, 16.5]  // northeast corner
+    );
+    map.fitBounds(kraloveBounds);
+
+</script>
+</body>
+</html>
