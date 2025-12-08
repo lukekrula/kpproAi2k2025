@@ -11,34 +11,51 @@
 </head>
 <body>
 <div id="map"></div>
+
+<!-- Load Leaflet first -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Then proj4 and proj4leaflet -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js"></script>
+
 <script>
-
-
     const map = L.map("map").setView([50.2, 15.9], 8);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
     }).addTo(map);
 
+    // Define S-JTSK projection for nature (EPSG:5514)
+    const crs5514 = new L.Proj.CRS(
+        "EPSG:5514",
+        "+proj=krovak +lat_0=49.5 +lon_0=24.83333333333333 +alpha=30.28858 +k=0.9999 " +
+        "+x_0=0 +y_0=0 +ellps=bessel +towgs84=570.69,85.69,462.84,4.998,1.586,5.261,3.56 +units=m +no_defs",
+        { origin: [0, 0] }
+    );
 
-
-    // Helper to load any GeoJSON and return a layer
+    // Loader function
     function loadLayer(url, options) {
         return fetch(url)
             .then(r => r.json())
             .then(data => {
+                console.log("Loaded", url, "features:", data.features.length);
                 return L.geoJSON(data, {
                     pointToLayer: (feature, latlng) => {
-                        if (feature.properties && feature.properties.x && feature.properties.y) {
+                        if (feature.properties && feature.properties.x != null && feature.properties.y != null) {
                             return L.marker([feature.properties.y, feature.properties.x], options.markerOptions);
                         }
                         return L.marker(latlng, options.markerOptions);
                     },
                     coordsToLatLng: coords => {
-                        // For polygons: convert EPSG:3857 meters to lat/lng
-                        const point = L.Projection.SphericalMercator.unproject({ x: coords[0], y: coords[1] });
-                        return L.latLng(point.lat, point.lng);
+                        if (options.convert === "mercator3857") {
+                            const p = L.Projection.SphericalMercator.unproject({ x: coords[0], y: coords[1] });
+                            return L.latLng(p.lat, p.lng);
+                        }
+                        if (options.convert === "krovak5514") {
+                            const p = crs5514.projection.unproject({ x: coords[0], y: coords[1] });
+                            return L.latLng(p.lat, p.lng);
+                        }
+                        return L.latLng(coords[1], coords[0]);
                     },
                     style: feature => {
                         if (feature.geometry.type.includes("Polygon")) {
@@ -46,18 +63,37 @@
                         }
                     },
                     onEachFeature: (feature, layer) => {
-                        layer.bindPopup(`
-            <b>${feature.properties?.nazev || feature.properties?.regionName || "Unnamed"}</b><br>
-            ${feature.properties?.popis || ""}
-          `);
+                        let label = "Unnamed";
+
+                        if (feature.properties) {
+                            // Nature dataset
+                            if (feature.properties.NAZEV) {
+                                label = feature.properties.NAZEV;
+                            }
+                            // Region dataset
+                            else if (feature.properties.nazev_obce) {
+                                label = feature.properties.nazev_obce;
+                            }
+                            else if (feature.properties.nazev_vusc) {
+                                label = feature.properties.nazev_vusc;
+                            }
+                            // Architecture dataset
+                            else if (feature.properties.nazev) {
+                                label = feature.properties.nazev;
+                            }
+                        }
+
+                        const desc = feature.properties?.popis || feature.properties?.POZNAMKA || "";
+                        layer.bindPopup(`<b>${label}</b><br>${desc}`);
                     }
+
+
                 });
             });
     }
 
-
-    // Load all datasets
     Promise.all([
+        // Architecture points
         loadLayer("http://localhost:8080/api/arch", {
             markerOptions: { icon: L.icon({
                     iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -66,40 +102,36 @@
                     iconAnchor: [12, 41]
                 }) }
         }),
-        loadLayer("http://localhost:8080/api/nature", {
-            style: { color: "green", weight: 2, fillColor: "#99ff99", fillOpacity: 0.4 }
-        }),
+        // Regions polygons (EPSG:3857)
         loadLayer("http://localhost:8080/api/region", {
-            style: { color: "orange", weight: 2, fillColor: "#ffcc99", fillOpacity: 0.4 }
+            style: { color: "orange", weight: 2, fillColor: "#ffcc99", fillOpacity: 0.4 },
+            convert: "mercator3857"
+        }),
+        // Nature polygons (EPSG:5514)
+        loadLayer("http://localhost:8080/api/nature", {
+            style: { color: "green", weight: 2, fillColor: "#99ff99", fillOpacity: 0.4 },
+            convert: "krovak5514"
         })
-    ]).then(([archLayer, natureLayer, regionsLayer]) => {
-        // Add them to map
+    ]).then(([archLayer, regionsLayer, natureLayer]) => {
         archLayer.addTo(map);
-        natureLayer.addTo(map);
         regionsLayer.addTo(map);
+        natureLayer.addTo(map);
 
-        // Fit bounds to all
-        const group = L.featureGroup([archLayer, natureLayer, regionsLayer]);
-        map.fitBounds(group.getBounds());
+        // Zoom to Královéhradecký kraj region bounds
+        if (regionsLayer.getBounds().isValid()) {
+            map.fitBounds(regionsLayer.getBounds());
+        } else {
+            map.fitBounds(L.latLngBounds([49.9, 15.6], [50.6, 16.5]));
+        }
 
-        // Add layer control
         L.control.layers(null, {
             "Architecture": archLayer,
-            "Nature": natureLayer,
-            "Regions": regionsLayer
+            "Regions": regionsLayer,
+            "Nature": natureLayer
         }).addTo(map);
+    }).catch(err => {
+        console.error("Layer load error:", err);
     });
-
-    // Center + zoom
-    map.setView([50.3, 16.1], 9);
-
-    // Or fit to bounding box
-    const kraloveBounds = L.latLngBounds(
-        [49.9, 15.6], // southwest corner
-        [50.6, 16.5]  // northeast corner
-    );
-    map.fitBounds(kraloveBounds);
-
 </script>
 </body>
 </html>
