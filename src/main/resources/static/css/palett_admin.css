@@ -1,0 +1,38 @@
+:root {
+    /* Base theme - red/wine palette */
+    --bg: #180808; /* Dark wine/burgundy background */
+    --primary: #443822; /* Keeping original (neutral brown) */
+    --primary-light: #7d2e2e; /* Wine red */
+    --accent: #b15959; /* Muted red accent */
+    --accent-hover: #c96e7c; /* Brighter wine red on hover */
+    --light-bg: #ffd5d5; /* Very light pink background */
+    --text: #fde7e7; /* Warm off-white text with red tint */
+    --text-muted: #d6a0a0; /* Muted red text */
+    --border: #9a443a; /* Wine red border */
+    --shadow: rgba(139, 0, 0, 0.4); /* Dark red shadow */
+    --gradient-start: #2a100f;
+    --gradient-end: #471a1a;
+
+    /* Component colors */
+    --primary-background: #d5a1a8; /* Soft rose */
+    --darker-background: #7d2e2e; /* Wine header/footer */
+    --mid-background: #b15968; /* Muted wine nav */
+    --shadow: #775258; /* Wine brown shadow */
+    --text-shadow: #47000c; /* Dark red text shadow */
+    --text-light: #ffd5d5; /* Light pink text */
+    --img-border: #ffe0e0;
+    --shadow-hover: rgba(152, 0, 0, 0.3);
+    --text-dark: #333333; /* Keeping original dark text */
+    --card: #47000c; /* Deep wine card */
+    --muted: #736668; /* Purplish gray */
+    --decent: #7d2e2e; /* Decent wine red */
+    --scent: #d5a1a8; /* Light rose */
+
+    /* Alert/Warning colors (adjusted for consistency) */
+    --warn-primary: #443822; /* Keeping original */
+    --warn-light: #7d6d2e; /* Keeping original amber */
+    --warn-accent: #b19559; /* Keeping original light amber */
+    --alert-primary: #442222; /* Deep wine red */
+    --alert-light: #7d2e2e; /* Wine red */
+    --alert-accent: #b15959; /* Muted red */
+}

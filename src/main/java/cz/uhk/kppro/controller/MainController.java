@@ -1,7 +1,12 @@
 package cz.uhk.kppro.controller;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 @Controller
 public class MainController {
@@ -19,6 +24,15 @@ public class MainController {
     public String login() {
         return "/login";
     }
+
+    @GetMapping("/items/map")
+    public String map() {
+        return "/map";
+    }
+
+
+
+
 
     @GetMapping("/403")
     @ResponseBody
