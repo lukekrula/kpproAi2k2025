@@ -17,25 +17,31 @@ public class DataLoader {
                                RoleRepository roleRepository,
                                PasswordEncoder passwordEncoder) {
         return args -> {
-            Role adminRole = new Role("ROLE_ADMIN");
-            Role userRole = new Role("ROLE_USER");
 
-            roleRepository.save(adminRole);
-            roleRepository.save(userRole);
+            // ✅ Create roles only if they don't exist
+            Role adminRole = roleRepository.findByName("ROLE_ADMIN")
+                    .orElseGet(() -> roleRepository.save(new Role("ROLE_ADMIN")));
 
-            User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRole(adminRole);   // přiřadíš objekt Role
-            userRepository.save(admin);
+            Role userRole = roleRepository.findByName("ROLE_USER")
+                    .orElseGet(() -> roleRepository.save(new Role("ROLE_USER")));
 
-            User user = new User();
-            user.setUsername("user");
-            user.setPassword(passwordEncoder.encode("user123"));
-            user.setRole(userRole);     // přiřadíš objekt Role
-            userRepository.save(user);
+            // ✅ Create admin user only if missing
+            if (!userRepository.existsByUsername("admin")) {
+                User admin = new User();
+                admin.setUsername("admin");
+                admin.setPassword(passwordEncoder.encode("admin123"));
+                admin.setRole(adminRole);
+                userRepository.save(admin);
+            }
 
+            // ✅ Create normal user only if missing
+            if (!userRepository.existsByUsername("user")) {
+                User user = new User();
+                user.setUsername("user");
+                user.setPassword(passwordEncoder.encode("user123"));
+                user.setRole(userRole);
+                userRepository.save(user);
+            }
         };
     }
 }
-

@@ -87,7 +87,6 @@
                         layer.bindPopup(`<b>${label}</b><br>${desc}`);
                     }
 
-
                 });
             });
     }
@@ -103,7 +102,7 @@
                 }) }
         }),
         // Regions polygons (EPSG:3857)
-        loadLayer("http://localhost:8080/api/region", {
+        loadLayer("http://localhost:8080/api/geo", {
             style: { color: "orange", weight: 2, fillColor: "#ffcc99", fillOpacity: 0.4 },
             convert: "mercator3857"
         }),

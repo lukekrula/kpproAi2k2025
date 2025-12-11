@@ -25,6 +25,8 @@ public class MainController {
         return "/login";
     }
 
+
+
     @GetMapping("/items/map")
     public String map() {
         return "/map";
@@ -45,6 +47,13 @@ public class MainController {
         return "<h1>Forbidden - you shall not pass</h1>";
     }
 
+    @GetMapping("/500")
+    @ResponseBody
+    public String internalServerError() {
+        return "<h1>Internal server error - are you sure you mapped it right?</h1>";
+    }
+
+
     @GetMapping("/logged")
     public String logged() {
         return "logged";
@@ -53,10 +62,16 @@ public class MainController {
     @GetMapping("/admin/administration")
     public String adminPage() {
         return "admin/administration";
+
     }
 
     @GetMapping("/login-error")
     public String loginError() {
-        return "login-error"; // resolves to login-error.html
+        return "login-error";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "logout";
     }
 }

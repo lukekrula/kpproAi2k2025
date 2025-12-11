@@ -22,6 +22,50 @@ public class GeoController {
         }
     }
 
+    @GetMapping(value = "/api/rud", produces = "application/json")
+    public ResponseEntity<String> getRud() throws IOException {
+
+        ClassPathResource resource = new ClassPathResource("static/data/rud.json");
+
+        try (InputStream in = resource.getInputStream()) {
+            String json = new String(in.readAllBytes());
+            return ResponseEntity.ok(json);
+        }
+    }
+
+    @GetMapping(value = "/api/trut", produces = "application/json")
+    public ResponseEntity<String> getTrut() throws IOException {
+
+        ClassPathResource resource = new ClassPathResource("static/data/trutnovsko.json");
+
+        try (InputStream in = resource.getInputStream()) {
+            String json = new String(in.readAllBytes());
+            return ResponseEntity.ok(json);
+        }
+    }
+
+    @GetMapping(value = "/api/naturear", produces = "application/json")
+    public ResponseEntity<String> getNatureArea() throws IOException {
+
+        ClassPathResource resource = new ClassPathResource("static/data/natureLandmark.json");
+
+        try (InputStream in = resource.getInputStream()) {
+            String json = new String(in.readAllBytes());
+            return ResponseEntity.ok(json);
+        }
+    }
+
+    @GetMapping(value = "/api/pyr", produces = "application/json")
+    public ResponseEntity<String> getPyr() throws IOException {
+
+        ClassPathResource resource = new ClassPathResource("static/data/czech.json");
+
+        try (InputStream in = resource.getInputStream()) {
+            String json = new String(in.readAllBytes());
+            return ResponseEntity.ok(json);
+        }
+    }
+
     @GetMapping(value = "/api/arch", produces = "application/json")
     public ResponseEntity<String> getArch() throws IOException {
 

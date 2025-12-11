@@ -33,7 +33,8 @@
                 </tr>
                 </thead>
                 <tbody id="itemList">
-                <tr th:each="item, iterStat : ${list}"     th:attr="onclick=|window.location.href='/items/detail/' + ${item.id}|"
+                <tr th:each="item, iterStat : ${list}"
+                    th:attr="onclick=|window.location.href='/items/detail/' + ${item.id}|"
                     style="cursor:pointer">
                     <td th:text="${iterStat.count}">1</td>
                     <td th:text="${item.title}">Title</td>
@@ -50,21 +51,23 @@
 
 
     </ul>
-
-    <a th:href="@{map}" class="btn">mapa</a>
-    <a th:href="@{arch}" class="btn">mapa2</a>
-
-    <footer>
-        <small>Luděk Krůla - Ai2k</small>
-    </footer>
+    <a th:href="@{add}" class="btn">Add item</a>
+    <div class="list">
+        <div class="warn-table-wrap">
+        <a th:href="@{map}" class="btn">mapa</a>
+        <a th:href="@{arch}" class="btn">mapa2</a>
+    </div>
+    </div>
 
 
     <ul id="itemListName">
         <li th:each="item : ${list}" th:text="${item.title}"></li>
     </ul>
-
+    <footer>
+        <small>Luděk Krůla - Ai2k</small>
+    </footer>
     <script>
-        document.getElementById('searchbox').addEventListener('keyup', function() {
+        document.getElementById('searchbox').addEventListener('keyup', function () {
             let filter = this.value.toLowerCase();
             document.querySelectorAll('#itemList tr').forEach(li => {
                 li.style.display = li.textContent.toLowerCase().includes(filter) ? '' : 'none';
