@@ -102,6 +102,17 @@ body {
     justify-content: end;
 }
 
+.row {
+    background-color: var(--gradient-end);
+    width: 100%;
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    z-index: 100;
+    margin-top: -40px;
+
+}
 .btn-wrap > .btn {
     margin-left: 15px;
 }
