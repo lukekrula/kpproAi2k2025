@@ -41,6 +41,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").hasRole("ADMIN")
                         .requestMatchers("/admi/**").hasRole("ADMIN")
                         .requestMatchers("/super/**").hasRole("SUPER_USER")
                         .requestMatchers("/user/**").hasRole("USER")

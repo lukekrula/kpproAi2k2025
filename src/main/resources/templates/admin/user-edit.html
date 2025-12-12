@@ -6,99 +6,70 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-
-<!-- Header -->
+<!-- Header fragment -->
 <div th:replace="fragments/header :: header"></div>
 
 <div class="page">
     <main>
-
-        <!-- Page Title -->
         <div class="list">
             <div class="card">
                 <h1 th:text="${'Details for user no: ' + user.id}"></h1>
+
                 <p class="subtitle">Detailed info:</p>
             </div>
-
             <div class="card">
-                <h1 th:text="${'Editing user no: ' + user.id}"></h1>
+                <h1 th:text="${'Editing user no: ' + user.id}">Edit User</h1>
                 <p class="subtitle">Update user details below:</p>
             </div>
         </div>
-
         <div class="list warn-table-wrap">
-
-            <!-- Actual values -->
             <div class="warn-card">
                 <h3>Actual values</h3>
-                <h1 th:text="${user.username}"></h1>
+                <h1 th:text="${user.username}">Edit user</h1>
                 <p th:text="${user.role != null ? user.role.name : 'No role'}"></p>
-            </div>
 
-            <!-- Edit form -->
+
+
+            </div>
             <div class="warn-card">
                 <h3>New values</h3>
-
                 <form th:action="@{/users/save}" th:object="${user}" method="post" class="card">
 
-                    <!-- Hidden ID -->
-                    <input th:field="*{id}" type="hidden"/>
+                    <input th:field="*{id}" type="hidden">
 
-                    <!-- Username -->
                     <div class="editor">
                         <label>Username:</label>
                         <input th:field="*{username}" type="text"/>
                     </div>
 
-                    <!-- Role -->
                     <div class="editor">
                         <label>Role:</label>
-                        <select th:field="*{role.id}">
+                        <select name="roleId">
                             <option th:each="r : ${roles}"
                                     th:value="${r.id}"
                                     th:text="${r.name}">
                             </option>
                         </select>
+
+
                     </div>
 
-                    <!-- New Password -->
                     <div class="editor">
                         <label>New Password (leave empty to keep old):</label>
                         <input type="password" name="newPassword"/>
                     </div>
 
-                    <!-- Error message -->
-                    <div th:if="${error}" class="error"
-                         th:text="${error}"
-                         style="color:red; margin-top:10px;">
-                    </div>
-
-                    <!-- Buttons -->
                     <div class="btn-wrap">
                         <button type="submit" class="btn warn-btn">Save</button>
                         <a th:href="@{/users/detail/{id}(id=${user.id})}" class="btn">Cancel</a>
                     </div>
-
                 </form>
-            </div>
 
+
+            </div>
         </div>
 
     </main>
 </div>
-<script>// Add to your HTML or a script file
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function() {
-            // Trigger change on all selects to ensure values are synced
-            const selects = form.querySelectorAll('select');
-            selects.forEach(select => {
-                const event = new Event('change', { bubbles: true });
-                select.dispatchEvent(event);
-            });
-        });
-    }
-});</script>
 </body>
 </html>
