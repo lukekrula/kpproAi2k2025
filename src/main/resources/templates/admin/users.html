@@ -17,10 +17,10 @@
 <body>
 
 <!-- ✅ Header fragment -->
-<div th:replace="fragments/header :: header"></div>
+
 <div class="page">
     <header>
-        <h1>Items overview</h1>
+        <h1>Users overview</h1>
         <p class="subtitle">List of all users</p>
     </header>
 
@@ -37,21 +37,18 @@
                 </tr>
                 </thead>
                 <tbody id="userList">
-                <tr th:each="item, iterStat : ${list}"
-                    th:attr="onclick=|window.location.href='/items/detail/' + ${item.id}|"
-                    style="cursor:pointer">
-                    <td th:text="${iterStat.count}">1</td>
-                    <td th:text="${item.title}">Title</td>
-                    <td th:text="${item.description}">Description</td>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.role != null ? user.role.name : 'No role'}"></td>
+
                 </tr>
                 </tbody>
             </table>
         </div>
     </main>
     <ul>
-        <li th:each="item : ${list}">
-            <a th:text="${item.title}" th:href="@{/items/detail/{id}(id=${item.id})}"></a>
-        </li>
+
 
 
     </ul>
@@ -64,9 +61,7 @@
     </div>
 
 
-    <ul id="itemListName">
-        <li th:each="item : ${list}" th:text="${item.title}"></li>
-    </ul>
+
     <footer>
         <small>Luděk Krůla - Ai2k</small>
     </footer>
