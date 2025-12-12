@@ -2,51 +2,42 @@ package cz.uhk.kppro.service;
 
 import cz.uhk.kppro.model.Community;
 import cz.uhk.kppro.repository.CommunityRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class CommunityServiceImpl implements CommunityService {
 
-    private final CommunityRepository repo;
+    private final CommunityRepository communityRepository;
 
-    public CommunityServiceImpl(CommunityRepository repo) {
-        this.repo = repo;
+    @Autowired
+    public CommunityServiceImpl(CommunityRepository communityRepository) {
+        this.communityRepository = communityRepository;
     }
 
     @Override
-    public Community create(Community c) {
-        return repo.save(c);
+    public Community get(long id) {
+        return communityRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void save(Community community) {
+        communityRepository.save(community);
+    }
+
+    @Override
+    public void delete(long id) {
+        communityRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(Community community) {
+        communityRepository.save(community);
     }
 
     @Override
     public List<Community> getAll() {
-        return repo.findAll();
-    }
-
-    @Override
-    public Community getById(String id) {
-        return repo.findById(id).orElse(null);
-    }
-
-    @Override
-    public Community update(String id, Community c) {
-        Community existing = getById(id);
-        if (existing == null) return null;
-
-        existing.setName(c.getName());
-        existing.setIdNumber(c.getIdNumber());
-        existing.setFoundingDate(c.getFoundingDate());
-        existing.setMembers(c.getMembersList());
-        existing.setActivities(c.getActivityList());
-        existing.setPartners(c.getPartnerList());
-
-        return repo.save(existing);
-    }
-
-    @Override
-    public void delete(String id) {
-        repo.deleteById(id);
+        return communityRepository.findAll();
     }
 }

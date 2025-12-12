@@ -1,15 +1,27 @@
 package cz.uhk.kppro.model;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "program")
 public class Program {
-    private String id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String name;
     private Integer amountMax;
-    // getters/setters
 
-    public String getId() {
+    @ManyToOne
+    private Partner partner;
+
+
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

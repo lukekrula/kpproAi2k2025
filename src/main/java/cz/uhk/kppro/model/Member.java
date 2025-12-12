@@ -1,15 +1,24 @@
 package cz.uhk.kppro.model;
+
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "member")
 public class Member {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String name;
     private String role; // leader, member, ...
     private String email;
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -36,4 +45,14 @@ public class Member {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @ManyToMany
+    @JoinTable(
+            name = "member_community",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "community_id")
+    )
+
+    private List<Community> communities;
+
 }

@@ -1,11 +1,16 @@
 package cz.uhk.kppro.service;
 
+import cz.uhk.kppro.model.Role;
 import cz.uhk.kppro.model.User;
+import cz.uhk.kppro.repository.RoleRepository;
 import cz.uhk.kppro.repository.UserRepository;
 import cz.uhk.kppro.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +19,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -55,4 +62,32 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) {
         return null; // only if you add email field
     }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Override
+    public void updateUser(User updatedUser, String newPassword) {
+
+        User existing = userRepository.findById(updatedUser.getId())
+                .orElseThrow();
+        // Update username
+        existing.setUsername(updatedUser.getUsername());
+
+        //  Update role
+        Role role = roleRepository.findById(updatedUser.getRole().getId())
+                .orElseThrow();
+        existing.setRole(role);
+
+        //  Update password only if provided
+        if (newPassword != null && !newPassword.isBlank()) {
+            existing.setPassword(passwordEncoder.encode(newPassword));
+        }
+
+        userRepository.save(existing);
+    }
+
 }

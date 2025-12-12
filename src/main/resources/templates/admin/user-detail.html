@@ -14,9 +14,11 @@
     <title>KPPRO-Ai2k-LK</title>
 </head>
 <body>
+<!-- Header fragment -->
+<div th:replace="fragments/header :: header"></div>
+
 <div class="page">
-    <!-- Header fragment -->
-    <div th:replace="fragments/header :: header"></div>
+
 
         <h1><h1 th:text="${'Details for user no: ' + id}"></h1></h1>
         <p class="subtitle">Detailed info:</p>
@@ -25,13 +27,13 @@
 
         <div class="card">
 
-            <h1 th:text="${user.role}">User Title</h1>
+            <h1 th:text="${user.role.name}">User Title</h1>
             <p th:text="${user.username}">User Description</p>
-            
+
         </div>
 
         <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn">Edit</a>
-        <a th:href="@{/users/}" class="btn">Go to user list</a>
+        <a th:href="@{/users}" class="btn">Go to user list</a>
 
     </main>
 </div>

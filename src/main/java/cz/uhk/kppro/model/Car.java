@@ -31,7 +31,7 @@ public class Car {
         return drivers;
     }
 
-    public void setDrivers(ArrayList<Driver> drivers) {
+    public void setDrivers(List<Driver> drivers) {
         this.drivers = drivers;
     }
 

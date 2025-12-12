@@ -27,28 +27,29 @@ public class SecurityConfig {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        // ✅ Register authentication provider BEFORE building the chain
+        var authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authBuilder
+                .userDetailsService(userService)
+                .passwordEncoder(passwordEncoder);
+
+        var authenticationManager = authBuilder.build();
+        http.authenticationManager(authenticationManager);
+
         http
                 .authorizeHttpRequests(auth -> auth
-                        // restricted access to folders according to role
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/super/**").hasRole("SUPER_USER")
                         .requestMatchers("/user/**").hasRole("USER")
-                        // folders static and images are public
                         .requestMatchers("/css/**", "/images/**", "/data/**").permitAll()
-                        // login required for all other requests
                         .anyRequest().authenticated()
                 )
-
-                .formLogin((form) -> form
-                        .loginPage("/login") // Custom login page
-                        .loginProcessingUrl("/login") // Form submission URL
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
                         .successHandler((request, response, authentication) -> {
                             var authorities = authentication.getAuthorities();
                             if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
@@ -59,25 +60,22 @@ public class SecurityConfig {
                                 response.sendRedirect("/");
                             }
                         })
-                        .failureUrl("/login?error")       // failure redirect
-                        .permitAll())
+                        .failureUrl("/login?error")
+                        .permitAll()
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                .exceptionHandling((exceptions) -> exceptions
-                        .accessDeniedHandler(accessDeniedHandler()));
+                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler()));
 
         return http.build();
     }
 
-
-
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, accessDeniedException) -> {
-            response.sendRedirect("/403");
-        };
+        return (request, response, accessDeniedException) ->
+                response.sendRedirect("/403");
     }
 }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<!-- Header fragment -->
+<div th:replace="fragments/header :: header"></div>
+
+<div class="page">
+    <main>
+        <div class="list">
+            <div class="card">
+                <h1><h1 th:text="${'Details for user no: ' + id}"></h1></h1>
+                <p class="subtitle">Detailed info:</p>
+            </div>
+            <div class="card">
+                <h1 th:text="${'Editing user no: ' + user.id}">Edit User</h1>
+                <p class="subtitle">Update user details below:</p>
+            </div>
+        </div>
+        <div class="list warn-table-wrap">
+            <div class="warn-card">
+                <h3>Actual values</h3>
+                <h1 th:text="${user.username}">Edit user</h1>
+                <p th:text="${user.role.name}">User Description</p>
+
+
+
+            </div>
+            <div class="warn-card">
+                <h3>New values</h3>
+                <form th:action="@{/users/save}" th:object="${user}" method="post" class="card">
+                    <!-- hidden id field ensures updates go to the same entity -->
+
+                    <input type="hidden" th:field="*{id}" />
+                    <div class="editor">
+
+                        <label>Username:</label>
+                        <input type="text" th:field="*{username}" />
+                    </div>
+
+                    <div class="editor">
+                        <label>Role:</label>
+                        <select th:field="*{role.id}">
+                            <option th:each="r : ${roles}"
+                                    th:value="${r.id}"
+                                    th:text="${r.name}"
+                                    th:selected="${r.id == user.role.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="editor">
+
+                        <label>New Password (leave empty to keep old):</label>
+                        <input type="password" name="newPassword" />
+                    </div>
+                    <div class="btn-wrap">
+                        <button type="submit" class="btn warn-btn">Save</button>
+                        <a th:href="@{/users/detail/{id}(id=${user.id})}" class="btn">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
 package cz.uhk.kppro.controller;
 
 import cz.uhk.kppro.model.User;
+import cz.uhk.kppro.repository.RoleRepository;
 import cz.uhk.kppro.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +12,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public void setUserService(UserService userService) {
+    public UserController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
+        this.roleRepository = roleRepository;
     }
+
 
     // LIST USERS
     @GetMapping("")
@@ -40,6 +44,9 @@ public class UserController {
         if (user == null) {
             return "redirect:/users";
         }
+
+        model.addAttribute("user", user);
+        model.addAttribute("roles", roleRepository.findAll());
         model.addAttribute("user", user);
         return "admin/user-edit";
     }
@@ -54,6 +61,16 @@ public class UserController {
                 ? "redirect:/users"
                 : "redirect:/users/detail/" + user.getId();
     }
+
+    @PostMapping("/create")
+    public String create(@ModelAttribute User user,
+                       @RequestParam(required = false) String newPassword) {
+
+        userService.updateUser(user, newPassword);
+
+        return "redirect:/users";
+    }
+
 
     // USER DETAIL PAGE
     @GetMapping("/detail/{id}")
