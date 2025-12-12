@@ -4,12 +4,13 @@ import cz.uhk.kppro.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
     void save(User user);
 
-    void updateUser(User user, String newPassword);
+    void updateUser(User user, String newPassword, long roleId);
 
     User get(Long id);
 
@@ -17,5 +18,10 @@ public interface UserService extends UserDetailsService {
 
     void delete(Long id);
 
-    User getByEmail(String email); // optional, if you add email field
+    void createUser(User user, String password, long roleId);
+
+
+    Optional<User> getByEmail(String email);
+
+    User findById(Long id);
 }

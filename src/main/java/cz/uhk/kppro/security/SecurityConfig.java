@@ -41,10 +41,10 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admi/**").hasRole("ADMIN")
                         .requestMatchers("/super/**").hasRole("SUPER_USER")
                         .requestMatchers("/user/**").hasRole("USER")
-                        .requestMatchers("/css/**", "/images/**", "/data/**").permitAll()
+                        .requestMatchers("/css/**", "/images/**", "/data/**", "/admin/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

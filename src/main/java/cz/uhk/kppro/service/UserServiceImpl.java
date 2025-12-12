@@ -6,20 +6,18 @@ import cz.uhk.kppro.repository.RoleRepository;
 import cz.uhk.kppro.repository.UserRepository;
 import cz.uhk.kppro.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
 
 
     @Autowired
@@ -58,10 +56,13 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+
     @Override
-    public User getByEmail(String email) {
-        return null; // only if you add email field
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
     }
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -70,14 +71,31 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     @Override
-    public void updateUser(User updatedUser, String newPassword) {
+    public void createUser(User user, String password, long roleId) {
+        Role role = roleRepository.findById(user.getRole().getId())
+                .orElseThrow();
+        user.setRole(role);
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> getByEmail(String email) {
+        return Optional.empty();
+    }
+
+
+    @Override
+    public void updateUser(User updatedUser, String newPassword, long roleId) {
+        System.out.println("ROLE ID = " + updatedUser.getRole().getId());
+        System.out.println("user ID = " + updatedUser.getId());
 
         User existing = userRepository.findById(updatedUser.getId())
                 .orElseThrow();
-        // Update username
+
         existing.setUsername(updatedUser.getUsername());
 
-        //  Update role
+        //  Load role from DB (critical fix)
         Role role = roleRepository.findById(updatedUser.getRole().getId())
                 .orElseThrow();
         existing.setRole(role);
@@ -87,7 +105,9 @@ public class UserServiceImpl implements UserService {
             existing.setPassword(passwordEncoder.encode(newPassword));
         }
 
+
         userRepository.save(existing);
     }
+
 
 }
