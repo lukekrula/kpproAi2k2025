@@ -22,7 +22,7 @@ public class UserController {
     @GetMapping("")
     public String index(Model model) {
         System.out.println("Users: " + userService.getAll().size());
-        model.addAttribute("list", userService.getAll());
+        model.addAttribute("users", userService.getAll());
         return "admin/users"; // templates/admin/users.html
     }
 
