@@ -18,11 +18,16 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -56,26 +61,22 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-
     @Override
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
     }
 
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
+    //  CREATE USER (clean version)
     @Override
     public void createUser(User user, String password, long roleId) {
-        Role role = roleRepository.findById(user.getRole().getId())
+
+        Role role = roleRepository.findById(roleId)
                 .orElseThrow();
+
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(password));
+
         userRepository.save(user);
     }
 
@@ -84,30 +85,25 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
     }
 
-
+    //  UPDATE USER (clean version)
     @Override
     public void updateUser(User updatedUser, String newPassword, long roleId) {
-        System.out.println("ROLE ID = " + updatedUser.getRole().getId());
-        System.out.println("user ID = " + updatedUser.getId());
 
         User existing = userRepository.findById(updatedUser.getId())
                 .orElseThrow();
 
         existing.setUsername(updatedUser.getUsername());
 
-        //  Load role from DB (critical fix)
-        Role role = roleRepository.findById(updatedUser.getRole().getId())
+        //  Set role from roleId (not from updatedUser)
+        Role role = roleRepository.findById(roleId)
                 .orElseThrow();
         existing.setRole(role);
 
-        //  Update password only if provided
+        //  Encode password only if provided
         if (newPassword != null && !newPassword.isBlank()) {
             existing.setPassword(passwordEncoder.encode(newPassword));
         }
 
-
         userRepository.save(existing);
     }
-
-
 }

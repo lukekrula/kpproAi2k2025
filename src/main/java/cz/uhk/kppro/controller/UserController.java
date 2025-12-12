@@ -29,6 +29,13 @@ public class UserController {
         return "admin/users";
     }
 
+    @GetMapping("/add-user")
+    public String addUser(Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("roles", roleRepository.findAll());
+        return "admin/add-user";
+    }
+
     // EDIT USER FORM
     @GetMapping("/edit/{id}")
     public String edit(Model model, @PathVariable Long id) {
@@ -52,41 +59,30 @@ public class UserController {
     @PostMapping("/save")
     public String updateUser(
             @ModelAttribute User formUser,
-            @RequestParam(required = false) String newPassword,
-            Model model) {
+            @RequestParam Long roleId,
+            @RequestParam(required = false) String newPassword) {
 
-        System.out.println(">>> FORM USER ID = " + formUser.getId());
-        System.out.println(">>> FORM USER ROLE = " +
-                (formUser.getRole() != null ? formUser.getRole().getId() : "null"));
-
-        User existing = userService.get(formUser.getId());
-        if (existing == null) {
-            return "redirect:/users";
-        }
-
-        // If role missing → redisplay form
-        if (formUser.getRole() == null || formUser.getRole().getId() == null) {
-            model.addAttribute("error", "Role is required.");
-            model.addAttribute("roles", roleRepository.findAll());
-
-            // Ensure role object exists
-            if (existing.getRole() == null) {
-                existing.setRole(new Role());
-            }
-
-            model.addAttribute("user", existing);
-            return "admin/user-edit";
-        }
-
-        // Update user
-        userService.updateUser(
-                formUser,
-                newPassword,
-                formUser.getRole().getId()
-        );
+        userService.updateUser(formUser, newPassword, roleId);
 
         return "redirect:/users/detail/" + formUser.getId();
     }
+
+
+
+    @PostMapping("/create")
+    public String create(
+            @RequestParam String username,
+            @RequestParam String password,
+            @RequestParam Long roleId) {
+
+        User user = new User();
+        user.setUsername(username);
+
+        userService.createUser(user, password, roleId);
+
+        return "redirect:/users";
+    }
+
 
     // USER DETAIL PAGE
     @GetMapping("/detail/{id}")
