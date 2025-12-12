@@ -18,7 +18,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    // ✅ LIST USERS
+    // LIST USERS
     @GetMapping("")
     public String index(Model model) {
         System.out.println("Users: " + userService.getAll().size());
@@ -26,14 +26,14 @@ public class UserController {
         return "admin/users"; // templates/admin/users.html
     }
 
-    // ✅ ADD USER FORM
+    // ADD USER FORM
     @GetMapping("/add")
     public String add(Model model) {
         model.addAttribute("user", new User());
         return "admin/user-add"; // recommended: keep admin templates grouped
     }
 
-    // ✅ EDIT USER FORM
+    // EDIT USER FORM
     @GetMapping("/edit/{id}")
     public String edit(Model model, @PathVariable Long id) {
         User user = userService.get(id);
@@ -44,7 +44,7 @@ public class UserController {
         return "admin/user-edit";
     }
 
-    // ✅ SAVE USER (CREATE OR UPDATE)
+    // SAVE USER (CREATE OR UPDATE)
     @PostMapping("/save")
     public String save(@ModelAttribute User user) {
         boolean isNew = (user.getId() == null);
@@ -55,7 +55,7 @@ public class UserController {
                 : "redirect:/users/detail/" + user.getId();
     }
 
-    // ✅ USER DETAIL PAGE
+    // USER DETAIL PAGE
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable Long id) {
         User user = userService.get(id);
@@ -66,7 +66,7 @@ public class UserController {
         return "admin/user-detail";
     }
 
-    // ✅ DELETE USER
+    // DELETE USER
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         User user = userService.get(id);
