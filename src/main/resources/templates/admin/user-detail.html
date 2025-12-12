@@ -25,9 +25,9 @@
 
         <div class="card">
 
-            <h1 th:text="${user.title}">User Title</h1>
-            <p th:text="${user.description}">User Description</p>
-            <p>Status: <span th:text="${user.done} ? 'Done &#9989;' : 'Not done &#10060;'"></span></p>
+            <h1 th:text="${user.role}">User Title</h1>
+            <p th:text="${user.username}">User Description</p>
+            
         </div>
 
         <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn">Edit</a>
