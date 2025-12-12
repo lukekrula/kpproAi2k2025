@@ -20,7 +20,10 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    // --- Getters & Setters ---
+    public User() {
+        this.role = new Role();
+    }
+
 
     public Long getId() {
         return id;
