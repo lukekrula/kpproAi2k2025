@@ -1,34 +1,35 @@
 /* Color scheme */
 :root {
-    --primary-background: #a8d5a1;
+    --primary-background: #d5a1a1;
     /* Main background color */
     --text: #FFFFFF;
     /* Light text color */
-    --darker-background: #2e7d32;
+    --darker-background: #7d2e2e;
     /* header - footer background*/
-    --mid-background: #68b159;
+    --mid-background: #b15959;
     /* #ad82c2; */
     /* nav bar background*/
-    --shadow: #587752;
+    --shadow: #775252;
     /* header - footer background*/
-    --text-shadow: #0c4700;
-    --text-light: #d5ffd5;
+    --text-shadow: #470000;
+    --text-light: #ffd5d5;
     /* header - footer background*/
     --img-border: white;
     --shadow-hover: rgba(0, 0, 0, 0.2);
     --text-dark: #333333;
-    --card: #0c4700;
-    --bg: #0d2006;
-    --accent: #68b159;
+    --card: #470000;
+    --bg: #200606;
+    --accent: #b15959;
     --muted: #687366;
-    --decent: #2e7d32;
-    --scent: #a8d5a1;
+    --decent: #7d2e2e;
+    --scent: #d5a1a1;
     --warn-primary: #443c22;
     --warn-light: #7d6d2e;
     --warn-accent: #b19559;
     --alert-primary: #442222;
     --alert-light: #7d2e2e;
     --alert-accent: #b15959;
+    --alert-alarm: #a60000;
 }
 
 * {
@@ -81,8 +82,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    color: white;
+    font-size: xxx-large;
+    font-weight: 900;
+    color: var(--alert-alarm);
     box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12)
 }
 

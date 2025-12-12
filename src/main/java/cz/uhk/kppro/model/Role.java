@@ -13,15 +13,11 @@ public class Role {
     @Column(unique = true, nullable = false)
     private String name;
 
-    public Role() {
-    }
+    public Role() {}
 
     public Role(String name) {
         this.name = name;
     }
-
-    // ✅ Remove this broken constructor
-    // public Role(Object o, String admin) { }
 
     public Long getId() {
         return id;

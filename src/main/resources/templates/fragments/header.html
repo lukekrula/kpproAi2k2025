@@ -4,7 +4,10 @@
         <div class="list">
             <div class="warn-table-wrap">
                 <a th:href="@{map}" class="btn">mapa</a>
-                <a th:href="@{arch}" class="btn">mapa2</a>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn">Logout</button>
+                </form>
+
             </div>
         </div>
     </div>
