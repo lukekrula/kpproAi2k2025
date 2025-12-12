@@ -16,28 +16,13 @@ public class CommunityController {
         this.service = service;
     }
 
-    @PostMapping
-    public Community create(@RequestBody Community c) {
-        return service.create(c);
-    }
+
 
     @GetMapping
     public List<Community> all() {
         return service.getAll();
     }
 
-    @GetMapping("/{id}")
-    public Community one(@PathVariable String id) {
-        return service.getById(id);
-    }
 
-    @PutMapping("/{id}")
-    public Community update(@PathVariable String id, @RequestBody Community c) {
-        return service.update(id, c);
-    }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
-        service.delete(id);
-    }
 }

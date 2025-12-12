@@ -9,6 +9,8 @@ public interface UserService extends UserDetailsService {
 
     void save(User user);
 
+    void updateUser(User user, String newPassword);
+
     User get(Long id);
 
     List<User> getAll();

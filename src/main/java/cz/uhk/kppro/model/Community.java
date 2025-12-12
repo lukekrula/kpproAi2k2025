@@ -1,24 +1,31 @@
 package cz.uhk.kppro.model;
 
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "communities")
+@Entity
+@Table(name = "community")
 public class Community {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String name;
 
-    public String getId() {
+    @ManyToMany(mappedBy = "communities")
+    private List<Member> members;
+
+    @ManyToMany(mappedBy = "communities")
+    private List<Activity> activities;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -49,24 +56,18 @@ public class Community {
     private String idNumber;
     private LocalDate foundingDate;
 
-    @Getter
-    @ManyToMany(mappedBy = "community")
-    private List<Member> members = new ArrayList<>();
 
     public void setMembers(List<Member> members) {
         this.members = members;
     }
 
-    @Getter
-    @ManyToMany(mappedBy = "community")
-    public List<Activity> activities = new ArrayList<>();
 
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
     }
 
     @Getter
-    @ManyToMany(mappedBy = "community")
+    @ManyToMany(mappedBy = "communities")
     public List<Partner> partners = new ArrayList<>();
 
     public void setPartners(List<Partner> partners) {

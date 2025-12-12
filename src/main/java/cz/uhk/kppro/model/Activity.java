@@ -1,16 +1,24 @@
 package cz.uhk.kppro.model;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
+import java.util.List;
+
+@Entity
+@Table(name = "activity")
 public class Activity {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String title;
     private LocalDate date;
     // getters/setters
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -29,4 +37,12 @@ public class Activity {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+    @ManyToMany
+    @JoinTable(
+            name = "activity_community",
+            joinColumns = @JoinColumn(name = "activity_id"),
+            inverseJoinColumns = @JoinColumn(name = "community_id")
+    )
+    private List<Community> communities;
+
 }
