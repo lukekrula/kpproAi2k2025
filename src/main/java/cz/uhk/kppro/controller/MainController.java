@@ -20,9 +20,10 @@ public class MainController {
     public String admin() {
         return "admin";
     }
+
     @GetMapping("/login")
     public String login() {
-        return "/login";
+        return "login";
     }
 
 
@@ -70,8 +71,5 @@ public class MainController {
         return "login-error";
     }
 
-    @GetMapping("/logout")
-    public String logout() {
-        return "logout";
-    }
+
 }

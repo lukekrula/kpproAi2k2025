@@ -30,7 +30,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        // ✅ Register authentication provider BEFORE building the chain
+        // Register authentication provider BEFORE building the chain
         var authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authBuilder
                 .userDetailsService(userService)
@@ -42,10 +42,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").hasRole("ADMIN")
-                        .requestMatchers("/admi/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/super/**").hasRole("SUPER_USER")
                         .requestMatchers("/user/**").hasRole("USER")
-                        .requestMatchers("/css/**", "/images/**", "/data/**", "/admin/**").permitAll()
+                        .requestMatchers("/css/**", "/images/**", "/data/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
