@@ -2,33 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Landni'ś</title>
     <link rel="stylesheet" th:href="@{/css/login-style.css}"/>
 </head>
+
 <body>
-<main class="card" role="main" aria-labelledby="signin-title">
 
-    <div class="brand">
-        <div class="logo" aria-hidden>
-            D
-        </div>
-        <div>
-            <h1 id="signin-title">Landni'ś</h1>
-            <p class="lead">muzete zde cokoliv</p>
-        </div>
-    </div>
+<main class="landing-container">
 
-            <h1 th:text="${'Hello ' + name}"></h1>
-            <div class="card" th:each="item : ${list}">
+    <!-- HERO SECTION -->
+    <section class="hero card">
+        <div class="brand">
+            <div class="logo" aria-hidden>D</div>
+            <div>
+                <h1 id="signin-title">Landni'ś</h1>
+                <p class="lead">muzete zde cokoliv</p>
+            </div>
+        </div>
+
+        <h2 class="hero-title" th:text="${'Hello ' + name}"></h2>
+        <p class="hero-subtitle">Welcome to your personal space for ideas, projects, and creativity.</p>
+
+        <a th:href="@{/login}" class="btn hero-btn">Go to item list</a>
+    </section>
+
+
+    <!-- FEATURE LIST -->
+    <section class="features">
+        <h2 class="section-title">Your Items</h2>
+
+        <div class="feature-grid">
+            <div class="card feature-card" th:each="item : ${list}">
                 <h3 th:text="${item.title}"></h3>
                 <p th:text="${item.description}"></p>
             </div>
-            <a th:href="@{/login}" class="btn">Go to item list</a>
+        </div>
+    </section>
 
 
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p class="small">© 2025 Landni'ś — All rights reserved.</p>
+    </footer>
 
+</main>
 
-
-    </main>
 </body>
 </html>
