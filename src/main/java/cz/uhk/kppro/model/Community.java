@@ -1,25 +1,44 @@
 package cz.uhk.kppro.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "community")
+@Table(name = "Communities")
 public class Community {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "Name")
     private String name;
 
-    @ManyToMany(mappedBy = "communities")
-    private List<Member> members;
+    @Column(name = "RegistrationNumber")
+    private String registrationNumber;
+
+    @Column(name = "CaseNumber")
+    private String caseNumber;
+
+    @Column(name = "FoundingDate")
+    private String foundingDateRaw;
+
+    @Column(name = "Address")
+    private String address;
+
+    @Transient
+    private LocalDate foundingDate;
 
     @ManyToMany(mappedBy = "communities")
-    private List<Activity> activities;
+    private List<Member> members = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "communities")
+    private List<Activity> activities = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "communities")
+    private List<Partner> partners = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -37,12 +56,28 @@ public class Community {
         this.name = name;
     }
 
-    public String getIdNumber() {
-        return idNumber;
+    public String getRegistrationNumber() {
+        return registrationNumber;
     }
 
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
+    }
+
+    public String getCaseNumber() {
+        return caseNumber;
+    }
+
+    public void setCaseNumber(String caseNumber) {
+        this.caseNumber = caseNumber;
+    }
+
+    public String getFoundingDateRaw() {
+        return foundingDateRaw;
+    }
+
+    public void setFoundingDateRaw(String foundingDateRaw) {
+        this.foundingDateRaw = foundingDateRaw;
     }
 
     public LocalDate getFoundingDate() {
@@ -53,36 +88,35 @@ public class Community {
         this.foundingDate = foundingDate;
     }
 
-    private String idNumber;
-    private LocalDate foundingDate;
+    public String getAddress() {
+        return address;
+    }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public List<Member> getMembers() {
+        return members;
+    }
 
     public void setMembers(List<Member> members) {
         this.members = members;
     }
 
+    public List<Activity> getActivities() {
+        return activities;
+    }
 
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
     }
 
-    @Getter
-    @ManyToMany(mappedBy = "communities")
-    public List<Partner> partners = new ArrayList<>();
+    public List<Partner> getPartners() {
+        return partners;
+    }
 
     public void setPartners(List<Partner> partners) {
         this.partners = partners;
-    }
-
-    public List<Member> getMembersList() {
-    return members;
-    }
-
-    public List<Activity> getActivityList() {
-    return activities;
-    }
-
-    public List<Partner> getPartnerList() {
-    return partners;
     }
 }
