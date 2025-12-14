@@ -14,8 +14,19 @@ import java.io.InputStream;
 public class GeoController {
 
     private String normalizeAddress(String address) {
-        // Remove Czech house number prefixes
-        String cleaned = address
+
+        // 1. Split on comma FIRST
+        String[] parts = address.split(",");
+
+        if (parts.length < 2) {
+            return address + " Czech Republic";
+        }
+
+        String housePart = parts[0].trim();   // "č.p. 205"
+        String restPart  = parts[1].trim();   // "543 72 Rudník"
+
+        // 2. Clean house number part
+        housePart = housePart
                 .replace("č.p.", "")
                 .replace("č.ev.", "")
                 .replace("č.p", "")
@@ -23,25 +34,26 @@ public class GeoController {
                 .replace("č.", "")
                 .replace("čp.", "")
                 .replace("čp", "")
-                .replace(",", "")
                 .trim();
 
-        // Split into parts
-        // Example: "205 543 72 Rudník"
-        String[] parts = cleaned.split("\\s+");
+        // Extract only digits → building number
+        String buildingNumber = housePart.replaceAll("[^0-9]", "");
 
-        // Extract house number (first number)
-        String house = parts[0];
+        // 3. Extract village name (ignore postal code)
+        String[] tokens = restPart.split("\\s+");
 
-        // Extract postal code (54372 or 543 72)
-        String postal = parts[1] + parts[2];
+        // Village is everything after the postal code (first 2 tokens)
+        StringBuilder villageBuilder = new StringBuilder();
+        for (int i = 2; i < tokens.length; i++) {
+            villageBuilder.append(tokens[i]).append(" ");
+        }
+        String village = villageBuilder.toString().trim();
 
-        // Extract village (remaining)
-        String village = parts[3];
-
-        // Return normalized Czech-friendly format
-        return village + " " + house + " Czech Republic";
+        // 4. Build final Czech-friendly format
+        return buildingNumber + " " + village + " Czech Republic";
     }
+
+
 
 
 
@@ -152,6 +164,7 @@ public class GeoController {
                 return result;
             }
         }
+        System.out.println("LOOKUP ADDRESS = " + address);
 
         return java.util.Collections.emptyList();
     }
