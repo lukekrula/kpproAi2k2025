@@ -59,7 +59,7 @@ public class CommunityController {
         Community community = communityService.get(id);
         if(community != null) {
             model.addAttribute("community", community);
-            return "detail";
+            return "community-detail";
         }else{
             return "redirect:/communities/";
         }
