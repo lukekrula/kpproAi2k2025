@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface TownRepository extends JpaRepository<Town, Long> {
-
+    Optional<Town> findByPostalCode(String postalCode);
 }

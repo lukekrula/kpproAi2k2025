@@ -1,10 +1,10 @@
 package cz.uhk.kppro.controller;
 
-
 import cz.uhk.kppro.model.Community;
-
+import cz.uhk.kppro.service.AddressService;
 import cz.uhk.kppro.service.CommunityService;
-import org.springframework.beans.factory.annotation.Autowired;
+import cz.uhk.kppro.service.GeocodingService;
+import cz.uhk.kppro.service.TownService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +13,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/communities")
 public class CommunityController {
 
-    private CommunityService communityService;
+    private final CommunityService communityService;
+    private final TownService townService;
+    private final AddressService addressService;
+    private final GeocodingService geocodingService;
 
-
-    @Autowired
-    public void setDriverService(CommunityService communityService) {
+    public CommunityController(CommunityService communityService,
+                               TownService townService,
+                               AddressService addressService,
+                               GeocodingService geocodingService) {
         this.communityService = communityService;
-
+        this.townService = townService;
+        this.addressService = addressService;
+        this.geocodingService = geocodingService;
     }
 
     @GetMapping("/")
@@ -30,7 +36,6 @@ public class CommunityController {
 
     @GetMapping("/add")
     public String add(Model model) {
-
         model.addAttribute("community", new Community());
         return "add";
     }
@@ -45,22 +50,21 @@ public class CommunityController {
         return "edit";
     }
 
-
     @PostMapping("/save")
     public String save(@ModelAttribute Community community) {
-        boolean test = community.getId() == 0;
+        boolean isNew = community.getId() == 0;
         communityService.save(community);
-        return test ? "redirect:/communities/" :
-                "redirect:/communities/detail/" + String.valueOf(community.getId());
+        return isNew ? "redirect:/communities/" :
+                "redirect:/communities/detail/" + community.getId();
     }
 
     @GetMapping("/detail/{id}")
     public String detail(Model model, @PathVariable int id) {
         Community community = communityService.get(id);
-        if(community != null) {
+        if (community != null) {
             model.addAttribute("community", community);
             return "community-detail";
-        }else{
+        } else {
             return "redirect:/communities/";
         }
     }
@@ -68,25 +72,29 @@ public class CommunityController {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable int id) {
         Community community = communityService.get(id);
-        if(community != null) {
+        if (community != null) {
             communityService.delete(id);
-            return "redirect:/communities/";
-        }else{
-            return "redirect:/communities/";
         }
+        return "redirect:/communities/";
     }
 
     @PostMapping("/detail/{id}")
     public String detail(@PathVariable int id,
                          @RequestParam(defaultValue = "false") boolean done) {
         Community community = communityService.get(id);
-        if(community != null) {
-
+        if (community != null) {
             communityService.save(community);
-            return "redirect:/communities/detail/" + String.valueOf(id);
-        }else{
+            return "redirect:/communities/detail/" + id;
+        } else {
             return "redirect:/communities/";
         }
     }
 
+    // NEW: Geocoding endpoint for your map
+    @GetMapping("/geocode")
+    @ResponseBody
+    public Object geocode(@RequestParam String address) {
+        String normalized = addressService.buildGeocodeAddress(address);
+        return geocodingService.geocode(normalized);
+    }
 }
