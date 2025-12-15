@@ -1,7 +1,20 @@
-INSERT INTO items (title, description, done) VALUES ( 'Super polozka', 'Nejlepsi item na svete', FALSE);
-INSERT INTO items (title, description, done) VALUES ('Phone', 'Smartphone with 5G', false);
-INSERT INTO items (title, description, done) VALUES ('Laptop', 'Lightweight ultrabook', false);
-INSERT INTO items (title, description, done) VALUES ('Headphones', 'Noise-cancelling', true);
+-- src/main/resources/schema.sql
+
+-- Disable foreign key constraints
+SET REFERENTIAL_INTEGRITY FALSE;
+
+-- Drop the table
+DROP TABLE IF EXISTS Towns;
+
+-- Re-enable foreign key constraints
+SET REFERENTIAL_INTEGRITY TRUE;
+
+-- Create the table Postal code length 10 for foreign countries
+CREATE TABLE Towns (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    PostalCode VARCHAR(10),
+    Town VARCHAR(100)
+);
 
 INSERT INTO Towns (PostalCode, Town) VALUES ('100 00', 'Praha 10');
 INSERT INTO Towns (PostalCode, Town) VALUES ('101 00', 'Praha 101');
