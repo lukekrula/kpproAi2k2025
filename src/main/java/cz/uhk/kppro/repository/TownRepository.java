@@ -7,7 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface TownRepository extends JpaRepository<Town, Long> {
-    Optional<Town> findByPostalCode(String postalCode);
-    Optional<Town> findByTown(String town);
-    boolean existsByPostalCodeAndTown(String postalCode, String town);
+
 }

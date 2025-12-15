@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TownServiceImpl {
+public class TownServiceImpl implements TownService {
 
     private TownRepository townRepository;
 
@@ -17,9 +17,11 @@ public class TownServiceImpl {
         this.townRepository = townRepository;
     }
 
+
     @Override
     public Town get(long id) {
-        return townRepository.findById(id).get();
+        return townRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Town not found: " + id));
     }
 
     @Override
@@ -42,3 +44,4 @@ public class TownServiceImpl {
         return townRepository.findAll();
     }
 }
+
