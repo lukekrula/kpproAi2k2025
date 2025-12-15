@@ -10,5 +10,6 @@ public interface TownService {
     void save(Town town);
     void delete(long id);
     void update(Town town);
+    Town getByPostalCode(String postalCode);
     List<Town> getAll();
 }

@@ -25,6 +25,12 @@ public class TownServiceImpl implements TownService {
     }
 
     @Override
+    public Town getByPostalCode(String postalCode) {
+        return townRepository.findByPostalCode(postalCode)
+                .orElseThrow(() -> new RuntimeException("Town not found: " + postalCode));
+    }
+
+    @Override
     public void save(Town town) {
         townRepository.save(town);
     }
@@ -38,6 +44,8 @@ public class TownServiceImpl implements TownService {
     public void update(Town town) {
         townRepository.save(town);
     }
+
+
 
     @Override
     public List<Town> getAll() {
