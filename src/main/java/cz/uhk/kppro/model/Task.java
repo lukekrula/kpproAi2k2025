@@ -17,12 +17,22 @@ public class Task {
 
     private boolean completed;
 
+    //  Task belongs to a Program
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "program_id")
+    private Program program;
+
+    //  Task is assigned to one Member
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigned_member_id")
+    private Member assignedTo;
+
     // CHILD → PARENT
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Task parent;
 
-    // PARENT → CHILDREN
+    //  PARENT → CHILDREN
     @OneToMany(
             mappedBy = "parent",
             cascade = CascadeType.ALL,
@@ -54,12 +64,17 @@ public class Task {
     }
 
 
+
     public UUID getId() {
         return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public boolean isCompletedFlag() {
+        return completed;
     }
 
     public List<Task> getSubTasks() {
@@ -69,5 +84,22 @@ public class Task {
     public Task getParent() {
         return parent;
     }
-}
 
+    public Program getProgram() {
+        return program;
+    }
+
+    public Member getAssignedTo() {
+        return assignedTo;
+    }
+
+
+
+    public void setProgram(Program program) {
+        this.program = program;
+    }
+
+    public void setAssignedTo(Member assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+}
