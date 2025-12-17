@@ -26,6 +26,16 @@ public class Member {
     )
     private List<Community> communities;
 
+    @ManyToMany(mappedBy = "assignedMembers")
+    private List<Program> assignedPrograms;
+
+    @OneToMany(mappedBy = "assignedTo")
+    private List<Task> assignedTasks;
+
+    @OneToMany(mappedBy = "manager")
+    private List<Program> managedPrograms;
+
+
     public long getId() {
         return id;
     }
