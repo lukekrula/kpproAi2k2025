@@ -8,7 +8,8 @@ import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
-    void save(User user);
+    User save(User user);
+
 
     void updateUser(User user, String newPassword, long roleId);
 
