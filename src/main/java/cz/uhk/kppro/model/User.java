@@ -16,12 +16,24 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private String email;
+
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
     @OneToOne(mappedBy = "user")
     private Member member;
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
 
     public User() {
         this.role = new Role();
@@ -59,4 +71,13 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 }

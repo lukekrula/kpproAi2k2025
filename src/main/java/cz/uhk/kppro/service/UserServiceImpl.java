@@ -42,9 +42,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user) {
-        userRepository.save(user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
+
 
     @Override
     public User get(Long id) {
@@ -82,8 +83,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getByEmail(String email) {
-        return Optional.empty();
+        return userRepository.findByEmail(email);
     }
+
 
     //  UPDATE USER (clean version)
     @Override
