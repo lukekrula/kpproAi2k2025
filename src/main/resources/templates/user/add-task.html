@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Task</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="page">
+    <main>
+
+        <div class="list">
+            <div class="card">
+                <h1>Add New Task</h1>
+                <p class="subtitle">Create a task with optional subtasks</p>
+            </div>
+        </div>
+
+        <div class="list warn-table-wrap">
+            <div class="warn-card">
+
+                <form th:action="@{/tasks/create}" method="post" class="card">
+
+                    <!-- Task name -->
+                    <div class="editor">
+                        <label>Task name:</label>
+                        <input type="text" name="name" required/>
+                    </div>
+
+                    <!-- Subtasks -->
+                    <div class="editor">
+                        <label>Subtasks:</label>
+                        <div id="subtasks"></div>
+                        <button type="button" class="btn" onclick="addSubtask()">+ Add subtask</button>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="btn-wrap">
+                        <button type="submit" class="btn warn-btn">Create Task</button>
+                        <a th:href="@{/tasks}" class="btn">Cancel</a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+    let index = 0;
+
+    function addSubtask() {
+        const container = document.getElementById('subtasks');
+
+        const div = document.createElement('div');
+        div.className = 'editor';
+
+        div.innerHTML = `
+            <input type="text" name="subTasks[${index}].name" placeholder="Subtask name" required />
+        `;
+
+        container.appendChild(div);
+        index++;
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks overview</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="page">
+
+    <h1>Tasks overview</h1>
+    <p class="subtitle">List of all tasks</p>
+
+    <main>
+        <input type="text" id="searchbox" placeholder="Search by task name">
+
+        <div class="list warn-table-wrap">
+            <ul id="taskList">
+                <li th:each="task : ${tasks}">
+                    <strong th:text="${task.name}"></strong>
+                    <span th:if="${task.completed}">✔</span>
+
+                    <!-- subtasks -->
+                    <ul th:if="${!#lists.isEmpty(task.subTasks)}">
+                        <li th:each="sub : ${task.subTasks}">
+                            └ <span th:text="${sub.name}"></span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <a th:href="@{/tasks/add}" class="btn">Add task</a>
+    </main>
+
+    <footer>
+        <small>Luděk Krůla - Ai2k</small>
+    </footer>
+
+    <script>
+        document.getElementById('searchbox').addEventListener('keyup', function () {
+            let filter = this.value.toLowerCase();
+            document.querySelectorAll('#taskList li').forEach(li => {
+                li.style.display = li.textContent.toLowerCase().includes(filter) ? '' : 'none';
+            });
+        });
+    </script>
+
+</div>
+</body>
+</html>
