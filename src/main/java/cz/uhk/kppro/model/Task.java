@@ -40,6 +40,8 @@ public class Task {
     )
     private List<Task> subTasks = new ArrayList<>();
 
+
+
     protected Task() {
         // JPA
     }

@@ -43,6 +43,7 @@ public class Program {
     )
     private List<Member> assignedMembers;
 
+
     @ManyToOne
     @JoinColumn(name = "manager_id")
     private Member manager;
@@ -52,14 +53,7 @@ public class Program {
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
     private List<Task> tasks;
 
-    @OneToMany(mappedBy = "assignedTo")
-    private List<Task> assignedTasks;
 
-    @ManyToMany(mappedBy = "assignedMembers")
-    private List<Program> assignedPrograms;
-
-    @OneToMany(mappedBy = "manager")
-    private List<Program> managedPrograms;
 
     public Community getCreator() {
         return creator;
@@ -99,9 +93,7 @@ public class Program {
         this.tasks = tasks;
     }
 
-    public List<Task> getAssignedTasks() {
-        return assignedTasks;
-    }
+
     public long getId() {
         return id;
     }
