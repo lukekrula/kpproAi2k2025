@@ -14,6 +14,18 @@ public class Member {
     private String role; // leader, member, ...
     private String email;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
+
+    @ManyToMany
+    @JoinTable(
+            name = "member_community",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "community_id")
+    )
+    private List<Community> communities;
+
     public long getId() {
         return id;
     }
@@ -46,13 +58,6 @@ public class Member {
         this.email = email;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "member_community",
-            joinColumns = @JoinColumn(name = "member_id"),
-            inverseJoinColumns = @JoinColumn(name = "community_id")
-    )
 
-    private List<Community> communities;
 
 }
