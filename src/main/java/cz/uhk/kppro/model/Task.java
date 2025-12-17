@@ -50,7 +50,7 @@ public class Task {
         this.name = name;
     }
 
-    // ===== Domain logic =====
+    // Domain logic
 
     public void addSubTask(Task subTask) {
         subTask.parent = this;
