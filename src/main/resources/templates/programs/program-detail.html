@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${program.name}">Program Detail</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="page">
+    <main>
+
+        <h1 th:text="${program.name}">Program Name</h1>
+        <p class="subtitle" th:text="${program.description}">Program description</p>
+
+        <div class="list warn-table-wrap">
+            <div class="warn-card">
+                <p><strong>Program ID:</strong> <span th:text="${program.id}"></span></p>
+                <p><strong>Manager:</strong> <span th:text="${program.manager.name}"></span></p>
+                <p><strong>Community:</strong> <span th:text="${program.community.name}"></span></p>
+                <p th:if="${program.amountMax}">
+                    <strong>Max amount:</strong> <span th:text="${program.amountMax}"></span>
+                </p>
+            </div>
+        </div>
+
+        <h2>Tasks</h2>
+
+        <div class="list warn-table-wrap">
+            <ul>
+                <li th:each="task : ${tasks}">
+                    <a th:href="@{/programs/{pid}/tasks(pid=${program.id})}">
+                        <strong th:text="${task.name}"></strong>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>
+        <a th:href="@{/templates/programs}" class="btn">Back to Programs</a>
+
+    </main>
+</div>
+
+</body>
+</html>

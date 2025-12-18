@@ -11,11 +11,10 @@ public class TaskDto {
     private String name;
     private boolean completed;
 
-    private long parentId;
-    private long programId;
+    private Long parentId;
+    private Long programId;
+
     private MemberDto assignedTo;
 
     private List<TaskDto> subTasks;
-    private TaskDto parent;
-    private ProgramDto program;
 }

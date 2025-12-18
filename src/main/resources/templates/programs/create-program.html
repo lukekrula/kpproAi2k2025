@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Program</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="page">
+    <main>
+
+        <h1>Create Program</h1>
+        <p class="subtitle">Fill in the details to create a new program</p>
+
+        <div class="list warn-table-wrap">
+            <div class="warn-card">
+
+                <form th:action="@{/programs/create}" method="post" class="card">
+
+                    <div class="editor">
+                        <label>Program name:</label>
+                        <input type="text" name="name" required>
+                    </div>
+
+                    <div class="editor">
+                        <label>Description:</label>
+                        <textarea name="description"></textarea>
+                    </div>
+
+                    <div class="editor">
+                        <label>Max amount (optional):</label>
+                        <input type="number" name="amountMax">
+                    </div>
+
+                    <div class="editor">
+                        <label>Manager ID:</label>
+                        <input type="number" name="managerId" required>
+                    </div>
+
+                    <div class="editor">
+                        <label>Community ID:</label>
+                        <input type="number" name="communityId" required>
+                    </div>
+
+                    <div class="btn-wrap">
+                        <button type="submit" class="btn warn-btn">Create Program</button>
+                        <a th:href="@{/templates/programs}" class="btn">Cancel</a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
