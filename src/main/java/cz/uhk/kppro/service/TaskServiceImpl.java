@@ -1,6 +1,10 @@
 package cz.uhk.kppro.service;
 
+import cz.uhk.kppro.model.Member;
+import cz.uhk.kppro.model.Program;
 import cz.uhk.kppro.model.Task;
+import cz.uhk.kppro.repository.MemberRepository;
+import cz.uhk.kppro.repository.ProgramRepository;
 import cz.uhk.kppro.repository.TaskRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -13,41 +17,65 @@ import java.util.UUID;
 @Transactional
 public class TaskServiceImpl implements TaskService {
 
-    private final TaskRepository repository;
+    private final TaskRepository taskRepository;
+    private final ProgramRepository programRepository;
+    private final MemberRepository memberRepository;
 
-    public TaskServiceImpl(TaskRepository repository) {
-        this.repository = repository;
+    public TaskServiceImpl(TaskRepository taskRepository,
+                           ProgramRepository programRepository,
+                           MemberRepository memberRepository) {
+        this.taskRepository = taskRepository;
+        this.programRepository = programRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
-    public Task createTask(String name) {
-        return repository.save(new Task(name));
+    public Task createTask(long programId, long assignedMemberId, Task task) {
+
+        Program program = programRepository.findById(programId)
+                .orElseThrow(() -> new RuntimeException("Program not found: " + programId));
+
+        Member assignedTo = memberRepository.findById(assignedMemberId)
+                .orElseThrow(() -> new RuntimeException("Member not found: " + assignedMemberId));
+
+        task.setProgram(program);
+        task.setAssignedTo(assignedTo);
+        task.setParent(null);
+
+        return taskRepository.save(task);
     }
 
     @Override
-    public void addSubTask(UUID parentId, String subTaskName) {
-        Task parent = repository.findById(parentId)
-                .orElseThrow(() -> new IllegalArgumentException("Parent not found"));
+    public Task addSubtask(long parentTaskId, Task subtask) {
 
-        Task child = new Task(subTaskName);
-        parent.addSubTask(child);
+        Task parent = taskRepository.findById(parentTaskId)
+                .orElseThrow(() -> new RuntimeException("Parent task not found: " + parentTaskId));
 
-        repository.save(parent); // cascades
+        subtask.setParent(parent);
+        subtask.setProgram(parent.getProgram());
+        subtask.setAssignedTo(parent.getAssignedTo());
+
+        return taskRepository.save(subtask);
     }
 
     @Override
-    public void completeTask(UUID id) {
-        Task task = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Task not found"));
-
-        task.complete();
+    public Task get(long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found: " + id));
     }
 
     @Override
-    public List<Task> findAllRootTasks() {
-        return repository.findAll()
-                .stream()
-                .filter(task -> task.getParent() == null)
-                .toList();
+    public List<Task> getAll() {
+        return taskRepository.findAll();
+    }
+
+    @Override
+    public void delete(long id) {
+        taskRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(Task task) {
+        taskRepository.save(task);
     }
 }

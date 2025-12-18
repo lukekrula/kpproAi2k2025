@@ -3,15 +3,23 @@ package cz.uhk.kppro.model;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "tasks")
 public class Task {
 
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     private String name;
 
@@ -61,21 +69,35 @@ public class Task {
         this.completed = true;
     }
 
-    public boolean isCompleted() {
-        return completed && subTasks.stream().allMatch(Task::isCompleted);
+    public boolean isFullyCompleted() {
+        return completed && subTasks.stream().allMatch(Task::isFullyCompleted);
     }
 
 
 
-    public UUID getId() {
-        return id;
+    public void setParent(Task parent) {
+        this.parent = parent;
+        if (parent != null && !parent.subTasks.contains(this)) {
+            parent.subTasks.add(this);
+        }
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+
+
 
     public String getName() {
         return name;
     }
 
-    public boolean isCompletedFlag() {
+    public boolean isCompletedValue() {
         return completed;
     }
 

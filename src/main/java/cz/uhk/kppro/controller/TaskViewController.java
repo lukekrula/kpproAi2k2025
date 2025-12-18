@@ -1,53 +1,62 @@
 package cz.uhk.kppro.controller;
 
+import cz.uhk.kppro.model.Task;
 import org.springframework.ui.Model;
 import cz.uhk.kppro.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/tasks")
+@RequestMapping("/programs/{programId}/tasks")
 public class TaskViewController {
 
     private final TaskService taskService;
 
-    @Autowired
     public TaskViewController(TaskService taskService) {
         this.taskService = taskService;
     }
 
-    // List tasks
+    // List tasks for a program
     @GetMapping
-    public String taskList(Model model) {
-        model.addAttribute("tasks", taskService.findAllRootTasks());
-        return "user/tasks";   // templates/user/task.html
+    public String listTasks(
+            @PathVariable long programId,
+            Model model
+    ) {
+        model.addAttribute("programId", programId);
+        model.addAttribute("tasks", taskService.getAll()); // you may filter by program later
+        return "tasks/list";
     }
 
-    // Add task form
-    @GetMapping("/add-task")
-    public String addTaskForm() {
-        return "user/add-task"; // templates/user/add-task.html
+    // Show form
+    @GetMapping("/create")
+    public String createForm(@PathVariable long programId, Model model) {
+        model.addAttribute("programId", programId);
+        return "tasks/create";
     }
 
-    // Create task and redirect
+    // Create task
     @PostMapping("/create")
     public String createTask(
-            @RequestParam String name,
-            @RequestParam(required = false) List<String> subTasks
+            @PathVariable long programId,
+            @RequestParam long memberId,
+            @RequestParam String name
     ) {
-        var task = taskService.createTask(name);
+        Task task = new Task(name);
+        taskService.createTask(programId, memberId, task);
+        return "redirect:/programs/" + programId + "/tasks";
+    }
 
-        if (subTasks != null) {
-            subTasks.forEach(sub -> taskService.addSubTask(task.getId(), sub));
-        }
-
-        // Redirect to task list page after creation
-        return "redirect:/tasks";
+    // Create subtask
+    @PostMapping("/{parentId}/subtask")
+    public String createSubtask(
+            @PathVariable long programId,
+            @PathVariable long parentId,
+            @RequestParam String name
+    ) {
+        Task subtask = new Task(name);
+        taskService.addSubtask(parentId, subtask);
+        return "redirect:/programs/" + programId + "/tasks";
     }
 }

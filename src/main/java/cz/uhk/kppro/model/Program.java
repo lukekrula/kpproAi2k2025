@@ -17,8 +17,6 @@ public class Program {
     private String description;
 
 
-
-
     @ManyToOne
     private Partner partner;
 
@@ -60,6 +58,7 @@ public class Program {
     }
 
     public void setCreator(Community creator) {
+        this.creator = creator;
     }
 
     public List<Community> getSharedWith() {
@@ -121,4 +120,17 @@ public class Program {
     public void setAmountMax(Integer amountMax) {
         this.amountMax = amountMax;
     }
+
+    public Partner getPartner() {
+        return partner;
+    }
+
+    public void setPartner(Partner partner) {
+        this.partner = partner;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }

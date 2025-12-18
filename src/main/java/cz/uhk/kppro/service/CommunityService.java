@@ -13,4 +13,5 @@ public interface CommunityService {
     List<Community> getAll();
 
 
+    Community assignMember(long communityId, long memberId);
 }

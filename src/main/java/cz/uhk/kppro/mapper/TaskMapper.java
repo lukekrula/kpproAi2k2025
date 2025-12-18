@@ -6,6 +6,7 @@ import cz.uhk.kppro.model.Task;
 
 import java.util.stream.Collectors;
 
+
 public class TaskMapper {
 
     public static TaskDto toDto(Task task) {
@@ -14,15 +15,18 @@ public class TaskMapper {
         TaskDto dto = new TaskDto();
         dto.setId(task.getId());
         dto.setName(task.getName());
-        dto.setCompleted(task.isCompletedFlag());
+        dto.setCompleted(task.isCompletedValue());
 
         if (task.getParent() != null) {
             dto.setParentId(task.getParent().getId());
         }
 
+        if (task.getProgram() != null) {
+            dto.setProgramId(task.getProgram().getId());
+        }
+
         dto.setAssignedTo(MemberMapper.toDto(task.getAssignedTo()));
 
-        // ✅ recursive mapping
         dto.setSubTasks(
                 task.getSubTasks()
                         .stream()
@@ -39,10 +43,18 @@ public class TaskMapper {
         TaskSummaryDto dto = new TaskSummaryDto();
         dto.setId(task.getId());
         dto.setName(task.getName());
-        dto.setCompleted(task.isCompletedFlag());
+        dto.setCompleted(task.isCompletedValue());
 
         if (task.getParent() != null) {
             dto.setParentId(task.getParent().getId());
+        }
+
+        if (task.getProgram() != null) {
+            dto.setProgramId(task.getProgram().getId());
+        }
+
+        if (task.getAssignedTo() != null) {
+            dto.setAssignedMemberId(task.getAssignedTo().getId());
         }
 
         return dto;

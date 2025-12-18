@@ -3,17 +3,19 @@ package cz.uhk.kppro.dto;
 import lombok.Data;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Data
 public class TaskDto {
-    private UUID id;
+    private long id;
     private String name;
     private boolean completed;
 
-    private UUID parentId;
-
+    private long parentId;
+    private long programId;
     private MemberDto assignedTo;
 
     private List<TaskDto> subTasks;
+    private TaskDto parent;
+    private ProgramDto program;
 }

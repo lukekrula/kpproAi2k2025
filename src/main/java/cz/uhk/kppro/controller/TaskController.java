@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/api/tasks")
 public class TaskController {
 
     private final TaskService taskService;
@@ -19,23 +19,24 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-
-
-
-
-        @PostMapping("/create-l")
-        public String createTask(
-                @RequestParam String name,
-                @RequestParam(required = false, name = "subTasks") List<String> subTasks
-        ) {
-            Task task = taskService.createTask(name);
-
-            if (subTasks != null) {
-                subTasks.forEach(sub ->
-                        taskService.addSubTask(task.getId(), sub)
-                );
-            }
-
-            return "redirect:logged";
-        }
+    // Create a root task inside a program
+    @PostMapping("/create")
+    public Task createTask(
+            @RequestParam long programId,
+            @RequestParam long memberId,
+            @RequestParam String name
+    ) {
+        Task task = new Task(name);
+        return taskService.createTask(programId, memberId, task);
     }
+
+    // Create a subtask
+    @PostMapping("/{parentId}/subtask")
+    public Task addSubtask(
+            @PathVariable long parentId,
+            @RequestParam String name
+    ) {
+        Task subtask = new Task(name);
+        return taskService.addSubtask(parentId, subtask);
+    }
+}

@@ -35,6 +35,9 @@ public class Member {
     @OneToMany(mappedBy = "manager")
     private List<Program> managedPrograms;
 
+    public List<Community> getCommunities() {
+        return communities;
+    }
 
     public long getId() {
         return id;

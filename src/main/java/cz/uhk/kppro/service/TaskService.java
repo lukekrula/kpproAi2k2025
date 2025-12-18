@@ -7,11 +7,12 @@ import java.util.UUID;
 
 public interface TaskService {
 
-    Task createTask(String name);
+    Task createTask(long programId, long assignedMemberId, Task task);
 
-    void addSubTask(UUID parentId, String subTaskName);
+    Task addSubtask(long parentTaskId, Task subtask);
 
-    void completeTask(UUID id);
-
-    List<Task> findAllRootTasks();
+    Task get(long id);
+    List<Task> getAll();
+    void delete(long id);
+    void update(Task task);
 }

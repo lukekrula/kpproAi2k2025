@@ -6,8 +6,12 @@ import lombok.Data;
 
 @Data
 public class TaskSummaryDto {
-    private UUID id;
+    private long id;
     private String name;
     private boolean completed;
-    private UUID parentId;
+    private long parentId;
+
+    private long programId;
+
+    private long assignedMemberId;
 }
