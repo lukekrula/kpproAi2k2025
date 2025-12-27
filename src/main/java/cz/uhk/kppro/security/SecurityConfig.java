@@ -27,6 +27,10 @@ public class SecurityConfig {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // TODO fix the redirects with h2 console
+    // redirects working properly H2 console not???
+    // redirects working properly H2 console not???
+    // TODO fix the redirects with h2 console
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 

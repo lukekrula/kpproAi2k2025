@@ -1,0 +1,91 @@
+package cz.uhk.kppro.security;
+
+import cz.uhk.kppro.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public SecurityConfig(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Custom auth provider setup
+        var authBuilder = http.getSharedObject(org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder.class);
+        authBuilder
+                .userDetailsService(userService)
+                .passwordEncoder(passwordEncoder);
+        http.authenticationManager(authBuilder.build());
+
+        http
+                .authorizeHttpRequests(auth -> auth
+                        // === Permit public / unauthenticated access FIRST (order is critical) ===
+                        .requestMatchers("/login", "/login?error", "/login?logout").permitAll()
+                        .requestMatchers("/error").permitAll()                       // often forgotten, causes loops
+                        .requestMatchers("/css/**", "/images/**", "/data/**", "/js/**", "/fonts/**").permitAll()  // add /js/** etc. if your login uses them
+                        .requestMatchers(PathRequest.toH2Console()).permitAll()     // H2 console open for dev
+
+                        // Role-specific paths
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/super/**").hasRole("SUPER_USER")
+                        .requestMatchers("/user/**").hasRole("USER")
+
+                        // Everything else → login required
+                        .anyRequest().authenticated()
+                )
+
+                .formLogin(form -> form
+                        .loginPage("/login")                // your custom page
+                        .loginProcessingUrl("/login")       // POST to same URL (standard)
+                        .successHandler((request, response, authentication) -> {
+                            var authorities = authentication.getAuthorities();
+                            String targetUrl = "/";  // safe fallback
+
+                            if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                                targetUrl = "/admin/administration";
+                            } else if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
+                                targetUrl = "/logged";
+                            }
+
+                            response.sendRedirect(targetUrl);
+                        })
+                        .failureUrl("/login?error")
+                        .permitAll()   // crucial: allows /login GET/POST + error
+                )
+
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .permitAll()
+                )
+
+                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler()))
+
+                // Dev helpers (tighten for prod!)
+                .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()));
+
+        return http.build();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, accessDeniedException) -> response.sendRedirect("/403");
+    }
+}
