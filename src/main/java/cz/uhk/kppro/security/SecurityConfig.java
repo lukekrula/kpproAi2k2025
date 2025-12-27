@@ -27,29 +27,24 @@ public class SecurityConfig {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // TODO fix the redirects with h2 console
-    // redirects working properly H2 console not???
-    // redirects working properly H2 console not???
-    // TODO fix the redirects with h2 console
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        // Register authentication provider BEFORE building the chain
+        // Register authentication provider
         var authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authBuilder
                 .userDetailsService(userService)
                 .passwordEncoder(passwordEncoder);
 
-        var authenticationManager = authBuilder.build();
-        http.authenticationManager(authenticationManager);
+        http.authenticationManager(authBuilder.build());
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").hasRole("ADMIN")
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/css/**", "/images/**", "/data/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/super/**").hasRole("SUPER_USER")
                         .requestMatchers("/user/**").hasRole("USER")
-                        .requestMatchers("/css/**", "/images/**", "/data/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -73,7 +68,12 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler()));
+                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler()))
+                .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.disable())
+                );
+
 
         return http.build();
     }
@@ -84,3 +84,4 @@ public class SecurityConfig {
                 response.sendRedirect("/403");
     }
 }
+
