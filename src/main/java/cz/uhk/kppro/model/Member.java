@@ -28,6 +28,7 @@ public class Member {
     private List<Community> communities = new ArrayList<>();
 
 
+
     @ManyToMany(mappedBy = "assignedMembers")
     private List<Program> assignedPrograms;
 

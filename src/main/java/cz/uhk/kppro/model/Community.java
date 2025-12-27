@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Communities")
+@Table(name = "communities")
 public class Community {
 
     @Id
