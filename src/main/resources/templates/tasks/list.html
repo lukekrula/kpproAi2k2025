@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="page">
+    <main>
+
+        <h1>Tasks</h1>
+
+        <!-- Load tasks dynamically -->
+        <div
+                hx-get="@{/programs/{id}/tasks/fragment(id=${programId})}"
+                hx-trigger="load"
+                hx-target="#taskList"
+                hx-swap="innerHTML">
+        </div>
+
+        <div id="taskList"></div>
+
+        <a th:href="@{/programs/{id}/tasks/create(id=${programId})}" class="btn">Add Task</a>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -23,6 +23,13 @@ public class ProgramViewController {
         return "programs/list";
     }
 
+    @GetMapping("/fragment")
+    public String programListFragment(Model model) {
+        model.addAttribute("programs", programService.getAll());
+        return "programs/_program-list :: programList";
+    }
+
+
     // Show create form
     @GetMapping("/create")
     public String createForm() {

@@ -2,6 +2,7 @@ package cz.uhk.kppro.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,7 +25,8 @@ public class Member {
             joinColumns = @JoinColumn(name = "member_id"),
             inverseJoinColumns = @JoinColumn(name = "community_id")
     )
-    private List<Community> communities;
+    private List<Community> communities = new ArrayList<>();
+
 
     @ManyToMany(mappedBy = "assignedMembers")
     private List<Program> assignedPrograms;

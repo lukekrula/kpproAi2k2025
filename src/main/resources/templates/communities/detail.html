@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name='description' content=''>
+    <meta name='keywords' content='spolek'>
+    <meta name='author' content='Ludek Krula'>
+    <meta name='robots' content='all'>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv='X-UA-Compatible' content='IE=edge'> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>KPPRO-Ai2k-LK</title>
+</head>
+<body>
+<div class="page">
+    <header>
+        <h1><h1 th:text="${'Details for community no: ' + id}"></h1></h1>
+        <p class="subtitle">Detailed info:</p>
+    </header>
+    <main>
+
+        <div class="card">
+
+            <h1 th:text="${community.name}">Community Title</h1>
+            <p th:text="${community.foundingDate}">Founded</p>
+            <p th:text="${community.registrationNumber}">State registration number</p>
+            <p th:text="${community.address}">Community Address</p>
+            <p th:text="${community.caseNumber}">Case file number</p>
+        </div>
+
+        <a th:href="@{/communities/edit/{id}(id=${community.id})}" class="btn">Edit</a>
+        <a th:href="@{/communities/}" class="btn">Go to community list</a>
+
+        <h2>Location</h2>
+
+        <!-- Map container -->
+        <div id="map" style="height: 350px; margin-bottom: 20px;"></div>
+
+        <!-- Leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+        <!-- Leaflet JS -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+        <script th:inline="javascript">
+
+            // Thymeleaf injects the address here
+            const address = /*[[${community.address}]]*/ '';
+
+            // Call OpenStreetMap Nominatim API to geocode the address
+            fetch(`/api/geocode?address=${encodeURIComponent(address)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!Array.isArray(data) || data.length === 0) {
+                        console.error("Address not found");
+                        return;
+                    }
+
+                    const lat = data[0].lat;
+                    const lon = data[0].lon;
+
+                    const map = L.map('map').setView([lat, lon], 16);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                    }).addTo(map);
+
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup(address)
+                        .openPopup();
+                })
+                .catch(err => console.error(err));
+
+        </script>
+
+
+
+    </main>
+</div>
+</body>
+</html>

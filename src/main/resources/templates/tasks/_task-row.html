@@ -1,0 +1,13 @@
+<!-- templates/tasks/_task-row.html -->
+<div th:fragment="taskRow(task)">
+    <li>
+        <span th:text="${task.name}"></span>
+        <span th:if="${task.completed}">✔</span>
+
+        <ul th:if="${!#lists.isEmpty(task.subTasks)}">
+            <li th:each="sub : ${task.subTasks}">
+                <span th:text="'↳ ' + ${sub.name}"></span>
+            </li>
+        </ul>
+    </li>
+</div>

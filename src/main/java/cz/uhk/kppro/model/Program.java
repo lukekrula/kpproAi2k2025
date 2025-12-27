@@ -2,6 +2,7 @@ package cz.uhk.kppro.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,7 @@ public class Program {
             joinColumns = @JoinColumn(name = "program_id"),
             inverseJoinColumns = @JoinColumn(name = "community_id")
     )
-    private List<Community> sharedWith;
+    private List<Community> sharedWith = new ArrayList<>();
 
     // members assigned to this program
     @ManyToMany
@@ -39,7 +40,7 @@ public class Program {
             joinColumns = @JoinColumn(name = "program_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id")
     )
-    private List<Member> assignedMembers;
+    private List<Member> assignedMembers = new ArrayList<>();
 
 
     @ManyToOne
@@ -49,7 +50,7 @@ public class Program {
 
     // Tasks belonging to this program
     @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
 
 
