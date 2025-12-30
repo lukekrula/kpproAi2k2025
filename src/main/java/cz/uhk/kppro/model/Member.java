@@ -15,9 +15,10 @@ public class Member {
     private String role; // leader, member, ...
     private String email;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", unique = true)
     private User user;
+
 
     @ManyToMany
     @JoinTable(

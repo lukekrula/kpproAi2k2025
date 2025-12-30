@@ -4,15 +4,12 @@ import cz.uhk.kppro.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;  // ← Add this import
 
 @Configuration
 @EnableWebSecurity
@@ -28,23 +25,30 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        // Register authentication provider
-        var authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        var authBuilder = http.getSharedObject(org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder.class);
         authBuilder
                 .userDetailsService(userService)
                 .passwordEncoder(passwordEncoder);
 
-        http.authenticationManager(authBuilder.build());
+        var authenticationManager = authBuilder.build();
+        http.authenticationManager(authenticationManager);
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/css/**", "/images/**", "/data/**").permitAll()
+                        // H2 console fully open (no login required) — put it EARLY
+                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+
+                        // Your other public paths
+                        .requestMatchers("/css/**", "/images/**", "/data/**", "/register", "/items/**").permitAll()
+
+                        // Protected paths
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/super/**").hasRole("SUPER_USER")
                         .requestMatchers("/user/**").hasRole("USER")
+
+                        // Everything else requires authentication
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -69,11 +73,10 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler()))
-                .csrf(csrf -> csrf.disable())
-                .headers(headers -> headers
-                        .frameOptions(frame -> frame.disable())
-                );
 
+                // Required for H2 console to work (frames + POST requests)
+                .csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));  // or .disable() for dev
 
         return http.build();
     }
@@ -84,4 +87,3 @@ public class SecurityConfig {
                 response.sendRedirect("/403");
     }
 }
-

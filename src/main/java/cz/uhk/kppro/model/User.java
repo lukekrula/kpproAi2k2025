@@ -23,7 +23,7 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Member member;
 
     public Member getMember() {
