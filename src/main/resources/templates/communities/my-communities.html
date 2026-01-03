@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Communities</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="page">
+    <header>
+        <h1>Your Communities</h1>
+        <p class="subtitle">You are a member of these communities</p>
+        <div class="btn-wrap">
+            <a th:href="@{/communities/join}" class="btn">Join another community</a>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="card" th:each="c : ${communities}">
+            <a th:href="@{'/communities/' + ${c.id} + '/programs'}" class="card-link">
+                <h2 th:text="${c.name}"></h2>
+            </a>
+
+            <div class="btn-wrap">
+                <a th:href="@{'/communities/' + ${c.id} + '/programs/new'}" class="btn small">
+                    Create program
+                </a>
+            </div>
+        </div>
+
+
+
+
+    </main>
+</div>
+
+</body>
+</html>

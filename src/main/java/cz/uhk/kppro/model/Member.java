@@ -39,6 +39,8 @@ public class Member {
     @OneToMany(mappedBy = "manager")
     private List<Program> managedPrograms;
 
+
+
     public List<Community> getCommunities() {
         return communities;
     }
@@ -82,8 +84,6 @@ public class Member {
     public void setUser(User user) {
         this.user = user;
     }
-
-
 
 
 }

@@ -14,19 +14,21 @@
 <div class="page">
     <main>
 
-        <h1>Programs</h1>
+        <h1 th:text="'Programs for ' + ${community.name}"></h1>
 
-        <!-- Load program list dynamically -->
+        <!-- HTMX loads the list -->
         <div
-                hx-get="/programs/fragment"
+                hx-get="@{'/communities/' + ${community.id} + '/programs/fragment'}"
                 hx-trigger="load"
                 hx-target="#programList"
                 hx-swap="innerHTML">
         </div>
 
-        <div id="programList"></div>
+        <ul id="programList"></ul>
 
-        <a th:href="@{/programs/create}" class="btn">Create Program</a>
+        <a th:href="@{'/communities/' + ${community.id} + '/programs/new'}" class="btn">
+            Create Program
+        </a>
 
     </main>
 </div>

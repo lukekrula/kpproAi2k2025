@@ -25,6 +25,13 @@ public class Task {
 
     private boolean completed;
 
+    private String description;
+
+    private int estimatedDays;
+
+    private int estimatedHours;
+
+
     //  Task belongs to a Program
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "program_id")
@@ -125,5 +132,29 @@ public class Task {
 
     public void setAssignedTo(Member assignedTo) {
         this.assignedTo = assignedTo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getEstimatedDays() {
+        return estimatedDays;
+    }
+
+    public void setEstimatedDays(int estimatedDays) {
+        this.estimatedDays = estimatedDays;
+    }
+
+    public int getEstimatedHours() {
+        return estimatedHours;
+    }
+
+    public void setEstimatedHours(int estimatedHours) {
+        this.estimatedHours = estimatedHours;
     }
 }

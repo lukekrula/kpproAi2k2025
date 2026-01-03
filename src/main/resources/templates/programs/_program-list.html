@@ -1,0 +1,7 @@
+<div th:fragment="programList(programs)">
+    <ul>
+        <li th:each="p : ${programs}"
+            th:replace="programs/_program-row :: programRow(${p})">
+        </li>
+    </ul>
+</div>

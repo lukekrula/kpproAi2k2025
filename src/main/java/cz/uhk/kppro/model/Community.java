@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "communities")
+@Table(name = "community")
 public class Community {
 
     @Id
@@ -29,7 +29,7 @@ public class Community {
     private String address;
 
     @Transient
-    private LocalDate foundingDate;
+    private String foundingDate;
 
     @ManyToMany(mappedBy = "communities")
     private List<Member> members = new ArrayList<>();
@@ -80,11 +80,11 @@ public class Community {
         this.foundingDateRaw = foundingDateRaw;
     }
 
-    public LocalDate getFoundingDate() {
+    public String getFoundingDate() {
         return foundingDate;
     }
 
-    public void setFoundingDate(LocalDate foundingDate) {
+    public void setFoundingDate(String foundingDate) {
         this.foundingDate = foundingDate;
     }
 

@@ -96,6 +96,22 @@ body {
     min-width: 30px;
 }
 
+.card {
+    color: white;
+    border-radius: 10px;
+
+    background-color: var(--accent);
+
+    box-shadow: inset 10px 10px 7px var(--shadow-hover);
+    min-width: 300px;
+    border: none;
+    padding-top: 15px;
+    padding-left: 15px;
+    margin-top: 15px;
+    font-weight: 600;
+
+}
+
 .btn-wrap{
     display: flex;
     flex-direction: row;
@@ -167,6 +183,13 @@ body {
     border-spacing: 0;
     font-size: 15px;
 }
+
+.error {
+    color: var(--alert-accent);
+    font-weight: 600;
+    margin-left: 10px;
+}
+
 
 .nice-table thead th {
     background: var(--primary-light); /* střední zelená hlavička */

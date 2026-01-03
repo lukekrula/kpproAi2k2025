@@ -1,25 +1,103 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<h2>Create a new account</h2>
+<div class="page">
+    <header>
+        <h1>Register New User</h1>
+        <p class="subtitle">Create your account and join a community</p>
+    </header>
 
-<form th:action="@{/register}" th:object="${user}" method="post">
+    <main>
+        <div class="card">
 
-    <label>Username:</label>
-    <input type="text" th:field="*{username}" required />
+            <form th:action="@{/register}" th:object="${user}" method="post">
 
-    <label>Email:</label>
-    <input type="email" th:field="*{email}" required />
+                <!-- USERNAME -->
+                <div class="editor">
+                    <label>Username:</label>
+                    <input type="text" th:field="*{username}">
+                </div>
+                <p th:if="${#fields.hasErrors('username')}"
+                   th:errors="*{username}"
+                   class="error"></p>
 
-    <label>Password:</label>
-    <input type="password" th:field="*{password}" required />
+                <!-- EMAIL -->
+                <div class="editor">
+                    <label>Email:</label>
+                    <input type="email" th:field="*{email}">
+                </div>
+                <p th:if="${#fields.hasErrors('email')}"
+                   th:errors="*{email}"
+                   class="error"></p>
 
-    <button type="submit">Register</button>
-</form>
+                <!-- PASSWORD -->
+                <div class="editor">
+                    <label>Password:</label>
+                    <input type="password" th:field="*{password}">
+                </div>
+                <p th:if="${#fields.hasErrors('password')}"
+                   th:errors="*{password}"
+                   class="error"></p>
+
+                <!-- REPEAT PASSWORD -->
+                <div class="editor">
+                    <label>Repeat password:</label>
+                    <input type="password" th:field="*{repeatPassword}">
+                </div>
+                <p th:if="${#fields.hasErrors('repeatPassword')}"
+                   th:errors="*{repeatPassword}"
+                   class="error"></p>
+
+                <hr>
+
+                <h3>Select Community</h3>
+
+                <!-- EXISTING COMMUNITY -->
+                <div class="editor">
+                    <label>Choose existing:</label>
+                    <select th:field="*{communityId}">
+                        <option value="">-- choose --</option>
+                        <option th:each="c : ${communities}"
+                                th:value="${c.id}"
+                                th:text="${c.name}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- NEW COMMUNITY -->
+                <div class="editor">
+                    <label>Or create new:</label>
+                    <input type="text" th:field="*{newCommunityName}">
+                </div>
+
+                <div class="btn-wrap">
+                    <button type="submit" class="btn">Register</button>
+                </div>
+
+            </form>
+
+
+        </div>
+    </main>
+</div>
+<script>
+    function checkPasswords() {
+        const p1 = document.querySelector('[name="password"]').value;
+        const p2 = document.querySelector('[name="repeatPassword"]').value;
+
+        if (p1 !== p2) {
+            alert("Passwords do not match");
+            return false;
+        }
+        return true;
+    }
+</script>
 
 </body>
 </html>

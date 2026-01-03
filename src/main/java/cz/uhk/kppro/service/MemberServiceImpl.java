@@ -42,4 +42,6 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Member not found: " + id));
     }
+
+
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Join Community</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="page">
+    <header>
+        <h1>Join a Community</h1>
+        <p class="subtitle">Choose a community to join</p>
+    </header>
+
+    <main>
+        <div class="card" th:each="c : ${available}">
+            <h2 th:text="${c.name}"></h2>
+
+            <form th:action="@{/communities/join/{id}(id=${c.id})}" method="post">
+                <button class="btn">Join</button>
+            </form>
+        </div>
+
+        <div class="btn-wrap">
+            <a th:href="@{/communities/my}" class="btn">Back</a>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
