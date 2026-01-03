@@ -27,6 +27,8 @@
             this.memberRepository = memberRepository;
         }
 
+
+
         @Override
         public Task createTask(long programId, long assignedMemberId, Task task) {
 
@@ -76,4 +78,10 @@
         public void update(Task task) {
             taskRepository.save(task);
         }
+
+        @Override
+        public List<Task> getByProgram(long programId) {
+            return taskRepository.findByProgramId(programId);
+        }
+
     }

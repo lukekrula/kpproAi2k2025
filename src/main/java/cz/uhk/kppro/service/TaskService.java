@@ -15,4 +15,8 @@ public interface TaskService {
     List<Task> getAll();
     void delete(long id);
     void update(Task task);
+
+    List<Task> getByProgram(long programId);
+
+
 }

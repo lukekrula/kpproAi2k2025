@@ -7,6 +7,8 @@ import cz.uhk.kppro.service.MemberService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -41,6 +43,11 @@ public class MemberServiceImpl implements MemberService {
     public Member findById(long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Member not found: " + id));
+    }
+
+    @Override
+    public List<Member> findByCommunity(long communityId) {
+        return memberRepository.findByCommunitiesId(communityId);
     }
 
 

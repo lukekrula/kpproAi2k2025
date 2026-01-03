@@ -23,13 +23,37 @@
         <div class="list warn-table-wrap">
             <div class="warn-card">
 
-                <form th:action="@{/tasks/create}" method="post" class="card">
+                <form th:action="@{/programs/{pid}/tasks/create(pid=${programId})}" method="post" class="card">
 
                     <!-- Task name -->
                     <div class="editor">
                         <label>Task name:</label>
                         <input type="text" name="name" required/>
                     </div>
+                    <div class="editor">
+                        <label>Description:</label>
+                        <textarea name="description"></textarea>
+                    </div>
+                    <div class="editor">
+                        <label>Days:</label>
+                        <input type="text" name="estimatedDays"/>
+
+                    <label>Hours:</label>
+                        <input type="text" name="estimatedHours"/>
+                </div>
+
+                    <div class="editor">
+                        <label>Assign to member:</label>
+                        <select name="memberId" required>
+                            <th:block th:each="m : ${members}">
+                                <option th:value="${m.id}"
+                                        th:text="${m.name}">
+                                </option>
+                            </th:block>
+                        </select>
+                    </div>
+
+
 
                     <!-- Subtasks -->
                     <div class="editor">
@@ -41,10 +65,11 @@
                     <!-- Buttons -->
                     <div class="btn-wrap">
                         <button type="submit" class="btn warn-btn">Create Task</button>
-                        <a th:href="@{/templates/tasks}" class="btn">Cancel</a>
+                        <a th:href="@{/programs/{pid}/tasks(pid=${programId})}" class="btn">Cancel</a>
                     </div>
 
                 </form>
+
 
             </div>
         </div>
