@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Programs</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="page">
+    <main>
+
+        <h1 th:text="'Programs for ' + ${community.name}"></h1>
+
+        <!-- HTMX loads the list -->
+        <div
+                th:hx-get="@{/communities/{id}/programs/fragment(id=${community.id})}"
+                hx-trigger="load"
+                hx-target="#programList"
+                hx-swap="innerHTML">
+        </div>
+
+
+        <div id="programList"></div>
+
+        <a th:href="@{/communities/{id}/programs/new(id=${community.id})}" class="btn">
+            Create Program
+        </a>
+
+    </main>
+</div>
+
+</body>
+</html>

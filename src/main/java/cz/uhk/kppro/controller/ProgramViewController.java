@@ -20,7 +20,7 @@ public class ProgramViewController {
     @GetMapping
     public String listPrograms(Model model) {
         model.addAttribute("programs", programService.getAll());
-        return "programs/list";
+        return "programs/programs";
     }
 
     @GetMapping("/fragment")
@@ -33,7 +33,7 @@ public class ProgramViewController {
     // Show create form
     @GetMapping("/create")
     public String createForm() {
-        return "programs/create";
+        return "new";
     }
 
     // Handle create
@@ -52,7 +52,7 @@ public class ProgramViewController {
 
         programService.createProgram(managerId, communityId, program);
 
-        return "redirect:/programs";
+        return "redirect:/communities/" + communityId + "/programs";
     }
 
     // Program detail page
@@ -62,6 +62,7 @@ public class ProgramViewController {
         model.addAttribute("program", program);
         model.addAttribute("tasks", program.getTasks());
         return "programs/detail";
+
     }
 }
 

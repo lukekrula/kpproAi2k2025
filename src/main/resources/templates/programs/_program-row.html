@@ -1,9 +1,0 @@
-<div th:fragment="programRow(program)">
-    <li>
-        <a th:href="@{'/programs/' + ${program.id}}">
-            <strong th:text="${program.name}"></strong>
-        </a>
-        <span th:if="${program.description}"
-              th:text="' – ' + ${program.description}"></span>
-    </li>
-</div>

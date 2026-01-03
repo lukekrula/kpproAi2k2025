@@ -37,9 +37,6 @@ public class ProgramController {
         return programService.getAll();
     }
 
-    @GetMapping("/{id}")
-    public Program get(@PathVariable long id) {
-        return programService.get(id);
-    }
+
 }
 

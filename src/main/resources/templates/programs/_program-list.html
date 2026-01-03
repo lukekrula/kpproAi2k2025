@@ -1,7 +1,8 @@
+
 <div th:fragment="programList(programs)">
-    <ul>
-        <li th:each="p : ${programs}"
-            th:replace="programs/_program-row :: programRow(${p})">
-        </li>
-    </ul>
+<div class="card" th:each="p : ${programs}">
+    <a th:href="@{/programs/{id}(id=${p.id})}" class="card-link"> <strong th:text="${p.name}"></strong> </a>
+
+
+</div>
 </div>

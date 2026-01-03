@@ -19,11 +19,43 @@
         <div class="list warn-table-wrap">
             <div class="warn-card">
                 <p><strong>Program ID:</strong> <span th:text="${program.id}"></span></p>
-                <p><strong>Manager:</strong> <span th:text="${program.manager.name}"></span></p>
-                <p><strong>Community:</strong> <span th:text="${program.community.name}"></span></p>
-                <p th:if="${program.amountMax}">
-                    <strong>Max amount:</strong> <span th:text="${program.amountMax}"></span>
+
+                <p th:if="${program.manager != null}">
+                    <strong>Manager:</strong>
+                    <span th:text="${program.manager.name}"></span>
                 </p>
+
+                <p th:if="${program.creator != null}">
+                    <strong>Community:</strong>
+                    <span th:text="${program.creator.name}"></span>
+                </p>
+
+
+                <p th:if="${program.amountMax != null}">
+                    <strong>Max amount:</strong>
+                    <span th:text="${program.amountMax}"></span>
+                </p>
+
+                <h2>Assigned Members</h2>
+                <ul>
+                    <li th:each="m : ${program.assignedMembers}">
+                        <span th:text="${m.name}"></span>
+                    </li>
+                </ul>
+
+                <h2>Shared With Communities</h2>
+                <ul>
+                    <li th:each="c : ${program.sharedWith}">
+                        <span th:text="${c.name}"></span>
+                    </li>
+                </ul>
+
+                <h2>Partner</h2>
+                <p th:if="${program.partner != null}">
+                    <strong>Partner:</strong>
+                    <span th:text="${program.partner.name}"></span>
+                </p>
+
             </div>
         </div>
 
@@ -32,7 +64,7 @@
         <div class="list warn-table-wrap">
             <ul>
                 <li th:each="task : ${tasks}">
-                    <a th:href="@{/programs/{pid}/tasks(pid=${program.id})}">
+                    <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}">
                         <strong th:text="${task.name}"></strong>
                     </a>
                 </li>
@@ -40,7 +72,7 @@
         </div>
 
         <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>
-        <a th:href="@{/templates/programs}" class="btn">Back to Programs</a>
+        <a th:href="@{/programs}" class="btn">Back to Programs</a>
 
     </main>
 </div>

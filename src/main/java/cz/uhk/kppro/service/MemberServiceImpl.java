@@ -1,4 +1,4 @@
-package cz.uhk.kppro.service.impl;
+package cz.uhk.kppro.service;
 
 import cz.uhk.kppro.model.Member;
 import cz.uhk.kppro.model.User;

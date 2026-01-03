@@ -1,8 +1,10 @@
 package cz.uhk.kppro.controller;
 
 import cz.uhk.kppro.model.Community;
+import cz.uhk.kppro.model.Member;
 import cz.uhk.kppro.model.Program;
 import cz.uhk.kppro.repository.CommunityRepository;
+import cz.uhk.kppro.repository.MemberRepository;
 import cz.uhk.kppro.repository.ProgramRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,11 +19,14 @@ public class ProgramPageController {
 
     private final ProgramRepository programRepository;
     private final CommunityRepository communityRepository;
+    private final MemberRepository memberRepository;
 
     public ProgramPageController(ProgramRepository programRepository,
-                                 CommunityRepository communityRepository) {
+                                 CommunityRepository communityRepository, MemberRepository memberRepository) {
         this.programRepository = programRepository;
         this.communityRepository = communityRepository;
+        this.memberRepository = memberRepository;
+
     }
 
     @GetMapping
@@ -41,8 +46,16 @@ public class ProgramPageController {
 
     @GetMapping("/new")
     public String newProgramForm(@PathVariable long communityId, Model model) {
-        model.addAttribute("communityId", communityId);
+
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow();
+
+        List<Member> members = memberRepository.findByCommunitiesId(communityId);
+
+        model.addAttribute("community", community);
+        model.addAttribute("members", members);
         model.addAttribute("program", new Program());
+
         return "programs/new";
     }
 }
