@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${program.name}">Program Detail</title>
+    <title th:text="${task.name}">Task Detail</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 
@@ -13,49 +13,49 @@
 <div class="page">
     <main>
 
-        <h1 th:text="${task.name}">Task Name</h1>
-        <p class="subtitle" th:text="${task.description}">Program description</p>
+        <!-- Title + subtitle -->
+        <div class="list">
+            <div class="card">
+                <h1 th:text="${task.name}">Task Name</h1>
+                <p class="subtitle" th:text="${task.description}">Task description</p>
+            </div>
+        </div>
 
+        <!-- Details card -->
         <div class="list warn-table-wrap">
             <div class="warn-card">
-                <p><strong>Program ID:</strong> <span th:text="${program.id}"></span></p>
+
+                <h2>Task Details</h2>
+
+                <p>
+                    <strong>Task ID:</strong>
+                    <span th:text="${task.id}"></span>
+                </p>
 
 
-                    <strong>Days</strong>
-                    <span th:text="${task.estimatedDays}"></span>
+                <div class="editor">
+                    <strong>Description:</strong><br>
+                    <p th:text="${task.description}">
+                    </p>
+                </div>
+                <p>
+                    <strong>Estimated Time:</strong><br>
+                    <span th:text="${task.estimatedDays}"></span> days,
+                    <span th:text="${task.estimatedHours}"></span> hours
+                </p>
 
-
-
-                    <strong>Hours</strong>
-                    <span th:text="${task.estimatedHours}"></span>
-
-
-
-
+                <p>
                     <strong>Responsible:</strong>
-                    <span th:text="${task.assignedMember}"></span>
+                    <span th:text="${task.assignedTo.name}"></span>
+                </p>
 
-
-
+                <p>
+                    <strong>Status:</strong></p>
+                <p>Status: <span th:text="${task.complete} ? 'Done &#9989;' : 'Not done &#10060;'"></span></p>
 
 
             </div>
         </div>
-
-        <h2>Tasks</h2>
-
-        <div class="list warn-table-wrap">
-            <ul>
-                <li th:each="task : ${tasks}">
-                    <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}">
-                        <strong th:text="${task.name}"></strong>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>
-        <a th:href="@{/programs}" class="btn">Back to Programs</a>
 
     </main>
 </div>

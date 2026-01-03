@@ -38,6 +38,14 @@ public class TaskViewController {
         return "tasks/list";
     }
 
+    @GetMapping("/{id}")
+    public String taskDetail(@PathVariable long id, Model model) {
+        Task task = taskService.get(id);
+        model.addAttribute("task", task);
+        return "tasks/detail";
+
+    }
+
     @GetMapping("/create")
     public String createForm(@PathVariable long programId, Model model) {
 
