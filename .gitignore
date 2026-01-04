@@ -1,2 +1,4 @@
 src/main/resources/static/data/czech.json
-target/
+/target/
+*.jar
+
