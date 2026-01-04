@@ -1,10 +1,13 @@
 package cz.uhk.kppro.controller;
 
 import cz.uhk.kppro.model.Program;
+import cz.uhk.kppro.model.Task;
 import cz.uhk.kppro.service.ProgramService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/programs")
@@ -58,11 +61,22 @@ public class ProgramViewController {
     // Program detail page
     @GetMapping("/{id}")
     public String programDetail(@PathVariable long id, Model model) {
-        Program program = programService.get(id);
-        model.addAttribute("program", program);
-        model.addAttribute("tasks", program.getTasks());
-        return "programs/detail";
 
+        Program program = programService.get(id);
+
+        // Get all tasks for this program
+        List<Task> all = program.getTasks();
+
+        // Filter only top-level tasks (no parent)
+        List<Task> roots = all.stream()
+                .filter(t -> t.getParent() == null)
+                .toList();
+
+        model.addAttribute("program", program);
+        model.addAttribute("tasks", roots);
+
+        return "programs/detail";
     }
+
 }
 

@@ -23,24 +23,27 @@
         <div class="list warn-table-wrap">
             <div class="warn-card">
 
-                <form th:action="@{/programs/{pid}/tasks/create(pid=${programId})}" method="post" class="card">
+                <form th:action="@{/programs/{pid}/tasks/create(pid=${programId})}"
+                      method="post" class="card">
 
                     <!-- Task name -->
                     <div class="editor">
                         <label>Task name:</label>
                         <input type="text" name="name" required/>
                     </div>
+
                     <div class="editor">
                         <label>Description:</label>
                         <textarea name="description"></textarea>
                     </div>
+
                     <div class="editor">
                         <label>Days:</label>
-                        <input type="text" name="estimatedDays"/>
+                        <input type="number" name="estimatedDays"/>
 
-                    <label>Hours:</label>
-                        <input type="text" name="estimatedHours"/>
-                </div>
+                        <label>Hours:</label>
+                        <input type="number" name="estimatedHours"/>
+                    </div>
 
                     <div class="editor">
                         <label>Assign to member:</label>
@@ -53,13 +56,15 @@
                         </select>
                     </div>
 
-
-
                     <!-- Subtasks -->
                     <div class="editor">
                         <label>Subtasks:</label>
+
                         <div id="subtasks"></div>
-                        <button type="button" class="btn" onclick="addSubtask()">+ Add subtask</button>
+
+                        <button type="button" class="btn" onclick="addSubtask()">
+                            + Add subtask
+                        </button>
                     </div>
 
                     <!-- Buttons -->
@@ -70,7 +75,6 @@
 
                 </form>
 
-
             </div>
         </div>
 
@@ -78,20 +82,18 @@
 </div>
 
 <script>
-    let index = 0;
-
     function addSubtask() {
         const container = document.getElementById('subtasks');
 
         const div = document.createElement('div');
         div.className = 'editor';
 
+        // IMPORTANT: name="subTasks" → Spring binds to List<String> subTasks
         div.innerHTML = `
-            <input type="text" name="subTasks[${index}].name" placeholder="Subtask name" required />
+            <input type="text" name="subTasks" placeholder="Subtask name" />
         `;
 
         container.appendChild(div);
-        index++;
     }
 </script>
 

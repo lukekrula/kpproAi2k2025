@@ -33,10 +33,20 @@ public class TaskViewController {
     // List all tasks belonging to a program
     @GetMapping
     public String listTasks(@PathVariable long programId, Model model) {
+
+        List<Task> all = taskService.getByProgram(programId);
+
+        // Only top-level tasks (no parent)
+        List<Task> roots = all.stream()
+                .filter(t -> t.getParent() == null)
+                .toList();
+
         model.addAttribute("programId", programId);
-        model.addAttribute("tasks", taskService.getByProgram(programId));
+        model.addAttribute("tasks", roots);
+
         return "tasks/list";
     }
+
 
     @GetMapping("/{id}")
     public String taskDetail(@PathVariable long id, Model model) {
@@ -65,11 +75,23 @@ public class TaskViewController {
     @PostMapping("/create")
     public String createTask(@PathVariable long programId,
                              @RequestParam long memberId,
-                             @RequestParam String name) {
+                             @RequestParam String name,
+                             @RequestParam(required = false) List<String> subTasks) {
 
-        taskService.createTask(programId, memberId, new Task(name));
+        Task parent = new Task(name);
+        Task savedParent = taskService.createTask(programId, memberId, parent);
+
+        if (subTasks != null) {
+            for (String subName : subTasks) {
+                if (subName != null && !subName.trim().isEmpty()) {
+                    taskService.addSubtask(savedParent.getId(), new Task(subName));
+                }
+            }
+        }
+
         return "redirect:/programs/" + programId;
     }
+
 
     // Create a subtask under a parent task
     @PostMapping("/{parentId}/subtask")

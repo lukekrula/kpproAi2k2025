@@ -52,6 +52,24 @@
                 <p>
                     <strong>Status:</strong></p>
                 <p>Status: <span th:text="${task.completed} ? 'Done &#9989;' : 'Not done &#10060;'"></span>
+
+                <h2>Subtasks</h2>
+
+                <div th:if="${#lists.isEmpty(task.subTasks)}">
+                    <p>No subtasks yet.</p>
+                </div>
+
+                <ul th:if="${!#lists.isEmpty(task.subTasks)}">
+                    <li th:each="sub : ${task.subTasks}">
+                        <span th:text="${sub.name}"></span>
+                        <span th:text="${sub.completed} ? 'Done &#9989;' : 'Not done &#10060;'"></span>
+
+                        <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${task.program.id}, tid=${sub.id})}"
+                           class="btn small">Open</a>
+                    </li>
+                </ul>
+
+
                 <div th:if="${!task.completed}">
                     <form th:action="@{/programs/{pid}/tasks/{tid}/complete(pid=${task.program.id}, tid=${task.id})}"
                           method="post">

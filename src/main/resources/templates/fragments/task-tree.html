@@ -1,0 +1,25 @@
+<th:block th:fragment="tree (tasks, program)">
+    <ul>
+        <li th:each="task : ${tasks}">
+
+            <!-- Task link -->
+            <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}">
+                <strong th:text="${task.name}"></strong>
+            </a>
+
+            <!-- Toggle button (only if subtasks exist) -->
+            <button type="button"
+                    th:if="${!#lists.isEmpty(task.subTasks)}"
+                    class="toggle-btn"
+                    onclick="toggleSubtasks(this)">
+                ▶
+            </button>
+
+            <div class="subtasks hidden" th:if="${!#lists.isEmpty(task.subTasks)}">
+                <div th:replace="fragments/task-tree :: tree(tasks=${task.subTasks}, program=${program})"></div>
+            </div>
+
+
+        </li>
+    </ul>
+</th:block>

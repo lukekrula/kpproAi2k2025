@@ -219,7 +219,18 @@ body {
     border-bottom: 1px solid rgba(104, 177, 89, 0.3);
 }
 
-/* Hlavní kouzlo – krásný hover */
+.hidden {
+    display: none;
+}
+
+.toggle-btn {
+    margin-left: 8px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 14px;
+}
+
 .nice-table tbody tr:hover {
     background: linear-gradient(90deg,
     rgba(104, 177, 89, 0.25),
@@ -235,7 +246,7 @@ body {
     }
 }
 
-/* První sloupec (číslo/pořadí) – zvýrazněný */
+
 .nice-table tbody td:first-child {
     width: 56px;
     font-weight: 700;
@@ -243,12 +254,12 @@ body {
     font-size: 16px;
 }
 
-/* Alternující řádky pro lepší čitelnost */
+
 .nice-table tbody tr:nth-child(even) td {
     background: #c8f0c8;
 }
 
-/* Responsivní režim – karty místo tabulky */
+
 @media (max-width: 640px) {
     .nice-table thead {
         display: none;

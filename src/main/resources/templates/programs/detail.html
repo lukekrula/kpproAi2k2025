@@ -62,20 +62,29 @@
         <h2>Tasks</h2>
 
         <div class="list warn-table-wrap">
-            <ul>
-                <li th:each="task : ${tasks}">
-                    <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}">
-                        <strong th:text="${task.name}"></strong>
-                    </a>
-                </li>
-            </ul>
+            <div th:replace="fragments/task-tree :: tree(tasks=${tasks}, program=${program})"></div>
+
         </div>
 
+
         <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>
-        <a th:href="@{/programs}" class="btn">Back to Programs</a>
+        <a th:href="@{'/communities/' + ${program.creator.id} + '/programs'}" class="btn">Back to Programs</a>
 
     </main>
 </div>
+<script>
+    function toggleSubtasks(btn) {
+        const container = btn.nextElementSibling; // the .subtasks div
+
+        if (container.classList.contains("hidden")) {
+            container.classList.remove("hidden");
+            btn.textContent = "▼"; // expanded
+        } else {
+            container.classList.add("hidden");
+            btn.textContent = "▶"; // collapsed
+        }
+    }
+</script>
 
 </body>
 </html>
