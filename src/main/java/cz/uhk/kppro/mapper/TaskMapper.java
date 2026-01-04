@@ -15,7 +15,7 @@ public class TaskMapper {
         TaskDto dto = new TaskDto();
         dto.setId(task.getId());
         dto.setName(task.getName());
-        dto.setCompleted(task.isCompletedValue());
+        dto.setCompleted(task.isCompleted());
 
         if (task.getParent() != null) {
             dto.setParentId(task.getParent().getId());
@@ -43,7 +43,7 @@ public class TaskMapper {
         TaskSummaryDto dto = new TaskSummaryDto();
         dto.setId(task.getId());
         dto.setName(task.getName());
-        dto.setCompleted(task.isCompletedValue());
+        dto.setCompleted(task.isCompleted());
 
         if (task.getParent() != null) {
             dto.setParentId(task.getParent().getId());

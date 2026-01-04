@@ -51,7 +51,15 @@
 
                 <p>
                     <strong>Status:</strong></p>
-                <p>Status: <span th:text="${task.complete} ? 'Done &#9989;' : 'Not done &#10060;'"></span></p>
+                <p>Status: <span th:text="${task.completed} ? 'Done &#9989;' : 'Not done &#10060;'"></span>
+                <div th:if="${!task.completed}">
+                    <form th:action="@{/programs/{pid}/tasks/{tid}/complete(pid=${task.program.id}, tid=${task.id})}"
+                          method="post">
+                        <button type="submit" class="btn warn-btn">Mark as Complete</button>
+                    </form>
+                </div></p>
+                <a th:href="@{/programs/{pid}(pid=${task.program.id})}" class="btn">Program</a>
+
 
 
             </div>

@@ -104,7 +104,7 @@ public class Task {
         return name;
     }
 
-    public boolean isCompletedValue() {
+    public boolean isCompleted() {
         return completed;
     }
 

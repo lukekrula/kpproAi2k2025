@@ -80,4 +80,16 @@ public class TaskViewController {
         taskService.addSubtask(parentId, new Task(name));
         return "redirect:/programs/" + programId;
     }
+
+    @PostMapping("/{taskId}/complete")
+    public String completeTask(@PathVariable long programId,
+                               @PathVariable long taskId) {
+
+        Task task = taskService.get(taskId);
+        task.complete();
+        taskService.update(task);
+
+        return "redirect:/programs/" + programId + "/tasks/" + taskId;
+    }
+
 }
