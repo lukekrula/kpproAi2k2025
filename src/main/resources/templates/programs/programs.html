@@ -27,9 +27,11 @@
 
         <div id="programList"></div>
 
-        <a th:href="@{/communities/{id}/programs/new(id=${community.id})}" class="btn">
-            Create Program
-        </a>
+        <div class="btn-wrap">
+
+            <a th:href="@{/communities/{id}/programs/new(id=${community.id})}" class="btn">Create Program</a>
+            <a th:href="@{/communities/my}" class="btn">Communities</a>
+        </div>
 
     </main>
 </div>

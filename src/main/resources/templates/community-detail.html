@@ -29,10 +29,10 @@
             <p th:text="${community.address}">Community Address</p>
             <p th:text="${community.caseNumber}">Case file number</p>
         </div>
-
-        <a th:href="@{/communities/edit/{id}(id=${community.id})}" class="btn">Edit</a>
-        <a th:href="@{/communities/}" class="btn">Go to community list</a>
-
+        <div class="btn-wrap">
+            <a th:href="@{/communities/edit/{id}(id=${community.id})}" class="btn">Edit</a>
+            <a th:href="@{/communities/}" class="btn">Go to community list</a>
+        </div>
         <h2>Location</h2>
 
         <!-- Map container -->

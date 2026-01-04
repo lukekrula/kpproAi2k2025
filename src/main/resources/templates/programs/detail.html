@@ -66,10 +66,10 @@
 
         </div>
 
-
-        <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>
-        <a th:href="@{'/communities/' + ${program.creator.id} + '/programs'}" class="btn">Back to Programs</a>
-
+        <div class="btn-wrap">
+            <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>
+            <a th:href="@{'/communities/' + ${program.creator.id} + '/programs'}" class="btn">Back to Programs</a>
+        </div>
     </main>
 </div>
 <script>

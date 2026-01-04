@@ -76,13 +76,14 @@
                         <button type="submit" class="btn warn-btn">Mark as Complete</button>
                     </form>
                 </div></p>
-                <a th:href="@{/programs/{pid}(pid=${task.program.id})}" class="btn">Program</a>
 
 
 
             </div>
         </div>
-
+        <div class="btn-wrap">
+            <a th:href="@{/programs/{pid}(pid=${task.program.id})}" class="btn">Program</a>
+        </div>
     </main>
 </div>
 
