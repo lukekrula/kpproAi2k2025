@@ -1,0 +1,32 @@
+<th:block th:fragment="subtaskRows(tasks, program, level)">
+    <tr th:each="task : ${tasks}">
+        <td></td>
+
+        <td>
+            <span th:style="'margin-left:' + (${level} * 20) + 'px'">
+                <strong th:text="${task.name}"></strong>
+            </span>
+        </td>
+
+        <td>
+            <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}"
+               class="tab-btn small">
+                Open
+            </a>
+        </td>
+
+        <td>
+            <button class="toggle-btn"
+                    hx-get="@{/programs/{pid}/tasks/{tid}/subtasks(fragment=true)(pid=${program.id}, tid=${task.id})}"
+                    hx-target="#subtasks-[[${task.id}]]"
+                    hx-swap="innerHTML toggle">
+                ▶
+            </button>
+        </td>
+    </tr>
+
+    <!-- placeholder row for deeper subtasks -->
+    <tr th:each="task : ${tasks}"
+        th:id="'subtasks-' + ${task.id}">
+    </tr>
+</th:block>

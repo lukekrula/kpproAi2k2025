@@ -146,8 +146,39 @@ body {
     transition: transform .08s ease, box-shadow .08s ease
 }
 
+.tab-btn {
+    margin-top: 6px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--scent), var(--scent));
+    border: none;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform .08s ease, box-shadow .08s ease
+
+}
+
 .warn-btn {
     background: linear-gradient(90deg, var(--warn-accent), var(--warn-light));
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+    color: var(--text);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
 }
 
 .table-wrap {

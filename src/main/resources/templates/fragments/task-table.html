@@ -1,0 +1,47 @@
+<th:block th:fragment="taskTable(tasks, program, level)">
+    <tbody>
+    <tr th:each="task : ${tasks}"
+        th:attr="onclick=|window.location.href='/programs/' + ${program.id} + '/tasks/' + ${task.id}|"
+        style="cursor:pointer">
+
+        <!-- Row number is optional; you can remove this -->
+        <td></td>
+
+        <!-- Indented task name -->
+        <td>
+            <span th:style="'margin-left:' + (${level} * 20) + 'px'">
+                <strong th:text="${task.name}"></strong>
+            </span>
+
+            <!-- Toggle button -->
+            <button type="button"
+                    th:if="${!#lists.isEmpty(task.subTasks)}"
+                    class="toggle-btn"
+                    onclick="toggleSubtasks(this)">
+                ▶
+            </button>
+        </td>
+
+        <!-- Actions -->
+        <td>
+            <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}"
+               class="tab-btn small"
+               onclick="event.stopPropagation()">
+                Open
+            </a>
+        </td>
+    </tr>
+
+    <!-- Subtasks (initially hidden) -->
+    <tr class="subtasks hidden"
+        th:if="${!#lists.isEmpty(task.subTasks)}">
+        <td colspan="3" style="padding:0">
+            <table class="nice-table inner-table">
+                <tbody th:replace="fragments/task-table :: taskTable(tasks=${task.subTasks}, program=${program}, level=${level + 1})"></tbody>
+
+            </table>
+        </td>
+    </tr>
+    </tbody>
+
+</th:block>

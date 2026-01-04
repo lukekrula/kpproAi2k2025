@@ -28,6 +28,26 @@ public class TaskViewController {
         this.memberService = memberService;
 
     }
+    @GetMapping("/programs/{pid}/tasks/{tid}/subtasks")
+    public String subtasksFragment(@PathVariable Long pid,
+                                   @PathVariable Long tid,
+                                   @RequestParam(required = false) Boolean fragment,
+                                   Model model) {
+
+        Task parent = taskService.get(tid);
+        List<Task> subtasks = parent.getSubTasks(); // or service call
+
+        model.addAttribute("tasks", subtasks);
+        model.addAttribute("program", programService.get(pid));
+        model.addAttribute("level", 1); // or compute if you want
+
+        if (Boolean.TRUE.equals(fragment)) {
+            return "fragments/task-subtasks :: subtaskRows";
+        }
+
+        // non-fragment fallback if you ever need it
+        return "programs/detail";
+    }
 
 
     // List all tasks belonging to a program

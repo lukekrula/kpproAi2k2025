@@ -30,6 +30,40 @@
             </div>
         </div>
 
+        <div class="table-wrap">
+            <table class="nice-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody id="communityList">
+                <tr th:each="c, iterStat : ${communities}"
+                    th:attr="onclick=|window.location.href='/communities/' + ${c.id} + '/programs'|"
+                    style="cursor:pointer">
+
+                    <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${c.name}">Name</td>
+                    <td th:text="${c.address}">Address</td>
+
+                    <td>
+                        <a th:href="@{'/communities/' + ${c.id} + '/programs/new'}"
+                           class="tab-btn small"
+                           onclick="event.stopPropagation()">
+                            Create program
+                        </a>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
 
 
 

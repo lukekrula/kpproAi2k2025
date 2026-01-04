@@ -81,6 +81,10 @@ body {
     justify-content: end;
 }
 
+.btn-wrap > .btn {
+    margin-left: 15px;
+}
+
 .brand {
     display: flex;
     align-items: center;

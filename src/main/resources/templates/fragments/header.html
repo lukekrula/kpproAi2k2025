@@ -1,10 +1,15 @@
 <header th:fragment="header">
-    <div class="row">
-        Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu
+    <div><p>
+    Taumatawhakatangihangakoauauotamateaturipukakapikimaungahoronukupokaiwhenuakitanatahu
+    </p></div>
+        <div class="row">
+
         <h1>Community project mager</h1>
         <div class="list">
-            <div class="warn-table-wrap">
-                <a th:href="@{map}" class="btn">mapa</a>
+            <div class="btn-wrap">
+                <div>
+                    <button class="btn" onclick="location.href='/logged'">landning page</button>
+                </div>
                 <form th:action="@{/logout}" method="post">
                     <button type="submit" class="btn">Logout</button>
                 </form>

@@ -1,8 +1,32 @@
-
 <div th:fragment="programList(programs)">
-<div class="card" th:each="p : ${programs}">
-    <a th:href="@{/programs/{id}(id=${p.id})}" class="card-link"> <strong th:text="${p.name}"></strong> </a>
+    <div class="table-wrap">
+        <table class="nice-table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
 
+            <tbody>
+            <tr th:each="p, iterStat : ${programs}"
+                th:attr="onclick=|window.location.href='/programs/' + ${p.id}|"
+                style="cursor:pointer">
 
-</div>
+                <td th:text="${iterStat.count}">1</td>
+                <td th:text="${p.name}">Program Name</td>
+
+                <td>
+                    <a th:href="@{/programs/{id}(id=${p.id})}"
+                       class="tab-btn small"
+                       onclick="event.stopPropagation()">
+                        Open
+                    </a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

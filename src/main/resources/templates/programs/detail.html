@@ -61,10 +61,53 @@
 
         <h2>Tasks</h2>
 
-        <div class="list warn-table-wrap">
-            <div th:replace="fragments/task-tree :: tree(tasks=${tasks}, program=${program})"></div>
+        <div class="table-wrap">
+            <table class="nice-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Task</th>
+                    <th>Actions</th>
+                    <th></th>
+                </tr>
+                </thead>
 
+                <tbody>
+                <tr th:each="task, iterStat : ${tasks}">
+                    <td th:text="${iterStat.count}">1</td>
+
+                    <td>
+                        <strong th:text="${task.name}"></strong>
+                    </td>
+
+                    <td>
+                        <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}"
+                           class="tab-btn small">
+                            Open
+                        </a>
+                    </td>
+
+                    <!-- Expand/collapse button -->
+                    <td>
+                        <button class="toggle-btn"
+                                hx-get="@{/programs/{pid}/tasks/{tid}/subtasks(fragment=true)(pid=${program.id}, tid=${task.id})}"
+                                hx-target="#subtasks-[[${task.id}]]"
+                                hx-swap="innerHTML toggle">
+                            ▶
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- HTMX will inject subtasks rows here -->
+                <tr th:each="task : ${tasks}"
+                    th:id="'subtasks-' + ${task.id}">
+                </tr>
+
+                </tbody>
+            </table>
         </div>
+
+
 
         <div class="btn-wrap">
             <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>
