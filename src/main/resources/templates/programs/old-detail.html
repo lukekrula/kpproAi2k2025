@@ -14,10 +14,6 @@
     <main>
 
         <h1 th:text="${program.name}">Program Name</h1>
-        <h1 th:text="${#numbers.formatDecimal(completion, 0, 1)} + '% progress ' + ${finished} + ' from ' + ${est} + ' hours'">
-            Completion
-        </h1>
-
         <p class="subtitle" th:text="${program.description}">Program description</p>
 
         <div class="list warn-table-wrap">
@@ -66,9 +62,11 @@
         <h2>Tasks</h2>
 
         <div class="list warn-table-wrap">
+
             <div th:replace="fragments/task-tree :: tree(tasks=${tasks}, program=${program})"></div>
 
         </div>
+
 
         <div class="btn-wrap">
             <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>

@@ -3,6 +3,7 @@ package cz.uhk.kppro.service;
 import cz.uhk.kppro.model.Community;
 import cz.uhk.kppro.model.Member;
 import cz.uhk.kppro.model.Program;
+import cz.uhk.kppro.model.Task;
 import cz.uhk.kppro.repository.CommunityRepository;
 import cz.uhk.kppro.repository.MemberRepository;
 import cz.uhk.kppro.repository.ProgramRepository;
@@ -17,13 +18,16 @@ public class ProgramServiceImpl implements ProgramService{
     private final ProgramRepository programRepository;
     private final MemberRepository memberRepository;
     private final CommunityRepository communityRepository;
+    private final TaskCalculationService taskCalc;
 
     public ProgramServiceImpl(ProgramRepository programRepository,
                               MemberRepository memberRepository,
-                              CommunityRepository communityRepository) {
+                              CommunityRepository communityRepository,
+                              TaskCalculationService taskCalc) {
         this.programRepository = programRepository;
         this.memberRepository = memberRepository;
         this.communityRepository = communityRepository;
+        this.taskCalc = taskCalc;
     }
 
 
@@ -94,5 +98,25 @@ public class ProgramServiceImpl implements ProgramService{
 
         return programRepository.save(program);
     }
+
+    @Override
+    public double getProgramCompletion(long programId) {
+        Program program = get(programId);
+
+        int totalEstimated = 0;
+        int totalFinished = 0;
+
+        for (Task task : program.getTasks()) {
+            totalEstimated += taskCalc.totalEstimated(task);
+            totalFinished += taskCalc.totalFinished(task);
+        }
+
+        if (totalEstimated == 0) return 100;
+
+        double pct = (double) totalFinished / totalEstimated * 100;
+        return Math.min(100, Math.max(0, pct));
+    }
+
+
 
 }

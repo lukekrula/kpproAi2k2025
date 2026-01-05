@@ -2,6 +2,7 @@ package cz.uhk.kppro.controller;
 
 import cz.uhk.kppro.model.Program;
 import cz.uhk.kppro.model.Task;
+import cz.uhk.kppro.service.ProgramCalculationService;
 import cz.uhk.kppro.service.ProgramService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,11 @@ import java.util.List;
 public class ProgramViewController {
 
     private final ProgramService programService;
+    private final ProgramCalculationService programCalculationService;
 
-    public ProgramViewController(ProgramService programService) {
+    public ProgramViewController(ProgramService programService, ProgramCalculationService programCalculationService) {
         this.programService = programService;
+        this.programCalculationService = programCalculationService;
     }
 
     // List all programs
@@ -63,10 +66,12 @@ public class ProgramViewController {
     public String programDetail(@PathVariable long id, Model model) {
 
         Program program = programService.get(id);
+        double completion = programService.getProgramCompletion(id);
+        int est = programCalculationService.getProgramTotalEstimatedHours(program);
+        int finished = programCalculationService.getProgramTotalFinishedHours(program);
 
         // Get all tasks for this program
         List<Task> all = program.getTasks();
-
         // Filter only top-level tasks (no parent)
         List<Task> roots = all.stream()
                 .filter(t -> t.getParent() == null)
@@ -74,6 +79,9 @@ public class ProgramViewController {
 
         model.addAttribute("program", program);
         model.addAttribute("tasks", roots);
+        model.addAttribute("completion", completion);
+        model.addAttribute("est", est);
+        model.addAttribute("finished", finished);
 
         return "programs/detail";
     }

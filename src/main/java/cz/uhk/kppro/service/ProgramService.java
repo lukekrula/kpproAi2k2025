@@ -12,6 +12,7 @@ public interface ProgramService {
     void delete(long id);
     void update(Program program);
     Program assignMember(long programId, long memberId);
+    double getProgramCompletion(long programId);
 
 }
 

@@ -1,32 +1,40 @@
 <th:block th:fragment="subtaskRows(tasks, program, level)">
-    <tr th:each="task : ${tasks}">
+    <tr th:each="task : ${tasks}"
+        th:classappend="${task.parentId != null} ? 'subtask-row'"
+        th:attr="onclick=|window.location.href='/programs/' + ${program.id} + '/tasks/' + ${task.id}|"
+        style="cursor:pointer">
+
         <td></td>
 
         <td>
             <span th:style="'margin-left:' + (${level} * 20) + 'px'">
                 <strong th:text="${task.name}"></strong>
             </span>
+
+            <button class="toggle-btn"
+                    onclick="event.stopPropagation()"
+                    th:hx-get="@{/programs/{pid}/tasks/{tid}/subtasks(fragment=true)(pid=${program.id}, tid=${task.id})}"
+                    th:hx-target="'#subtasks-' + ${task.id}"
+                    hx-swap="outerHTML">
+                ▶<span th:text="'TARGET=' + ('#subtasks-' + ${task.id})"></span>
+            </button><!-- DEBUG -->
+            <span th:text="'TARGET=' + ('#subtasks-' + ${task.id})"></span>
+
+
+
+
         </td>
 
         <td>
             <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}"
-               class="tab-btn small">
+               class="tab-btn small"
+               onclick="event.stopPropagation()">
                 Open
             </a>
         </td>
-
-        <td>
-            <button class="toggle-btn"
-                    hx-get="@{/programs/{pid}/tasks/{tid}/subtasks(pid=${program.id}, tid=${task.id})}"
-                    hx-target="#subtasks-[[${task.id}]]"
-                    hx-swap="innerHTML">
-                ▶
-            </button>
-
-        </td>
     </tr>
 
-    <!-- placeholder row for deeper subtasks -->
+    <!-- placeholders for deeper levels -->
     <tr th:id="'subtasks-' + ${task.id}"></tr>
 
 
