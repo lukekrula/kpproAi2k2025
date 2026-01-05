@@ -50,5 +50,11 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findByCommunitiesId(communityId);
     }
 
+    @Override
+    public Member findByUserId(long userId) {
+        return memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Member not found for userId: " + userId));
+    }
+
 
 }

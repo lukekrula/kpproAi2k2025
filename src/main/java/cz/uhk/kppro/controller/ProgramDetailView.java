@@ -10,6 +10,8 @@ public record ProgramDetailView(
         List<Task> tasks,
         double completion,
         int estimatedHours,
-        int finishedHours
+        int finishedHours,
+        int estMemberHours,
+        int totalMemberHours
 ) {}
 

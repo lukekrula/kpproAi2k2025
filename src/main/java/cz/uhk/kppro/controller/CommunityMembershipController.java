@@ -38,13 +38,14 @@ public class CommunityMembershipController {
     public String myCommunities(Model model,
                                 @AuthenticationPrincipal MyUserDetails userDetails) {
 
-        Member member = memberRepository.findByUserId(userDetails.getUser().getId());
+        long userId = userDetails.getUser().getId();
 
-        // SAFETY NET: auto-create Member if missing
-        if (member == null) {
-            member = memberService.createForUser(userDetails.getUser());
-            memberRepository.save(member);
-        }
+        Member member = memberRepository.findByUserId(userId)
+                .orElseGet(() -> {
+                    // SAFETY NET: auto-create Member if missing
+                    Member created = memberService.createForUser(userDetails.getUser());
+                    return memberRepository.save(created);
+                });
 
         model.addAttribute("member", member);
         model.addAttribute("communities", member.getCommunities());
@@ -53,10 +54,15 @@ public class CommunityMembershipController {
     }
 
 
-    @GetMapping("/join")
-    public String joinCommunityPage(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
 
-        Member member = memberRepository.findByUserId(userDetails.getUser().getId());
+    @GetMapping("/join")
+    public String joinCommunityPage(Model model,
+                                    @AuthenticationPrincipal MyUserDetails userDetails) {
+
+        long userId = userDetails.getUser().getId();
+
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Member not found for userId: " + userId));
 
         List<Community> all = communityRepository.findAll();
         List<Community> available = all.stream()
@@ -68,11 +74,16 @@ public class CommunityMembershipController {
         return "communities/join-community";
     }
 
+
     @PostMapping("/join/{id}")
     public String joinCommunity(@PathVariable Long id,
                                 @AuthenticationPrincipal MyUserDetails userDetails) {
 
-        Member member = memberRepository.findByUserId(userDetails.getUser().getId());
+        long userId = userDetails.getUser().getId();
+
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Member not found for userId: " + userId));
+
         Community community = communityRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Community not found"));
 
@@ -81,5 +92,6 @@ public class CommunityMembershipController {
 
         return "redirect:/communities/my";
     }
+
 }
 

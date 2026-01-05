@@ -3,7 +3,6 @@ package cz.uhk.kppro.service;
 import cz.uhk.kppro.model.Community;
 import cz.uhk.kppro.model.Member;
 import cz.uhk.kppro.model.Program;
-import cz.uhk.kppro.model.Task;
 import cz.uhk.kppro.repository.CommunityRepository;
 import cz.uhk.kppro.repository.MemberRepository;
 import cz.uhk.kppro.repository.ProgramRepository;
@@ -14,22 +13,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ProgramServiceImpl implements ProgramService{
+public class ProgramServiceImpl implements ProgramService {
+
     private final ProgramRepository programRepository;
     private final MemberRepository memberRepository;
     private final CommunityRepository communityRepository;
-    private final TaskCalculationService taskCalc;
+
+    private final ProgramCalculationService programCalculationService;
 
     public ProgramServiceImpl(ProgramRepository programRepository,
                               MemberRepository memberRepository,
                               CommunityRepository communityRepository,
-                              TaskCalculationService taskCalc) {
+                              ProgramCalculationService programCalculationService) {
+
         this.programRepository = programRepository;
         this.memberRepository = memberRepository;
         this.communityRepository = communityRepository;
-        this.taskCalc = taskCalc;
+        this.programCalculationService = programCalculationService;
     }
-
 
 
     @Override
@@ -42,11 +43,9 @@ public class ProgramServiceImpl implements ProgramService{
         Community creator = communityRepository.findById(communityId)
                 .orElseThrow(() -> new RuntimeException("Community not found: " + communityId));
 
-        //  Set required fields
         program.setManager(manager);
         program.setCreator(creator);
 
-        //  Optional: initialize empty lists if null
         if (program.getAssignedMembers() == null) {
             program.setAssignedMembers(new ArrayList<>());
         }
@@ -55,10 +54,8 @@ public class ProgramServiceImpl implements ProgramService{
             program.setSharedWith(new ArrayList<>());
         }
 
-        //  Save and return
         return programRepository.save(program);
     }
-
 
     @Override
     public Program get(long id) {
@@ -81,6 +78,7 @@ public class ProgramServiceImpl implements ProgramService{
         programRepository.save(program);
     }
 
+
     @Override
     @Transactional
     public Program assignMember(long programId, long memberId) {
@@ -91,7 +89,6 @@ public class ProgramServiceImpl implements ProgramService{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found: " + memberId));
 
-        //  Avoid duplicates
         if (!program.getAssignedMembers().contains(member)) {
             program.getAssignedMembers().add(member);
         }
@@ -99,24 +96,37 @@ public class ProgramServiceImpl implements ProgramService{
         return programRepository.save(program);
     }
 
+
     @Override
     public double getProgramCompletion(long programId) {
         Program program = get(programId);
-
-        int totalEstimated = 0;
-        int totalFinished = 0;
-
-        for (Task task : program.getTasks()) {
-            totalEstimated += taskCalc.totalEstimated(task);
-            totalFinished += taskCalc.totalFinished(task);
-        }
-
-        if (totalEstimated == 0) return 100;
-
-        double pct = (double) totalFinished / totalEstimated * 100;
-        return Math.min(100, Math.max(0, pct));
+        return programCalculationService.completion(program);
     }
 
+    @Override
+    public int getProgramTotalEstimatedHours(long programId) {
+        Program program = get(programId);
+        return programCalculationService.totalEstimated(program);
+    }
 
+    @Override
+    public int getProgramTotalFinishedHours(long programId) {
+        Program program = get(programId);
+        return programCalculationService.totalFinished(program);
+    }
 
+    @Override
+    public int memberEstimated(Program program, Member member) {
+        return programCalculationService.memberEstimated(program, member);
+    }
+
+    @Override
+    public int memberFinished(Program program, Member member) {
+        return programCalculationService.memberFinished(program, member);
+    }
+
+    @Override
+    public double memberCompletion(Program program, Member member) {
+        return programCalculationService.memberCompletion(program, member);
+    }
 }

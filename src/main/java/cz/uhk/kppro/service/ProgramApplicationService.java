@@ -1,6 +1,7 @@
 package cz.uhk.kppro.service;
 
 import cz.uhk.kppro.controller.ProgramDetailView;
+import cz.uhk.kppro.model.Member;
 import cz.uhk.kppro.model.Program;
 import cz.uhk.kppro.model.Task;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,14 @@ public class ProgramApplicationService {
 
     private final ProgramService programService;
     private final ProgramCalculationService programCalculationService;
+    private final CurrentMemberService currentMemberService;
 
     public ProgramApplicationService(ProgramService programService,
-                                     ProgramCalculationService programCalculationService) {
+                                     ProgramCalculationService programCalculationService,
+                                     CurrentMemberService currentMemberService) {
         this.programService = programService;
         this.programCalculationService = programCalculationService;
+        this.currentMemberService = currentMemberService;
     }
 
     public List<Program> getPrograms() {
@@ -26,14 +30,19 @@ public class ProgramApplicationService {
     public ProgramDetailView getProgramDetail(long programId) {
 
         Program program = programService.get(programId);
+        Member member = currentMemberService.getCurrentMember();
 
         double completion = programService.getProgramCompletion(programId);
         int estimated = programCalculationService
                 .getProgramTotalEstimatedHours(program);
         int finished = programCalculationService
                 .getProgramTotalFinishedHours(program);
+        int estMemberHours = programCalculationService
+                .memberEstimated(program, member);
+        int finishedMemberHours = programCalculationService
+                .memberFinished(program, member);
 
-        List<Task> rootTasks = program.getTasks().stream()
+                List<Task> rootTasks = program.getTasks().stream()
                 .filter(t -> t.getParent() == null)
                 .toList();
 
@@ -42,7 +51,9 @@ public class ProgramApplicationService {
                 rootTasks,
                 completion,
                 estimated,
-                finished
+                finished,
+                estMemberHours,
+                finishedMemberHours
         );
     }
 
@@ -61,5 +72,7 @@ public class ProgramApplicationService {
 
         programService.createProgram(managerId, communityId, program);
     }
+
+
 
 }

@@ -20,6 +20,11 @@ public class MyUserDetails implements UserDetails {
         return user;
     }
 
+    public long getUserId() {
+        return user.getId();
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(user.getRole().getName()));
