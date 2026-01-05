@@ -2,6 +2,7 @@ package cz.uhk.kppro.controller;
 
 import cz.uhk.kppro.model.Program;
 import cz.uhk.kppro.model.Task;
+import cz.uhk.kppro.service.ProgramApplicationService;
 import cz.uhk.kppro.service.ProgramCalculationService;
 import cz.uhk.kppro.service.ProgramService;
 import org.springframework.stereotype.Controller;
@@ -14,77 +15,63 @@ import java.util.List;
 @RequestMapping("/programs")
 public class ProgramViewController {
 
-    private final ProgramService programService;
-    private final ProgramCalculationService programCalculationService;
+    private final ProgramApplicationService programApplicationService;
 
-    public ProgramViewController(ProgramService programService, ProgramCalculationService programCalculationService) {
-        this.programService = programService;
-        this.programCalculationService = programCalculationService;
+    public ProgramViewController(ProgramApplicationService programApplicationService) {
+        this.programApplicationService = programApplicationService;
     }
 
-    // List all programs
+
     @GetMapping
     public String listPrograms(Model model) {
-        model.addAttribute("programs", programService.getAll());
+        model.addAttribute("programs", programApplicationService.getPrograms());
         return "programs/programs";
     }
 
     @GetMapping("/fragment")
     public String programListFragment(Model model) {
-        model.addAttribute("programs", programService.getAll());
+        model.addAttribute("programs", programApplicationService.getPrograms());
         return "programs/_program-list :: programList";
     }
 
 
-    // Show create form
+
     @GetMapping("/create")
     public String createForm() {
         return "new";
     }
 
-    // Handle create
     @PostMapping("/create")
-    public String createProgram(
-            @RequestParam long managerId,
-            @RequestParam long communityId,
-            @RequestParam String name,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false) Integer amountMax
-    ) {
-        Program program = new Program();
-        program.setName(name);
-        program.setDescription(description);
-        program.setAmountMax(amountMax);
+    public String createProgram(@RequestParam long managerId,
+                                @RequestParam long communityId,
+                                @RequestParam String name,
+                                @RequestParam(required = false) String description,
+                                @RequestParam(required = false) Integer amountMax) {
 
-        programService.createProgram(managerId, communityId, program);
+        programApplicationService.createProgram(
+                managerId,
+                communityId,
+                name,
+                description,
+                amountMax
+        );
 
         return "redirect:/communities/" + communityId + "/programs";
     }
 
-    // Program detail page
+
     @GetMapping("/{id}")
     public String programDetail(@PathVariable long id, Model model) {
 
-        Program program = programService.get(id);
-        double completion = programService.getProgramCompletion(id);
-        int est = programCalculationService.getProgramTotalEstimatedHours(program);
-        int finished = programCalculationService.getProgramTotalFinishedHours(program);
+        ProgramDetailView view = programApplicationService.getProgramDetail(id);
 
-        // Get all tasks for this program
-        List<Task> all = program.getTasks();
-        // Filter only top-level tasks (no parent)
-        List<Task> roots = all.stream()
-                .filter(t -> t.getParent() == null)
-                .toList();
-
-        model.addAttribute("program", program);
-        model.addAttribute("tasks", roots);
-        model.addAttribute("completion", completion);
-        model.addAttribute("est", est);
-        model.addAttribute("finished", finished);
+        model.addAttribute("program", view.program());
+        model.addAttribute("tasks", view.tasks());
+        model.addAttribute("completion", view.completion());
+        model.addAttribute("est", view.estimatedHours());
+        model.addAttribute("finished", view.finishedHours());
 
         return "programs/detail";
     }
-
 }
 
