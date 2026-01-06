@@ -1,15 +1,9 @@
 package cz.uhk.kppro.controller;
 
-import cz.uhk.kppro.model.Program;
-import cz.uhk.kppro.model.Task;
 import cz.uhk.kppro.service.ProgramApplicationService;
-import cz.uhk.kppro.service.ProgramCalculationService;
-import cz.uhk.kppro.service.ProgramService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/programs")
