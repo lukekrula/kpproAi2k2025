@@ -12,6 +12,6 @@ public record ProgramDetailView(
         int estimatedHours,
         int finishedHours,
         int estMemberHours,
-        int totalMemberHours
+        int finishedMemberHours
 ) {}
 

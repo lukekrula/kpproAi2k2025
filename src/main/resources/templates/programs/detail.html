@@ -17,6 +17,7 @@
         <h1 th:text="${#numbers.formatDecimal(completion, 0, 1)} + '% progress ' + ${finished} + ' from ' + ${est} + ' hours'">
             Completion
         </h1>
+        <h2 th:text="'You have finished ' +${finishedMemberHours} + 'hours from ' + ${finished} + ' hours of your workload in this project.'"></h2>
 
         <p class="subtitle" th:text="${program.description}">Program description</p>
 

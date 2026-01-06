@@ -70,6 +70,8 @@ public class ProgramViewController {
         model.addAttribute("completion", view.completion());
         model.addAttribute("est", view.estimatedHours());
         model.addAttribute("finished", view.finishedHours());
+        model.addAttribute("estMemberHours", view.estMemberHours());
+        model.addAttribute("finishedMemberHours", view.finishedMemberHours());
 
         return "programs/detail";
     }
