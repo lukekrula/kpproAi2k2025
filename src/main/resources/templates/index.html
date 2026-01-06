@@ -15,15 +15,20 @@
         <div class="brand">
             <div class="logo" aria-hidden>D</div>
             <div>
-                <h1 id="signin-title">Landni'ś</h1>
-                <p class="lead">muzete zde cokoliv</p>
+                <h1 id="signin-title">Community partnership</h1>
+                <p class="lead">Make the change together</p>
             </div>
         </div>
 
         <h2 class="hero-title" th:text="${'Hello ' + name}"></h2>
         <p class="hero-subtitle">Welcome to your personal space for ideas, projects, and creativity.</p>
 
-        <a th:href="@{/login}" class="btn hero-btn">Go to item list</a>
+        <div class="btn-wrap">
+
+            <a th:href="@{/login}" class="btn hero-btn">Community</a>
+            <a th:href="@{/partner/register}" class="btn hero-btn">Partners</a>
+
+        </div>
     </section>
 
 

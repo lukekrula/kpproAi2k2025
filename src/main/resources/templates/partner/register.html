@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="page">
+    <header>
+        <h1>Register as a partner</h1>
+        <p class="subtitle">Create your partner account and join a community</p>
+    </header>
+
+    <main>
+        <div class="card">
+
+            <form th:action="@{/partner/register}"
+                  th:object="${partner}"
+                  method="post"
+                  onsubmit="return checkPasswords()">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+                <!-- PARTNER NAME -->
+                <div class="editor">
+                    <label>Organization Name:</label>
+                    <input type="text" th:field="*{name}">
+                </div>
+                <p th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}"
+                   class="error"></p>
+
+                <!-- CONTACT EMAIL -->
+                <div class="editor">
+                    <label>Contact Email:</label>
+                    <input type="email" th:field="*{contactEmail}">
+                </div>
+                <p th:if="${#fields.hasErrors('contactEmail')}"
+                   th:errors="*{contactEmail}"
+                   class="error"></p>
+
+                <!-- CONTACT PERSON -->
+                <div class="editor">
+                    <label>Contact Person:</label>
+                    <input type="text" th:field="*{contactPerson}">
+                </div>
+                <p th:if="${#fields.hasErrors('contactPerson')}"
+                   th:errors="*{contactPerson}"
+                   class="error"></p>
+
+                <hr>
+
+                <h3>Login Credentials</h3>
+
+                <!-- USERNAME -->
+                <div class="editor">
+                    <label>Username:</label>
+                    <input type="text" th:field="*{username}">
+                </div>
+                <p th:if="${#fields.hasErrors('username')}"
+                   th:errors="*{username}"
+                   class="error"></p>
+
+                <!-- PASSWORD -->
+                <div class="editor">
+                    <label>Password:</label>
+                    <input type="password" th:field="*{password}">
+                </div>
+                <p th:if="${#fields.hasErrors('password')}"
+                   th:errors="*{password}"
+                   class="error"></p>
+
+                <!-- REPEAT PASSWORD -->
+                <div class="editor">
+                    <label>Repeat Password:</label>
+                    <input type="password" th:field="*{repeatPassword}">
+                </div>
+                <p th:if="${#fields.hasErrors('repeatPassword')}"
+                   th:errors="*{repeatPassword}"
+                   class="error"></p>
+
+                <div class="btn-wrap">
+                    <button type="submit" class="btn">Register Partner</button>
+                </div>
+
+            </form>
+
+        </div>
+    </main>
+</div>
+
+<script>
+    function checkPasswords() {
+        const p1 = document.querySelector('[name="password"]').value;
+        const p2 = document.querySelector('[name="repeatPassword"]').value;
+
+        if (p1 !== p2) {
+            alert("Passwords do not match");
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

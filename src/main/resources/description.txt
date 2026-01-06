@@ -69,3 +69,24 @@ Communities or Members may be linked to a Town
 
 Metadata
 Store additional info for entities (audit, tags, etc.)
+
+
+User + Role + Member (1:1)
+
+Community + Member (M:N)
+
+Program + Community (creator)
+
+Program + Community (sharedWith)
+
+Program + Member (assignedMembers)
+
+Task + Program + Member (assignedTo)
+
+Partner + Community (M:N)
+
+Activity + Community (M:N)
+
+Metadata (generic)
+
+This order avoids circular headaches and keeps the model evolving cleanly.
