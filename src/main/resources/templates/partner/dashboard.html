@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Partner Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="page">
+    <header>
+        <h1>Partner Dashboard</h1>
+        <p class="subtitle">Welcome to your partner space</p>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Your Overview</h2>
+
+            <ul>
+                <li><a th:href="@{/partner/programs}">View Programs You Support</a></li>
+                <li><a th:href="@{/partner/communities}">Communities You Work With</a></li>
+                <li><a th:href="@{/partner/profile}">Edit Your Profile</a></li>
+            </ul>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

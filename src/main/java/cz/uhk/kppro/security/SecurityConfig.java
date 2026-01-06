@@ -58,7 +58,12 @@ public class SecurityConfig {
                             var authorities = authentication.getAuthorities();
                             if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
                                 response.sendRedirect("/admin/administration");
-                            } else if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
+
+                            }
+                            else if (authorities.stream().anyMatch(a -> a.getAuthority().equals("PARTNER_USER"))) {
+                                response.sendRedirect("/partner/dashboard");
+                            }
+                            else if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
                                 response.sendRedirect("/logged");
                             } else {
                                 response.sendRedirect("/");
