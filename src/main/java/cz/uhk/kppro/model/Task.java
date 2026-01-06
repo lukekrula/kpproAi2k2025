@@ -12,23 +12,10 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     private String name;
-
     private boolean completed;
-
     private String description;
-
     private int estimatedDays;
-
     private int estimatedHours;
 
 
@@ -55,8 +42,6 @@ public class Task {
     )
     private List<Task> subTasks = new ArrayList<>();
 
-
-
     protected Task() {
         // JPA
     }
@@ -65,7 +50,7 @@ public class Task {
         this.name = name;
     }
 
-    // Domain logic
+
 
     public void addSubTask(Task subTask) {
         subTask.parent = this;
@@ -87,6 +72,14 @@ public class Task {
         if (parent != null && !parent.subTasks.contains(this)) {
             parent.subTasks.add(this);
         }
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -123,8 +116,6 @@ public class Task {
     public Member getAssignedTo() {
         return assignedTo;
     }
-
-
 
     public void setProgram(Program program) {
         this.program = program;

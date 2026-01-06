@@ -84,4 +84,8 @@
             return taskRepository.findByProgramId(programId);
         }
 
+        @Override
+        public List<Task> getByMember(long memberId) {
+            return taskRepository.findByAssignedToId(memberId);
+        }
     }

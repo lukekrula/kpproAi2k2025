@@ -1,7 +1,5 @@
 package cz.uhk.kppro.controller;
 
-import cz.uhk.kppro.model.Program;
-import cz.uhk.kppro.model.Task;
 import cz.uhk.kppro.service.TaskApplicationService;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;

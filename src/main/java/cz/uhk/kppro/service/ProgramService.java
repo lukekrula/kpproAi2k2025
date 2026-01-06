@@ -13,16 +13,7 @@ public interface ProgramService {
     void delete(long id);
     void update(Program program);
     Program assignMember(long programId, long memberId);
-    double getProgramCompletion(long programId);
 
-    int getProgramTotalEstimatedHours(long programId);
 
-    int getProgramTotalFinishedHours(long programId);
-
-    int memberEstimated(Program program, Member member);
-
-    int memberFinished(Program program, Member member);
-
-    double memberCompletion(Program program, Member member);
 }
 

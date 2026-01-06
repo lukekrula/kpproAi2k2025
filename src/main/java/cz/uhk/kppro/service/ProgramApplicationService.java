@@ -14,13 +14,20 @@ public class ProgramApplicationService {
     private final ProgramService programService;
     private final ProgramCalculationService programCalculationService;
     private final CurrentMemberService currentMemberService;
+    private final TaskCalculationService taskCalc;
+    private final TaskQueryService taskQueryService;
+
 
     public ProgramApplicationService(ProgramService programService,
                                      ProgramCalculationService programCalculationService,
-                                     CurrentMemberService currentMemberService) {
+                                     CurrentMemberService currentMemberService,
+                                     TaskCalculationService taskCalc,
+                                     TaskQueryService taskQueryService) {
         this.programService = programService;
         this.programCalculationService = programCalculationService;
         this.currentMemberService = currentMemberService;
+        this.taskCalc = taskCalc;
+        this.taskQueryService = taskQueryService;
     }
 
     public List<Program> getPrograms() {
@@ -32,17 +39,13 @@ public class ProgramApplicationService {
         Program program = programService.get(programId);
         Member member = currentMemberService.getCurrentMember();
 
-        double completion = programService.getProgramCompletion(programId);
-        int estimated = programCalculationService
-                .getProgramTotalEstimatedHours(program);
-        int finished = programCalculationService
-                .getProgramTotalFinishedHours(program);
-        int estMemberHours = programCalculationService
-                .memberEstimated(program, member);
-        int finishedMemberHours = programCalculationService
-                .memberFinished(program, member);
+        double completion = programCalculationService.completion(program);
+        int estimated = programCalculationService.totalEstimated(program);
+        int finished = programCalculationService.totalFinished(program);
+        int estMemberHours = taskCalc.totalEstimated(taskQueryService.getTasksForMember(program, member));
+        int finMemberHours = taskCalc.totalFinished(taskQueryService.getTasksForMember(program, member));
 
-                List<Task> rootTasks = program.getTasks().stream()
+        List<Task> rootTasks = program.getTasks().stream()
                 .filter(t -> t.getParent() == null)
                 .toList();
 
@@ -53,9 +56,10 @@ public class ProgramApplicationService {
                 estimated,
                 finished,
                 estMemberHours,
-                finishedMemberHours
+                finMemberHours
         );
     }
+
 
 
 
@@ -72,7 +76,5 @@ public class ProgramApplicationService {
 
         programService.createProgram(managerId, communityId, program);
     }
-
-
 
 }

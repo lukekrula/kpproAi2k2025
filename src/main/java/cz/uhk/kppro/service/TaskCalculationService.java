@@ -4,6 +4,8 @@ import cz.uhk.kppro.model.Member;
 import cz.uhk.kppro.model.Task;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TaskCalculationService {
 
@@ -56,54 +58,16 @@ public class TaskCalculationService {
         return total;
     }
 
-    public double completionPercentage(Task task) {
-        int est = totalEstimated(task);
-        int fin = totalFinished(task);
-
-        if (est == 0) return 100;
-
-        double pct = (double) fin / est * 100;
-        return Math.min(100, Math.max(0, pct));
+    public int totalEstimated(List<Task> tasks) {
+        return tasks.stream()
+                .mapToInt(this::totalEstimated)
+                .sum();
     }
 
-    //  public int totalFinishedForMember(Task task, Member member) {
-    //     return totalFinishedForMember(task, member, false);}
-
-    public int totalFinishedForMember(Task task, Member member) {
-
-        // Only count this task if it is assigned to the given member
-        int total = (member.equals(task.getAssignedTo()))
-                ? finishedHours(task)
-                : 0;
-
-        // Recursively add all subtasks
-        for (Task sub : task.getSubTasks()) {
-            total += totalFinishedForMember(sub, member);
-        }
-
-        return total;
+    public int totalFinished(List<Task> tasks) {
+        return tasks.stream()
+                .mapToInt(this::totalFinished)
+                .sum();
     }
 
-
-    private int totalFinishedForMember(Task task, Member member, boolean parentAssigned) {
-
-        boolean assignedHere = member.equals(task.getAssignedTo());
-        boolean effectiveAssignment = parentAssigned || assignedHere;
-
-        int total = effectiveAssignment ? finishedHours(task) : 0;
-
-        for (Task sub : task.getSubTasks()) {
-            total += totalFinishedForMember(sub, member, effectiveAssignment);
-        }
-
-        return total;
-    }
-
-    public int totalEstimatedForMember(Task task, Member member) {
-        int total = (member.equals(task.getAssignedTo())) ? estimatedHours(task) : 0;
-        for (Task sub : task.getSubTasks()) {
-            total += totalEstimatedForMember(sub, member);
-        }
-        return total;
-    }
 }

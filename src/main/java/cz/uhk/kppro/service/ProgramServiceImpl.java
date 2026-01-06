@@ -19,17 +19,15 @@ public class ProgramServiceImpl implements ProgramService {
     private final MemberRepository memberRepository;
     private final CommunityRepository communityRepository;
 
-    private final ProgramCalculationService programCalculationService;
 
     public ProgramServiceImpl(ProgramRepository programRepository,
                               MemberRepository memberRepository,
-                              CommunityRepository communityRepository,
-                              ProgramCalculationService programCalculationService) {
+                              CommunityRepository communityRepository) {
 
         this.programRepository = programRepository;
         this.memberRepository = memberRepository;
         this.communityRepository = communityRepository;
-        this.programCalculationService = programCalculationService;
+
     }
 
 
@@ -96,37 +94,4 @@ public class ProgramServiceImpl implements ProgramService {
         return programRepository.save(program);
     }
 
-
-    @Override
-    public double getProgramCompletion(long programId) {
-        Program program = get(programId);
-        return programCalculationService.completion(program);
-    }
-
-    @Override
-    public int getProgramTotalEstimatedHours(long programId) {
-        Program program = get(programId);
-        return programCalculationService.totalEstimated(program);
-    }
-
-    @Override
-    public int getProgramTotalFinishedHours(long programId) {
-        Program program = get(programId);
-        return programCalculationService.totalFinished(program);
-    }
-
-    @Override
-    public int memberEstimated(Program program, Member member) {
-        return programCalculationService.memberEstimated(program, member);
-    }
-
-    @Override
-    public int memberFinished(Program program, Member member) {
-        return programCalculationService.memberFinished(program, member);
-    }
-
-    @Override
-    public double memberCompletion(Program program, Member member) {
-        return programCalculationService.memberCompletion(program, member);
-    }
 }

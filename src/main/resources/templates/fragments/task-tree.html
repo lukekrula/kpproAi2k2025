@@ -4,7 +4,7 @@
 
             <!-- Task link -->
             <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}">
-                <strong th:text="${task.name}"></strong>
+                <span th:text="${task.completed} ? '&#9989; ' : '&#10060; '"></span><strong th:text="${task.name}"></strong>
             </a>
 
             <!-- Toggle button (only if subtasks exist) -->

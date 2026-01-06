@@ -1,0 +1,71 @@
+Rewritten version (same style, clearer meaning)
+I have several domain classes in my Spring Boot app — Activity, Community, Member, Metadata, Partner, Program, Role, Task, Town, and User — and I need to connect them properly. A User has a Role. A Community has Members, and each Member can belong to multiple Communities. The same many‑to‑many relationship applies between Communities and Partners. A Community can create Programs, and Partners can donate to or otherwise participate in those Programs. Programs can also be shared with other Communities. Each Program contains Tasks that must be completed to achieve the Program’s goal. Every Community maintains a list of Activities they perform, and these Activities can influence whether a Partner decides to donate; the same Activity can appear in multiple Communities. A User is also a Member, so they can view the Communities they belong to, and they can be assigned to a Program and to specific Tasks within that Program.
+
+📌 Functionalities we should incorporate (based on the description)
+User & Role
+User authentication and role-based access
+
+User ↔ Role assignment
+
+User is also a Member entity
+
+Community
+Community creation and management
+
+Members can join multiple communities
+
+Partners can be linked to multiple communities
+
+Community has a list of Activities
+
+Community can create Programs
+
+Community can share Programs with other communities
+
+Member
+Member belongs to multiple communities
+
+Member can be assigned to Programs
+
+Member can be assigned to Tasks
+
+Member can view communities they belong to
+
+Partner
+Partner participates in communities
+
+Partner can donate to Programs
+
+Partner decisions influenced by community Activities
+
+Program
+Programs created by communities
+
+Programs shared with other communities
+
+Programs contain Tasks
+
+Members can be assigned to a Program
+
+Task
+Tasks belong to Programs
+
+Tasks can be assigned to Members
+
+Tasks must be completed to achieve Program goals
+
+Tasks may have subtasks (hierarchy)
+
+Activity
+Communities maintain a list of Activities
+
+Activities influence Partner donation decisions
+
+Activities can appear in multiple communities
+
+Town
+Communities or Members may be linked to a Town
+(depending on your domain model)
+
+Metadata
+Store additional info for entities (audit, tags, etc.)
