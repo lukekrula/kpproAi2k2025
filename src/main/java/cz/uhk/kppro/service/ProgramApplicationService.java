@@ -38,6 +38,9 @@ public class ProgramApplicationService {
         return programService.getAll();
     }
 
+    public Program getProgram(long id) {
+        return programService.get(id);
+    }
 
 
     public ProgramDetailView getProgramDetail(long programId) {

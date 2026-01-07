@@ -47,15 +47,6 @@ public class ParticipationRequestController {
         model.addAttribute("partners", partnerService.getAll()); // dropdown
         return "requests/create";
     }
-    @GetMapping("/programs/{id}/requests/fragment")
-    public String getRequestsFragment(@PathVariable Long id, Model model) {
-        Program program = programService.get(id);
-        List<ParticipationRequest> requests = participationRequestService.getRequestsForProgram(program.getId());
-
-        model.addAttribute("requests", requests);
-        return "fragments/requests-table :: requestsTable";
-    }
-
 
     @PostMapping("/create")
     public String createRequest(@ModelAttribute ParticipationRequest request) {

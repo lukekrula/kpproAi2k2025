@@ -1,7 +1,6 @@
 <div th:fragment="requestsTable(requests)">
     <div class="table-wrap">
         <table class="nice-table">
-
             <thead>
             <tr>
                 <th>#</th>
@@ -17,24 +16,14 @@
                 th:attr="onclick=|window.location.href='/requests/' + ${req.id}|"
                 style="cursor:pointer">
 
-                <!-- Row number -->
                 <td th:text="${iterStat.count}">1</td>
-
-                <!-- Partner -->
                 <td th:text="${req.partner.name}">Partner</td>
-
-                <!-- Status -->
                 <td th:text="${req.status}">Status</td>
-
-                <!-- Requested amount -->
                 <td th:text="${req.amountRequested}">0</td>
-
-                <!-- Approved amount -->
                 <td th:text="${req.amountApproved}">0</td>
 
             </tr>
             </tbody>
-
         </table>
     </div>
 </div>

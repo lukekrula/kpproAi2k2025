@@ -1,6 +1,7 @@
 package cz.uhk.kppro.controller;
 
 import cz.uhk.kppro.model.ParticipationRequest;
+import cz.uhk.kppro.model.Program;
 import cz.uhk.kppro.service.ParticipationRequestService;
 import cz.uhk.kppro.service.ProgramApplicationService;
 import jakarta.annotation.PostConstruct;
@@ -33,6 +34,15 @@ public class ProgramViewController {
     public String programListFragment(Model model) {
         model.addAttribute("programs", programApplicationService.getPrograms());
         return "programs/_program-list :: programList";
+    }
+
+    @GetMapping("/programs/{id}/requests/fragment")
+    public String getRequestsFragment(@PathVariable Long id, Model model) {
+        Program program = programApplicationService.getProgram(id);
+        List<ParticipationRequest> requests = participationRequestService.getRequestsForProgram(program.getId());
+
+        model.addAttribute("requests", requests);
+        return "fragments/requests-table :: requestsTable";
     }
 
 
