@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Participation Request</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="page">
+    <main>
+
+        <h1>Create Participation Request</h1>
+
+        <p class="subtitle">
+            Fill in the details below to request participation from a partner.
+        </p>
+
+        <div class="list warn-table-wrap">
+            <div class="warn-card">
+
+
+                <form th:action="@{/requests/create}" th:object="${request}" method="post">
+                    <div class="card">
+                    <!-- Hidden program ID -->
+                    <input type="hidden" th:field="*{program.id}"/>
+
+                    <p>
+                        <strong>Program:</strong>
+                        <span th:text="${request.program.name}"></span>
+                    </p>
+                </div>
+                    <div class="editor">
+                    <label><strong>Partner</strong></label>
+                    <select th:field="*{partner.id}">
+                        <option th:each="p : ${partners}"
+                                th:value="${p.id}"
+                                th:text="${p.name}">
+                        </option>
+                    </select>
+                        </div>
+                        <div class="editor">
+                    <label><strong>Proposal Text</strong></label>
+                    <textarea th:field="*{proposalText}" rows="5"></textarea>
+                        </div>
+                    <div class="editor">
+                    <label><strong>Description</strong></label>
+                    <textarea th:field="*{description}" rows="3"></textarea>
+                    </div>
+                    <div class="editor">
+                    <label><strong>Amount Requested</strong></label>
+                    <input type="number" th:field="*{amountRequested}"/>
+                    </div>
+
+                    <div class="btn-wrap" style="margin-top: 20px;">
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+
+                    </div>
+
+                </form>
+                <!-- FORM END -->
+
+            </div>
+
+        </div>
+        <div class="btn-wrap" style="margin-top: 20px;">
+
+            <a th:href="@{/programs/{id}(id=${request.program.id})}" class="btn">Back to Program</a>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

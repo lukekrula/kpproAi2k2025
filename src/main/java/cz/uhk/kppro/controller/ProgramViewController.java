@@ -1,18 +1,25 @@
 package cz.uhk.kppro.controller;
 
+import cz.uhk.kppro.model.ParticipationRequest;
+import cz.uhk.kppro.service.ParticipationRequestService;
 import cz.uhk.kppro.service.ProgramApplicationService;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/programs")
 public class ProgramViewController {
 
     private final ProgramApplicationService programApplicationService;
+    private final ParticipationRequestService participationRequestService;
 
-    public ProgramViewController(ProgramApplicationService programApplicationService) {
+    public ProgramViewController(ProgramApplicationService programApplicationService, ParticipationRequestService participationRequestService) {
         this.programApplicationService = programApplicationService;
+        this.participationRequestService = participationRequestService;
     }
 
 
@@ -67,8 +74,13 @@ public class ProgramViewController {
 
         model.addAttribute("estMemberHours", view.estMemberHours());
         model.addAttribute("finishedMemberHours", view.finMemberHours());
-
+        model.addAttribute("requests",view.participationRequests());
         return "programs/detail";
     }
+
+    @PostConstruct
+    public void test() { System.out.println("ProgramViewController loaded!"); }
+
+
 }
 

@@ -1,5 +1,6 @@
 package cz.uhk.kppro.controller;
 
+import cz.uhk.kppro.model.ParticipationRequest;
 import cz.uhk.kppro.model.Program;
 import cz.uhk.kppro.model.Task;
 
@@ -12,6 +13,7 @@ public record ProgramDetailView(
         int estimatedHours,
         int finishedHours,
         int estMemberHours,
-        int finMemberHours
+        int finMemberHours,
+        List<ParticipationRequest> participationRequests
 ) {}
 

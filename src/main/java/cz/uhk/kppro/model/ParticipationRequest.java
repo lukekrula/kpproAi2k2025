@@ -32,15 +32,22 @@ public class ParticipationRequest {
     // The user who created the request (usually community manager)
     @ManyToOne(optional = false)
     @JoinColumn(name = "creator_user_id")
-    private User creator;
+    private Member creator;
 
 
 
     private String name;
     private String description;
     private Double amountRequested;
-    private String sharedWith;
-    private String manager;
+
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Member manager;
+
+    private Double amountApproved = 0.0;
+
+
 
 
 
@@ -86,8 +93,8 @@ public class ParticipationRequest {
     public Partner getPartner() { return partner; }
     public void setPartner(Partner partner) { this.partner = partner; }
 
-    public User getCreator() { return creator; }
-    public void setCreator(User creator) { this.creator = creator; }
+    public Member getCreator() { return creator; }
+    public void setCreator(Member creator) { this.creator = creator; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -98,11 +105,16 @@ public class ParticipationRequest {
     public Double getAmountRequested() { return amountRequested; }
     public void setAmountRequested(Double amountRequested) { this.amountRequested = amountRequested; }
 
-    public String getSharedWith() { return sharedWith; }
-    public void setSharedWith(String sharedWith) { this.sharedWith = sharedWith; }
+    public Double getAmountApproved() {
+        return amountApproved;
+    }
 
-    public String getManager() { return manager; }
-    public void setManager(String manager) { this.manager = manager; }
+    public void setAmountApproved(Double amountApproved) {
+        this.amountApproved = amountApproved;
+    }
+
+    public Member getManager() { return manager; }
+    public void setManager(Member manager) { this.manager = manager; }
 
     public ParticipationRequestStatus getStatus() { return status; }
     public void setStatus(ParticipationRequestStatus status) { this.status = status; }

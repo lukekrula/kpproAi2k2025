@@ -3,9 +3,11 @@ package cz.uhk.kppro.service;
 import cz.uhk.kppro.model.Partner;
 import cz.uhk.kppro.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class PartnerServiceImpl implements PartnerService {
 
     private PartnerRepository partnerRepository;

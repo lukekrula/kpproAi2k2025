@@ -2,23 +2,30 @@
     <ul>
         <li th:each="task : ${tasks}">
 
-            <!-- Task link -->
-            <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}">
-                <span th:text="${task.completed} ? '&#9989; ' : '&#10060; '"></span><strong th:text="${task.name}"></strong>
-            </a>
+            <div class="task-row">
 
-            <!-- Toggle button (only if subtasks exist) -->
-            <button type="button"
-                    th:if="${!#lists.isEmpty(task.subTasks)}"
-                    class="toggle-btn"
-                    onclick="toggleSubtasks(this)">
-                ▶
-            </button>
+                <!-- Task link -->
+                <a th:href="@{/programs/{pid}/tasks/{tid}(pid=${program.id}, tid=${task.id})}">
+                    <span th:utext="${task.completed} ? '&#9989;' : '&#10060;'"></span>
+                    <strong th:text="${task.name}"></strong>
+                </a>
 
-            <div class="subtasks hidden" th:if="${!#lists.isEmpty(task.subTasks)}">
-                <div th:replace="fragments/task-tree :: tree(tasks=${task.subTasks}, program=${program})"></div>
+                <!-- Toggle button -->
+                <button type="button"
+                        th:if="${!#lists.isEmpty(task.subTasks)}"
+                        class="toggle-btn"
+                        onclick="toggleSubtasks(this)">
+                    ▶
+                </button>
+
             </div>
 
+            <!-- Subtasks -->
+            <ul class="subtasks hidden" th:if="${!#lists.isEmpty(task.subTasks)}">
+                <li th:each="sub : ${task.subTasks}">
+                    <div th:replace="fragments/task-tree :: tree(tasks=${task.subTasks}, program=${program})"></div>
+                </li>
+            </ul>
 
         </li>
     </ul>

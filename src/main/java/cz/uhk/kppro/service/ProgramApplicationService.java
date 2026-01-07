@@ -2,6 +2,7 @@ package cz.uhk.kppro.service;
 
 import cz.uhk.kppro.controller.ProgramDetailView;
 import cz.uhk.kppro.model.Member;
+import cz.uhk.kppro.model.ParticipationRequest;
 import cz.uhk.kppro.model.Program;
 import cz.uhk.kppro.model.Task;
 import org.springframework.stereotype.Service;
@@ -16,28 +17,34 @@ public class ProgramApplicationService {
     private final CurrentMemberService currentMemberService;
     private final TaskCalculationService taskCalc;
     private final TaskQueryService taskQueryService;
+    private final ParticipationRequestService participationRequestService;
 
 
     public ProgramApplicationService(ProgramService programService,
                                      ProgramCalculationService programCalculationService,
                                      CurrentMemberService currentMemberService,
                                      TaskCalculationService taskCalc,
-                                     TaskQueryService taskQueryService) {
+                                     TaskQueryService taskQueryService,
+                                     ParticipationRequestService participationRequestService) {
         this.programService = programService;
         this.programCalculationService = programCalculationService;
         this.currentMemberService = currentMemberService;
         this.taskCalc = taskCalc;
         this.taskQueryService = taskQueryService;
+        this.participationRequestService = participationRequestService;
     }
 
     public List<Program> getPrograms() {
         return programService.getAll();
     }
 
+
+
     public ProgramDetailView getProgramDetail(long programId) {
 
         Program program = programService.get(programId);
         Member member = currentMemberService.getCurrentMember();
+        List<ParticipationRequest> participationRequests = participationRequestService.getRequestsForProgram(programId);
 
         double completion = programCalculationService.completion(program);
         int estimated = programCalculationService.totalEstimated(program);
@@ -56,7 +63,8 @@ public class ProgramApplicationService {
                 estimated,
                 finished,
                 estMemberHours,
-                finMemberHours
+                finMemberHours,
+                participationRequests
         );
     }
 

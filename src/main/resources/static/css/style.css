@@ -118,6 +118,12 @@ body {
     justify-content: end;
 }
 
+.heading-wrap{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .row {
     background-color: var(--gradient-end);
     width: 100%;

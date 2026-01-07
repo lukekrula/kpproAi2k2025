@@ -64,32 +64,69 @@
             </div>
         </div>
 
-        <h2>Tasks</h2>
 
+        <div class="heading-wrap">
+            <h2>Tasks</h2>
+            <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>
+        </div>
         <div class="list warn-table-wrap">
             <div th:replace="fragments/task-tree :: tree(tasks=${tasks}, program=${program})"></div>
 
         </div>
+        <div class="heading-wrap">
+            <h3>Participation Requests</h3>
+            <a th:href="@{/requests/create(programId=${program.id})}" class="btn btn-primary">
+                Request Participation
+            </a>
+        </div>
+
+        <div class="heading-wrap">
+            <h3>Participation Requests</h3>
+            <a th:href="@{/requests/create(programId=${program.id})}" class="btn btn-primary">
+                Request Participation
+            </a>
+        </div>
+
+        <!-- HTMX loader -->
+        <div
+                th:hx-get="@{/programs/{id}/requests/fragment(id=${program.id})}"
+                hx-trigger="load"
+                hx-target="#requestsTable"
+                hx-swap="innerHTML">
+        </div>
+
+        <div id="requestsTable"></div>
+
+
 
         <div class="btn-wrap">
             <a th:href="@{/programs/{id}/tasks/create(id=${program.id})}" class="btn">Add Task</a>
+            <a th:href="@{/requests/create(programId=${program.id})}" class="btn btn-primary">
+                Request Participation
+            </a>
+
             <a th:href="@{'/communities/' + ${program.creator.id} + '/programs'}" class="btn">Back to Programs</a>
+
         </div>
     </main>
 </div>
 <script>
     function toggleSubtasks(btn) {
-        const container = btn.nextElementSibling; // the .subtasks div
+        const li = btn.closest("li");
+        const container = li.querySelector(".subtasks");
+
+        if (!container) return;
 
         if (container.classList.contains("hidden")) {
             container.classList.remove("hidden");
-            btn.textContent = "▼"; // expanded
+            btn.textContent = "▼";
         } else {
             container.classList.add("hidden");
-            btn.textContent = "▶"; // collapsed
+            btn.textContent = "▶";
         }
     }
 </script>
+
 
 </body>
 </html>
