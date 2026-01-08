@@ -17,11 +17,15 @@
         <div class="card">
             <h2>Your Overview</h2>
 
-            <ul>
-                <li><a th:href="@{/partner/programs}">View Programs You Support</a></li>
-                <li><a th:href="@{/partner/communities}">Communities You Work With</a></li>
-                <li><a th:href="@{/partner/profile}">Edit Your Profile</a></li>
-            </ul>
+            <div class="btn-wrap">
+                <a th:href="@{/partners/{id}/requests(id=${program.partner.id})}" class="btn">
+                    Partner Requests
+                </a>
+
+
+                <a th:href="@{/partner/communities}" class="btn">Communities You Work With</a>
+                <a th:href="@{/partner/profile}" class="btn">Edit Your Profile</a>
+            </div>
         </div>
     </main>
 </div>

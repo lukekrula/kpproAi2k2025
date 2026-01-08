@@ -2,6 +2,8 @@ package cz.uhk.kppro.service;
 
 import cz.uhk.kppro.model.Community;
 import cz.uhk.kppro.model.Member;
+import cz.uhk.kppro.model.Membership;
+import cz.uhk.kppro.model.MembershipRole;
 import cz.uhk.kppro.repository.CommunityRepository;
 import cz.uhk.kppro.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,19 +53,14 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     @Transactional
     public Community assignMember(long communityId, long memberId) {
-
+        Membership membership = new Membership();
         Community community = get(communityId);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found: " + memberId));
+        membership.setRole(MembershipRole.COMMUNITY_MEMBER);
+        membership.setMember(member);
 
-        // avoid duplicates
-        if (!community.getMembers().contains(member)) {
-            community.getMembers().add(member);
-        }
 
-        if (!member.getCommunities().contains(community)) {
-            member.getCommunities().add(community);
-        }
 
         return communityRepository.save(community);
     }

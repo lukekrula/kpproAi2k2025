@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = new Member();
         member.setName(user.getUsername());
         member.setEmail(user.getEmail());
-        member.setRole("member");
+
         member.setUser(user);
 
         //  important: set reverse side

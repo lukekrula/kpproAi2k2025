@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "community")
-public class Community {
+public class Community extends Organization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +39,6 @@ public class Community {
     @ManyToMany(mappedBy = "communities")
     private List<Partner> partners = new ArrayList<>();
 
-    public long getId() {
-        return id;
-    }
 
     public void setId(long id) {
         this.id = id;

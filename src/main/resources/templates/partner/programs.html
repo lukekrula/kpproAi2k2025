@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Requests for ' + ${partner.name}">Partner Requests</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="page">
+    <main>
+
+        <div class="heading-wrap">
+            <h2 th:text="'Participation Requests for ' + ${partner.name}"></h2>
+        </div>
+
+        <div class="table-wrap">
+            <table class="nice-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Community</th>
+                    <th>Program</th>
+                    <th>Status</th>
+                    <th>Requested</th>
+                    <th>Approved</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="req, iterStat : ${requests}"
+                    th:attr="onclick=|window.location.href='/requests/' + ${req.id}|"
+                    style="cursor:pointer">
+
+                    <td th:text="${iterStat.count}">1</td>
+                    <td th:text="${req.community.name}">Community</td>
+                    <td th:text="${req.program.name}">Program</td>
+                    <td th:text="${req.status}">Status</td>
+                    <td th:text="${req.amountRequested}">0</td>
+                    <td th:text="${req.amountApproved}">0</td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="btn-wrap">
+            <a th:href="@{/partners}" class="btn">Back to Partners</a>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>

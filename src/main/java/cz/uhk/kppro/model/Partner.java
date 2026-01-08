@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "partner")
-public class Partner {
+public class Partner extends Organization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,10 +40,6 @@ public class Partner {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public long getId() {
-        return id;
     }
 
     public void setId(long id) {
