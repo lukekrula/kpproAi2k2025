@@ -20,6 +20,8 @@ public interface UserService extends UserDetailsService {
     void delete(Long id);
 
     void createUser(User user, String password, long roleId);
+    User createUser(String username, String email, String rawPassword);
+
 
 
     Optional<User> getByEmail(String email);

@@ -28,7 +28,9 @@ public class PartnerRegistrationService {
     public Partner registerPartner(PartnerRegistrationDto dto) {
 
 
-        Role partnerRole = roleRepository.findByName("PARTNER_USER");
+        Role partnerRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new IllegalStateException("Default role ROLE_USER not found"));
+
         if (partnerRole == null) {
             throw new IllegalStateException("Role PARTNER_USER not found");
         }

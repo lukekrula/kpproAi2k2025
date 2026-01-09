@@ -18,21 +18,36 @@ public class RegistrationDto {
     @NotBlank(message = "Please repeat the password")
     private String repeatPassword;
 
-    public String getRepeatPassword() {
-        return repeatPassword;
+
+    @NotBlank(message = "Organization type is required")
+    private String organizationType;
+    // values: "COMMUNITY", "PARTNER"
+
+
+
+    private Long communityId;          // join existing community
+    private String newCommunityName;   // create new community
+
+
+    private String partnerName;
+    private String partnerContactEmail;
+    private String partnerContactPerson;
+
+
+    public String getOrganizationType() {
+        return organizationType;
     }
 
-    public void setRepeatPassword(String repeatPassword) {
-        this.repeatPassword = repeatPassword;
+    public void setOrganizationType(String organizationType) {
+        this.organizationType = organizationType;
     }
 
+    public Long getCommunityId() {
+        return communityId;
+    }
 
-
-    private Long communityId; // existing community
-
-    private String newCommunityName; // if creating new one
-
-    public RegistrationDto() {
+    public void setCommunityId(Long communityId) {
+        this.communityId = communityId;
     }
 
     public String getNewCommunityName() {
@@ -43,12 +58,28 @@ public class RegistrationDto {
         this.newCommunityName = newCommunityName;
     }
 
-    public Long getCommunityId() {
-        return communityId;
+    public String getPartnerName() {
+        return partnerName;
     }
 
-    public void setCommunityId(Long communityId) {
-        this.communityId = communityId;
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
+    }
+
+    public String getPartnerContactEmail() {
+        return partnerContactEmail;
+    }
+
+    public void setPartnerContactEmail(String partnerContactEmail) {
+        this.partnerContactEmail = partnerContactEmail;
+    }
+
+    public String getPartnerContactPerson() {
+        return partnerContactPerson;
+    }
+
+    public void setPartnerContactPerson(String partnerContactPerson) {
+        this.partnerContactPerson = partnerContactPerson;
     }
 
     public String getUsername() {
@@ -73,5 +104,13 @@ public class RegistrationDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRepeatPassword() {
+        return repeatPassword;
+    }
+
+    public void setRepeatPassword(String repeatPassword) {
+        this.repeatPassword = repeatPassword;
     }
 }

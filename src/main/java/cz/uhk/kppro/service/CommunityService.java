@@ -1,5 +1,6 @@
 package cz.uhk.kppro.service;
 
+import cz.uhk.kppro.dto.RegistrationDto;
 import cz.uhk.kppro.model.Community;
 import cz.uhk.kppro.model.Item;
 
@@ -12,6 +13,7 @@ public interface CommunityService {
     void update(Community community);
     List<Community> getAll();
 
+    Community resolveCommunity(RegistrationDto dto);
 
     Community assignMember(long communityId, long memberId);
 }

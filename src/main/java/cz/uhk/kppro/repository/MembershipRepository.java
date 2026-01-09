@@ -21,4 +21,6 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
 
     // Optional: find by member + organization type
     List<Membership> findByMemberId(long memberId);
+    List<Membership> findByOrganizationId(Long organizationId);
+
 }

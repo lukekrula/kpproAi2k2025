@@ -41,4 +41,16 @@ public class PartnerServiceImpl implements PartnerService {
     public List<Partner> getAll() {
         return partnerRepository.findAll();
     }
+
+    @Override
+    public Partner createPartner(String name, String contactEmail, String contactPerson) {
+        Partner partner = new Partner();
+        partner.setName(name);
+        partner.setContactEmail(contactEmail);
+        partner.setContactPerson(contactPerson);
+        // if using OrganizationType:
+        // partner.setType(OrganizationType.PARTNER);
+        return partnerRepository.save(partner);
+    }
+
 }

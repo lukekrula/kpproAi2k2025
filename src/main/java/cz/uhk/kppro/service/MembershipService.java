@@ -18,4 +18,7 @@ public interface MembershipService {
     void removeMembership(Member member, Organization organization);
 
     boolean isMemberOf(Member member, Organization organization);
+
+    List<Member> getMembersOfOrganization(Long organizationId);
+
 }

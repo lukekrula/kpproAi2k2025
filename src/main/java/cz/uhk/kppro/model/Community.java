@@ -5,15 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "community")
 public class Community extends Organization {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(name = "Name")
-    private String name;
 
     @Column(name = "RegistrationNumber")
     private String registrationNumber;
@@ -30,27 +22,7 @@ public class Community extends Organization {
     @Transient
     private String foundingDate;
 
-    @ManyToMany(mappedBy = "communities")
-    private List<Member> members = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "communities")
-    private List<Activity> activities = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "communities")
-    private List<Partner> partners = new ArrayList<>();
-
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getRegistrationNumber() {
         return registrationNumber;
@@ -92,27 +64,5 @@ public class Community extends Organization {
         this.address = address;
     }
 
-    public List<Member> getMembers() {
-        return members;
-    }
 
-    public void setMembers(List<Member> members) {
-        this.members = members;
-    }
-
-    public List<Activity> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(List<Activity> activities) {
-        this.activities = activities;
-    }
-
-    public List<Partner> getPartners() {
-        return partners;
-    }
-
-    public void setPartners(List<Partner> partners) {
-        this.partners = partners;
-    }
 }

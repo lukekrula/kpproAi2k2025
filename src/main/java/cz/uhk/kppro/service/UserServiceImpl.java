@@ -82,6 +82,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User createUser(String username, String email, String rawPassword) {
+
+        Role defaultRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new IllegalStateException("Default role ROLE_USER not found"));
+
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setRole(defaultRole);
+        user.setPassword(passwordEncoder.encode(rawPassword));
+
+        return userRepository.save(user);
+    }
+
+
+    @Override
     public Optional<User> getByEmail(String email) {
         return userRepository.findByEmail(email);
     }
@@ -108,4 +124,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(existing);
     }
+
+
 }

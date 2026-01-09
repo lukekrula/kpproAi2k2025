@@ -16,42 +16,70 @@ public class RegistrationService {
     private final UserService userService;
     private final MemberService memberService;
     private final CommunityService communityService;
+    private final PartnerService partnerService;
     private final MembershipService membershipService;
+    private final RoleService roleService;
 
     public RegistrationService(UserService userService,
                                MemberService memberService,
                                CommunityService communityService,
-                               MembershipService membershipService) {
+                               PartnerService partnerService,
+                               MembershipService membershipService,
+                               RoleService roleService) {
         this.userService = userService;
         this.memberService = memberService;
         this.communityService = communityService;
+        this.partnerService = partnerService;
         this.membershipService = membershipService;
+        this.roleService = roleService;
     }
 
     @Transactional
     public void register(RegistrationDto dto) {
 
-        if (!dto.getPassword().equals(dto.getRepeatPassword())) {
-            throw new IllegalArgumentException("Passwords do not match");
-        }
-
         // 1) Create User
-        User user = userService.createUser(dto.getUsername(), dto.getEmail(), dto.getPassword());
+        User user = userService.createUser(
+                dto.getUsername(),
+                dto.getEmail(),
+                dto.getPassword()
+        );
 
-        // 2) Resolve or create Community
-        Community community = resolveCommunity(dto);
-
-        // 3) Create Member for this User
+        // 2) Create Member
         Member member = memberService.createForUser(user);
 
-        // 4) Add Membership (COMMUNITY_MEMBER)
-        membershipService.addMembership(member, community, MembershipRole.COMMUNITY_MEMBER);
+        // 3) Determine organization type
+        Organization organization;
+
+        switch (dto.getOrganizationType()) {
+
+            case "PARTNER" -> {
+                organization = partnerService.createPartner(
+                        dto.getPartnerName(),
+                        dto.getPartnerContactEmail(),
+                        dto.getPartnerContactPerson()
+                );
+
+                membershipService.addMembership(
+                        member,
+                        organization,
+                        MembershipRole.PARTNER_ADMIN
+                );
+            }
+
+            case "COMMUNITY" -> {
+                organization = communityService.resolveCommunity(dto);
+
+                membershipService.addMembership(
+                        member,
+                        organization,
+                        MembershipRole.COMMUNITY_MEMBER
+                );
+            }
+
+            default -> throw new IllegalArgumentException(
+                    "Unknown organization type: " + dto.getOrganizationType()
+            );
+        }
     }
 
-    private Community resolveCommunity(RegistrationDto dto) {
-        if (dto.getNewCommunityName() != null && !dto.getNewCommunityName().isBlank()) {
-            return communityService.create(dto.getNewCommunityName());
-        }
-        return communityService.getById(dto.getCommunityId());
-    }
 }

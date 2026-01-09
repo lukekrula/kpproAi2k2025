@@ -1,5 +1,6 @@
 package cz.uhk.kppro.service;
 
+import cz.uhk.kppro.dto.RegistrationDto;
 import cz.uhk.kppro.model.Community;
 import cz.uhk.kppro.model.Member;
 import cz.uhk.kppro.model.Membership;
@@ -64,4 +65,25 @@ public class CommunityServiceImpl implements CommunityService {
 
         return communityRepository.save(community);
     }
+
+    @Override
+    public Community resolveCommunity(RegistrationDto dto) {
+
+        // 1) Create new community if name is provided
+        if (dto.getNewCommunityName() != null && !dto.getNewCommunityName().isBlank()) {
+            Community community = new Community();
+            community.setName(dto.getNewCommunityName());
+            // community.setType(OrganizationType.COMMUNITY);
+            return communityRepository.save(community);
+        }
+
+        // 2) Otherwise, join existing community
+        if (dto.getCommunityId() != null) {
+            return communityRepository.findById(dto.getCommunityId())
+                    .orElseThrow(() -> new IllegalArgumentException("Community not found"));
+        }
+
+        throw new IllegalArgumentException("Either communityId or newCommunityName must be provided");
+    }
+
 }

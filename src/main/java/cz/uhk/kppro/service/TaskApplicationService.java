@@ -1,8 +1,6 @@
 package cz.uhk.kppro.service;
 
-import cz.uhk.kppro.model.Member;
-import cz.uhk.kppro.model.Program;
-import cz.uhk.kppro.model.Task;
+import cz.uhk.kppro.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,14 +10,14 @@ public class TaskApplicationService {
 
     private final TaskService taskService;
     private final ProgramService programService;
-    private final MemberService memberService;
+    private final MembershipService membershipService;
 
     public TaskApplicationService(TaskService taskService,
                                   ProgramService programService,
-                                  MemberService memberService) {
+                                  MembershipService membershipService) {
         this.taskService = taskService;
         this.programService = programService;
-        this.memberService = memberService;
+        this.membershipService = membershipService;
     }
 
 
@@ -38,9 +36,22 @@ public class TaskApplicationService {
     }
 
     public List<Member> getAssignableMembers(long programId) {
+
         Program program = programService.get(programId);
-        return memberService.findByCommunity(program.getCreator().getId());
+
+        // The creator is now an Organization (Community or Partner)
+        Organization creatorOrg = program.getCreator();
+
+        // Get all memberships for that organization
+        List<Membership> memberships =
+                membershipService.getMembershipsForOrganization(creatorOrg);
+
+        // Map memberships → members
+        return memberships.stream()
+                .map(Membership::getMember)
+                .toList();
     }
+
 
 
 

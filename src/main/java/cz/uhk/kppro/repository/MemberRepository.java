@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member,Long> {
 
-
-    List<Member> findByCommunitiesId(long communityId);
     Optional<Member> findByUserId(long userId);
 
 }

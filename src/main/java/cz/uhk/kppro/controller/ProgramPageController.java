@@ -1,10 +1,10 @@
 package cz.uhk.kppro.controller;
 
-import cz.uhk.kppro.model.Community;
 import cz.uhk.kppro.model.Member;
+import cz.uhk.kppro.model.Organization;
 import cz.uhk.kppro.model.Program;
-import cz.uhk.kppro.repository.CommunityRepository;
-import cz.uhk.kppro.repository.MemberRepository;
+import cz.uhk.kppro.service.MembershipService;
+import cz.uhk.kppro.repository.OrganizationRepository;
 import cz.uhk.kppro.repository.ProgramRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,28 +19,32 @@ import java.util.List;
 public class ProgramPageController {
 
     private final ProgramRepository programRepository;
-    private final CommunityRepository communityRepository;
-    private final MemberRepository memberRepository;
+    private final OrganizationRepository organizationRepository;
+    private final MembershipService membershipService;
 
     public ProgramPageController(ProgramRepository programRepository,
-                                 CommunityRepository communityRepository, MemberRepository memberRepository) {
+                                 OrganizationRepository organizationRepository,
+                                 MembershipService membershipService) {
         this.programRepository = programRepository;
-        this.communityRepository = communityRepository;
-        this.memberRepository = memberRepository;
-
+        this.organizationRepository = organizationRepository;
+        this.membershipService = membershipService;
     }
 
     @GetMapping
     public String programsPage(@PathVariable long communityId, Model model) {
-        Community community = communityRepository.findById(communityId)
+
+        Organization community = organizationRepository.findById(communityId)
                 .orElseThrow();
+
         model.addAttribute("community", community);
-        return "programs/programs"; // main page
+        return "programs/programs";
     }
 
     @GetMapping("/fragment")
     public String programsFragment(@PathVariable long communityId, Model model) {
+
         List<Program> programs = programRepository.findByCreatorId(communityId);
+
         model.addAttribute("programs", programs);
         return "programs/_program-list :: programList";
     }
@@ -48,10 +52,11 @@ public class ProgramPageController {
     @GetMapping("/new")
     public String newProgramForm(@PathVariable long communityId, Model model) {
 
-        Community community = communityRepository.findById(communityId)
+        Organization community = organizationRepository.findById(communityId)
                 .orElseThrow();
 
-        List<Member> members = memberRepository.findByCommunitiesId(communityId);
+        // NEW: get members via Membership
+        List<Member> members = membershipService.getMembersOfOrganization(communityId);
 
         model.addAttribute("community", community);
         model.addAttribute("members", members);

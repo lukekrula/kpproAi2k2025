@@ -1,12 +1,19 @@
 package cz.uhk.kppro.model;
 
-
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Organization {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private OrganizationType type;
 
     public Long getId() {
         return id;
@@ -15,9 +22,6 @@ public abstract class Organization {
     public void setId(Long id) {
         this.id = id;
     }
-
-    @jakarta.persistence.Id
-    private Long id;
 
     public String getName() {
         return name;
@@ -34,10 +38,4 @@ public abstract class Organization {
     public void setType(OrganizationType type) {
         this.type = type;
     }
-
-    private String name;
-
-    @Enumerated(EnumType.STRING)
-    private OrganizationType type;
 }
-

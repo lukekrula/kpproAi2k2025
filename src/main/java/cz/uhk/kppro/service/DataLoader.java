@@ -18,15 +18,17 @@ public class DataLoader {
                                PasswordEncoder passwordEncoder) {
         return args -> {
 
-            // Create ROLE_ADMIN if missing
-            Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+            // Ensure ROLE_ADMIN exists
+            Role adminRole = roleRepository.findByName("ROLE_ADMIN")
+                    .orElseGet(() -> roleRepository.save(new Role("ROLE_ADMIN")));;
             if (adminRole == null) {
                 adminRole = new Role("ROLE_ADMIN");
                 roleRepository.save(adminRole);
             }
 
-            // Create ROLE_USER if missing
-            Role userRole = roleRepository.findByName("ROLE_USER");
+            // Ensure ROLE_USER exists
+            Role userRole = roleRepository.findByName("ROLE_USER")
+                    .orElseGet(() -> roleRepository.save(new Role("USER_ADMIN")));;
             if (userRole == null) {
                 userRole = new Role("ROLE_USER");
                 roleRepository.save(userRole);

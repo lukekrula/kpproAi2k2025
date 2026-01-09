@@ -4,15 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "partner")
 public class Partner extends Organization {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    private String name;
-
     private String contactEmail;
 
     private String contactPerson;
@@ -24,13 +16,6 @@ public class Partner extends Organization {
     @OneToMany(mappedBy = "partner")
     private List<Program> programs;
 
-    @ManyToMany
-    @JoinTable(
-            name = "partner_community",
-            joinColumns = @JoinColumn(name = "partner_id"),
-            inverseJoinColumns = @JoinColumn(name = "community_id")
-    )
-    private List<Community> communities;
 
     // getters and setters
 
@@ -40,18 +25,6 @@ public class Partner extends Organization {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getContactEmail() {
@@ -78,11 +51,4 @@ public class Partner extends Organization {
         this.programs = programs;
     }
 
-    public List<Community> getCommunities() {
-        return communities;
-    }
-
-    public void setCommunities(List<Community> communities) {
-        this.communities = communities;
-    }
 }

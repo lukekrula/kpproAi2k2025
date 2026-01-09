@@ -9,10 +9,10 @@ public class Membership {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Organization organization;
 
     @Enumerated(EnumType.STRING)

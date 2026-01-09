@@ -12,7 +12,6 @@ public interface MemberService {
 
     Member findById(long id);
 
-    List<Member> findByCommunity(long communityId);
 
     Member findByUserId(long userId);
 }

@@ -10,4 +10,6 @@ public interface PartnerService {
     void delete(long id);
     void update(Partner partner);
     List<Partner> getAll();
+    Partner createPartner(String name, String contactEmail, String contactPerson);
+
 }

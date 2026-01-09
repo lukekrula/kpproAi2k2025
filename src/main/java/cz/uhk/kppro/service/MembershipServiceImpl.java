@@ -63,4 +63,13 @@ public class MembershipServiceImpl implements MembershipService {
     public boolean isMemberOf(Member member, Organization organization) {
         return membershipRepository.findByMemberAndOrganization(member, organization).isPresent();
     }
+
+    @Override
+    public List<Member> getMembersOfOrganization(Long organizationId){
+        return membershipRepository.findByOrganizationId(organizationId)
+                .stream()
+                .map(Membership::getMember)
+                .toList();
+    }
+
 }
