@@ -15,20 +15,20 @@ public class RegistrationService {
 
     private final UserService userService;
     private final MemberService memberService;
-    private final CommunityService communityService;
+    private final OrganizationService organizationService;
     private final PartnerService partnerService;
     private final MembershipService membershipService;
     private final RoleService roleService;
 
     public RegistrationService(UserService userService,
                                MemberService memberService,
-                               CommunityService communityService,
+                               OrganizationService organizationService,
                                PartnerService partnerService,
                                MembershipService membershipService,
                                RoleService roleService) {
         this.userService = userService;
         this.memberService = memberService;
-        this.communityService = communityService;
+        this.organizationService = organizationService;
         this.partnerService = partnerService;
         this.membershipService = membershipService;
         this.roleService = roleService;
@@ -36,6 +36,7 @@ public class RegistrationService {
 
     @Transactional
     public void register(RegistrationDto dto) {
+
 
         // 1) Create User
         User user = userService.createUser(
@@ -47,39 +48,18 @@ public class RegistrationService {
         // 2) Create Member
         Member member = memberService.createForUser(user);
 
-        // 3) Determine organization type
-        Organization organization;
+        // 3) Load selected organization
+        Organization organization = organizationService.get(dto.getOrganizationId());
 
-        switch (dto.getOrganizationType()) {
+        // 4) Determine membership role based on organization type
+        MembershipRole role =
+                organization.getType() == OrganizationType.PARTNER
+                        ? MembershipRole.PARTNER_ADMIN
+                        : MembershipRole.COMMUNITY_MEMBER;
 
-            case "PARTNER" -> {
-                organization = partnerService.createPartner(
-                        dto.getPartnerName(),
-                        dto.getPartnerContactEmail(),
-                        dto.getPartnerContactPerson()
-                );
-
-                membershipService.addMembership(
-                        member,
-                        organization,
-                        MembershipRole.PARTNER_ADMIN
-                );
-            }
-
-            case "COMMUNITY" -> {
-                organization = communityService.resolveCommunity(dto);
-
-                membershipService.addMembership(
-                        member,
-                        organization,
-                        MembershipRole.COMMUNITY_MEMBER
-                );
-            }
-
-            default -> throw new IllegalArgumentException(
-                    "Unknown organization type: " + dto.getOrganizationType()
-            );
-        }
+        // 5) Create membership
+        membershipService.addMembership(member, organization, role);
     }
+
 
 }

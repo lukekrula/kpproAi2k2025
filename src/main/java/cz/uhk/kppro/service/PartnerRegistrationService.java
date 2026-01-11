@@ -47,7 +47,7 @@ public class PartnerRegistrationService {
         partner.setName(dto.getName());
         partner.setContactEmail(dto.getContactEmail());
         partner.setContactPerson(dto.getContactPerson());
-        partner.setUser(user);
+
 
         return partnerRepository.save(partner);
     }

@@ -1,7 +1,8 @@
 package cz.uhk.kppro.controller;
 
 import cz.uhk.kppro.dto.RegistrationDto;
-import cz.uhk.kppro.repository.CommunityRepository;
+import cz.uhk.kppro.model.OrganizationType;
+import cz.uhk.kppro.repository.OrganizationRepository;
 import cz.uhk.kppro.service.RegistrationService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -13,18 +14,20 @@ import org.springframework.web.bind.annotation.*;
 public class RegistrationController {
 
     private final RegistrationService registrationService;
-    private final CommunityRepository communityRepository;
+    private final OrganizationRepository organizationRepository;
 
     public RegistrationController(RegistrationService registrationService,
-                                  CommunityRepository communityRepository) {
+                                  OrganizationRepository organizationRepository) {
         this.registrationService = registrationService;
-        this.communityRepository = communityRepository;
+        this.organizationRepository = organizationRepository;
     }
+
 
     @GetMapping("/register")
     public String showForm(Model model) {
         model.addAttribute("user", new RegistrationDto());
-        model.addAttribute("communities", communityRepository.findAll());
+        model.addAttribute("organizations", organizationRepository.findByType(OrganizationType.COMMUNITY));
+
         return "register";
     }
 
@@ -38,10 +41,15 @@ public class RegistrationController {
         if (!dto.getPassword().equals(dto.getRepeatPassword())) {
             bindingResult.rejectValue("repeatPassword", "error.repeatPassword", "Passwords do not match");
         }
-
+        dto.setOrganizationType("COMMUNITY");
         // If any validation errors exist, re-render the form
+        bindingResult.getAllErrors().forEach(err -> {
+            System.out.println("VALIDATION ERROR: " + err.toString());
+        });
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("communities", communityRepository.findAll());
+            model.addAttribute("organizations", organizationRepository.findAll());
+
             return "register";
         }
 

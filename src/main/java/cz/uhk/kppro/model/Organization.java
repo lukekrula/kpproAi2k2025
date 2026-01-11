@@ -3,17 +3,19 @@ package cz.uhk.kppro.model;
 import jakarta.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "org_type")
 public abstract class Organization {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     private String name;
 
     @Enumerated(EnumType.STRING)
     private OrganizationType type;
+
 
     public Long getId() {
         return id;

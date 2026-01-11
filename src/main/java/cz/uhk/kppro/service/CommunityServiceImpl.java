@@ -78,8 +78,8 @@ public class CommunityServiceImpl implements CommunityService {
         }
 
         // 2) Otherwise, join existing community
-        if (dto.getCommunityId() != null) {
-            return communityRepository.findById(dto.getCommunityId())
+        if (dto.getOrganizationId() != null) {
+            return communityRepository.findById(dto.getOrganizationId())
                     .orElseThrow(() -> new IllegalArgumentException("Community not found"));
         }
 

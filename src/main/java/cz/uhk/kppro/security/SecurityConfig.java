@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
 
                         // Your other public paths
-                        .requestMatchers("/css/**", "/images/**", "/public/**", "/data/**", "/partner/register/**", "/items/**").permitAll()
+                        .requestMatchers("/css/**", "/images/**", "/register/**", "/public/**", "/data/**", "/partner/register/**", "/items/**").permitAll()
 
                         // Protected paths
                         .requestMatchers("/admin/**").hasRole("ADMIN")

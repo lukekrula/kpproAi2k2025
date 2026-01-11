@@ -61,9 +61,9 @@
                 <!-- EXISTING COMMUNITY -->
                 <div class="editor">
                     <label>Choose existing:</label>
-                    <select th:field="*{communityId}">
+                    <select th:field="*{organizationId}">
                         <option value="">-- choose --</option>
-                        <option th:each="c : ${communities}"
+                        <option th:each="c : ${organizations}"
                                 th:value="${c.id}"
                                 th:text="${c.name}">
                         </option>

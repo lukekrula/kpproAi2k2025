@@ -5,23 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("COMMUNITY")
 public class Community extends Organization {
 
-    @Column(name = "RegistrationNumber")
     private String registrationNumber;
-
-    @Column(name = "CaseNumber")
     private String caseNumber;
-
-    @Column(name = "FoundingDate")
-    private String foundingDateRaw;
-
-    @Column(name = "Address")
-    private String address;
-
-    @Transient
     private String foundingDate;
-
+    private String foundingDateRaw;
+    private String address;
 
 
     public String getRegistrationNumber() {

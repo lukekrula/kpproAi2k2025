@@ -19,13 +19,12 @@ public class RegistrationDto {
     private String repeatPassword;
 
 
-    @NotBlank(message = "Organization type is required")
     private String organizationType;
     // values: "COMMUNITY", "PARTNER"
 
 
 
-    private Long communityId;          // join existing community
+    private Long organizationId;          // join existing community
     private String newCommunityName;   // create new community
 
 
@@ -42,12 +41,12 @@ public class RegistrationDto {
         this.organizationType = organizationType;
     }
 
-    public Long getCommunityId() {
-        return communityId;
+    public Long getOrganizationId() {
+        return organizationId;
     }
 
-    public void setCommunityId(Long communityId) {
-        this.communityId = communityId;
+    public void setOrganizationId(Long communityId) {
+        this.organizationId = communityId;
     }
 
     public String getNewCommunityName() {
