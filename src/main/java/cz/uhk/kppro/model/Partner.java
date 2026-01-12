@@ -13,6 +13,8 @@ public class Partner extends Organization {
     @OneToMany(mappedBy = "partner")
     private List<Program> programs;
 
+    @OneToMany(mappedBy = "partner")
+    private List<Member> members;
 
     // getters and setters
 

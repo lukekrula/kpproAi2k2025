@@ -14,5 +14,7 @@ public interface MemberService {
 
 
     Member findByUserId(long userId);
+
+
 }
 

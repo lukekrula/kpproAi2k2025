@@ -1,5 +1,6 @@
 package cz.uhk.kppro.service;
 
+import cz.uhk.kppro.model.Member;
 import cz.uhk.kppro.model.Partner;
 import cz.uhk.kppro.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,28 @@ import java.util.List;
 public class PartnerServiceImpl implements PartnerService {
 
     private PartnerRepository partnerRepository;
+    private final CurrentMemberService currentMemberService;
 
     @Autowired
-    public void setPartnerRepository(PartnerRepository partnerRepository) {
+    public PartnerServiceImpl(
+            PartnerRepository partnerRepository,
+            CurrentMemberService currentMemberService
+    ) {
         this.partnerRepository = partnerRepository;
+        this.currentMemberService = currentMemberService;
+    }
+
+    @Override
+    public Partner getForCurrentUser() {
+
+        // 1) Get the logged-in member
+        Member member = currentMemberService.getCurrentMember();
+
+        // 2) Find the partner associated with that member
+        return partnerRepository.findByMembersContaining(member)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Current user is not associated with any partner"
+                ));
     }
 
     @Override
@@ -52,5 +71,7 @@ public class PartnerServiceImpl implements PartnerService {
         // partner.setType(OrganizationType.PARTNER);
         return partnerRepository.save(partner);
     }
+
+
 
 }

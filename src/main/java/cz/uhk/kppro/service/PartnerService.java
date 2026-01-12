@@ -11,5 +11,5 @@ public interface PartnerService {
     void update(Partner partner);
     List<Partner> getAll();
     Partner createPartner(String name, String contactEmail, String contactPerson);
-
+    Partner getForCurrentUser();
 }

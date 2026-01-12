@@ -34,6 +34,10 @@ public class Member {
     @OneToMany(mappedBy = "manager")
     private Set<Program> managedPrograms = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "partner_id")
+    private Partner partner;
+
 
     // Getters & setters...
 
