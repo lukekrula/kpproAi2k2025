@@ -54,7 +54,7 @@ public class RegistrationService {
         // 4) Determine membership role based on organization type
         MembershipRole role =
                 organization.getType() == OrganizationType.PARTNER
-                        ? MembershipRole.PARTNER_ADMIN
+                        ? MembershipRole.PARTNER_USER
                         : MembershipRole.COMMUNITY_MEMBER;
 
         // 5) Create membership

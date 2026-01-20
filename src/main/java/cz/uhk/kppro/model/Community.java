@@ -14,6 +14,9 @@ public class Community extends Organization {
     private String foundingDateRaw;
     private String address;
 
+    @OneToMany(mappedBy = "organization")
+    private List<Membership> memberships;
+
 
     public String getRegistrationNumber() {
         return registrationNumber;

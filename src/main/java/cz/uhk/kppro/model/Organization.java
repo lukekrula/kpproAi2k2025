@@ -14,7 +14,12 @@ public abstract class Organization {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "org_type", insertable = false, updatable = false)
     private OrganizationType type;
+
+    public OrganizationType getType() {
+        return type;
+    }
 
 
     public Long getId() {
@@ -31,10 +36,6 @@ public abstract class Organization {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public OrganizationType getType() {
-        return type;
     }
 
     public void setType(OrganizationType type) {

@@ -15,17 +15,20 @@ public class PartnerRegistrationService {
     private final PartnerRepository partnerRepository;
     private final MemberService memberService;
     private final MembershipService membershipService;
+    private final OrganizationService organizationService;
 
     public PartnerRegistrationService(UserService userService,
                                       RoleRepository roleRepository,
                                       PartnerRepository partnerRepository,
                                       MemberService memberService,
-                                      MembershipService membershipService) {
+                                      MembershipService membershipService,
+                                      OrganizationService organizationService) {
         this.userService = userService;
         this.roleRepository = roleRepository;
         this.partnerRepository = partnerRepository;
         this.memberService = memberService;
         this.membershipService = membershipService;
+        this.organizationService = organizationService;
     }
 
     @Transactional
@@ -43,26 +46,27 @@ public class PartnerRegistrationService {
         userService.createUser(user, dto.getPassword(), partnerRole.getId());
 
         // 3) Create Member linked to the User
-        Member member = new Member();
-        member.setUser(user);
-        member.setName(dto.getContactPerson());
-        member.setEmail(dto.getContactEmail());
-        memberService.createForUser(user);
+        Member member = memberService.createForUser(user);
 
         // 4) Create Partner (Organization)
+
+
         Partner partner = new Partner();
         partner.setName(dto.getName());
         partner.setContactEmail(dto.getContactEmail());
         partner.setContactPerson(dto.getContactPerson());
 
         partner = partnerRepository.save(partner);
+        System.out.println("Created partner with ID: " + partner.getId());
 
-        // 5) Create Membership linking Member ↔ Partner
-        membershipService.addMembership(
-                member,
-                partner,
-                MembershipRole.PARTNER_ADMIN   // or PARTNER_USER depending on your design
-        );
+        MembershipRole role =
+                partner.getType() == OrganizationType.PARTNER
+                        ? MembershipRole.PARTNER_MEMBER
+                        : MembershipRole.COMMUNITY_MEMBER;
+
+        // 5) Create membership
+        membershipService.addMembership(member, partner, role);
+
 
         return partner;
     }

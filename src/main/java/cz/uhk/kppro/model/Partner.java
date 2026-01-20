@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@DiscriminatorValue("PARTNER")
 public class Partner extends Organization {
+
     private String contactEmail;
 
     private String contactPerson;
@@ -13,8 +15,8 @@ public class Partner extends Organization {
     @OneToMany(mappedBy = "partner")
     private List<Program> programs;
 
-    @OneToMany(mappedBy = "partner")
-    private List<Member> members;
+    @OneToMany(mappedBy = "organization")
+    private List<Membership> memberships;
 
     // getters and setters
 

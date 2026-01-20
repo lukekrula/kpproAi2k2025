@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: appdb
+    volumes:
+      - ./mongo-data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+
+  app:
+    build: .
+    container_name: springboot-app
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/appdb

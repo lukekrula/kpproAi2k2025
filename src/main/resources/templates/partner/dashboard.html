@@ -19,11 +19,30 @@
     <main>
         <div class="card">
             <h2>Your Overview</h2>
+            <div class="table-wrap">
+                <table class="nice-table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
 
+                    </tr>
+                    </thead>
+                    <tbody id="partnerList">
+                    <tr th:each="org, iterStat : ${partner}"
+                        th:attr="onclick=|window.location.href='/partner/requests/' + ${org.id}|"
+                        style="cursor:pointer">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td th:text="${org.name}">Name</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+    </main>
             <div class="btn-wrap">
-                <a th:href="@{/partners/{id}/requests(id=${partner.id})}" class="btn">
-                    Partner Requests
-                </a>
+
 
 
 

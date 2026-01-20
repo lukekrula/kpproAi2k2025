@@ -1,39 +1,43 @@
 package cz.uhk.kppro.service;
 
 import cz.uhk.kppro.model.Member;
+import cz.uhk.kppro.model.Membership;
+import cz.uhk.kppro.model.OrganizationType;
 import cz.uhk.kppro.model.Partner;
 import cz.uhk.kppro.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PartnerServiceImpl implements PartnerService {
 
     private PartnerRepository partnerRepository;
     private final CurrentMemberService currentMemberService;
+    private final MembershipService membershipService;
 
     @Autowired
     public PartnerServiceImpl(
             PartnerRepository partnerRepository,
-            CurrentMemberService currentMemberService
+            CurrentMemberService currentMemberService,
+            MembershipService membershipService
     ) {
         this.partnerRepository = partnerRepository;
         this.currentMemberService = currentMemberService;
+        this.membershipService = membershipService;
     }
 
     @Override
-    public Partner getForCurrentUser() {
+    public Optional<Partner> getForCurrentUser() {
 
         // 1) Get the logged-in member
         Member member = currentMemberService.getCurrentMember();
 
         // 2) Find the partner associated with that member
-        return partnerRepository.findByMembersContaining(member)
-                .orElseThrow(() -> new IllegalStateException(
-                        "Current user is not associated with any partner"
-                ));
+        return membershipService.findByMemberAndOrganizationType(member, OrganizationType.PARTNER);
+
     }
 
     @Override
@@ -71,6 +75,12 @@ public class PartnerServiceImpl implements PartnerService {
         // partner.setType(OrganizationType.PARTNER);
         return partnerRepository.save(partner);
     }
+
+    @Override
+    public List<Partner> getPartnersForMember(Member member) {
+        return partnerRepository.findAllByMembershipsMember(member);
+    }
+
 
 
 

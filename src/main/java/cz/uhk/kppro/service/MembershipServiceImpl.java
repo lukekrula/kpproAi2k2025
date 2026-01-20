@@ -72,4 +72,13 @@ public class MembershipServiceImpl implements MembershipService {
                 .toList();
     }
 
+    @Override
+    public Optional<Partner> findByMemberAndOrganizationType(Member member, OrganizationType organizationType){
+        return membershipRepository
+                .findByMemberAndOrganizationType(member, OrganizationType.PARTNER)
+                .map(Membership::getOrganization)
+                .map(org -> (Partner) org);
+
+    }
+
 }

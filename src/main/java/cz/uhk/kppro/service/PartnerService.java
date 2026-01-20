@@ -1,8 +1,10 @@
 package cz.uhk.kppro.service;
 
+import cz.uhk.kppro.model.Member;
 import cz.uhk.kppro.model.Partner;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PartnerService {
     Partner get(long id);
@@ -11,5 +13,7 @@ public interface PartnerService {
     void update(Partner partner);
     List<Partner> getAll();
     Partner createPartner(String name, String contactEmail, String contactPerson);
-    Partner getForCurrentUser();
+    Optional<Partner> getForCurrentUser();
+   List<Partner> getPartnersForMember(Member member);
+
 }

@@ -4,6 +4,6 @@ public enum MembershipRole {
     COMMUNITY_ADMIN,
     COMMUNITY_MEMBER,
     PARTNER_ADMIN,
-    PARTNER_MEMBER
+    PARTNER_USER, PARTNER_MEMBER
 }
 

@@ -184,7 +184,7 @@ public class KpproApplication {
                 membershipRepository.save(ms);
             }
         };
-    }*/
+    }
     @Bean
     CommandLineRunner loadCommunities(CommunityRepository communityRepository) {
         return args -> {
@@ -243,7 +243,7 @@ public class KpproApplication {
 
             System.out.println("Communities loaded successfully.");
         };
-    }
+    }*/
 
 
 

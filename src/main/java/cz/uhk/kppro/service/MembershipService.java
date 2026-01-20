@@ -1,5 +1,6 @@
 package cz.uhk.kppro.service;
 
+import cz.uhk.kppro.controller.MainController;
 import cz.uhk.kppro.model.*;
 
 import java.util.List;
@@ -21,4 +22,5 @@ public interface MembershipService {
 
     List<Member> getMembersOfOrganization(Long organizationId);
 
+   Optional<Partner> findByMemberAndOrganizationType(Member member, OrganizationType organizationType);
 }
