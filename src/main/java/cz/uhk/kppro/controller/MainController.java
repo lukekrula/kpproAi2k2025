@@ -1,12 +1,7 @@
 package cz.uhk.kppro.controller;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 @Controller
 public class MainController {
@@ -30,12 +25,12 @@ public class MainController {
 
     @GetMapping("/items/map")
     public String map() {
-        return "/map";
+        return "map";
     }
 
     @GetMapping("/items/arch")
     public String arch() {
-        return "/architecture";
+        return "architecture";
     }
 
 

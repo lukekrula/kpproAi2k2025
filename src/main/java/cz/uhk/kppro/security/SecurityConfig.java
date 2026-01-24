@@ -1,64 +1,58 @@
 package cz.uhk.kppro.security;
 
-import cz.uhk.kppro.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import cz.uhk.kppro.service.MongoUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;  // ← Add this import
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserService userService;
+    private final MongoUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public SecurityConfig(UserService userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
+    public SecurityConfig(MongoUserDetailsService userDetailsService,
+                          PasswordEncoder passwordEncoder) {
+        this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        var authBuilder = http.getSharedObject(org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder.class);
-        authBuilder
-                .userDetailsService(userService)
-                .passwordEncoder(passwordEncoder);
-
-        var authenticationManager = authBuilder.build();
-        http.authenticationManager(authenticationManager);
-
         http
+                .authenticationProvider(authenticationProvider())
+
                 .authorizeHttpRequests(auth -> auth
-                        // H2 console fully open (no login required) — put it EARLY
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
-
-                        // Your other public paths
-                        .requestMatchers("/css/**", "/images/**", "/register/**", "/public/**", "/data/**", "/partner/register/**", "/items/**").permitAll()
-
-                        // Protected paths
+                        .requestMatchers("/css/**", "/images/**", "/register/**", "/public/**", "/data/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/super/**").hasRole("SUPER_USER")
                         .requestMatchers("/user/**").hasRole("USER")
-
-                        // Everything else requires authentication
                         .anyRequest().authenticated()
                 )
+
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .successHandler((request, response, authentication) -> {
                             var authorities = authentication.getAuthorities();
+
                             if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
                                 response.sendRedirect("/admin/administration");
-
                             }
                             else if (authorities.stream().anyMatch(a -> a.getAuthority().equals("PARTNER_USER"))) {
                                 response.sendRedirect("/partner/dashboard");
@@ -72,23 +66,19 @@ public class SecurityConfig {
                         .failureUrl("/login?error")
                         .permitAll()
                 )
+
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .permitAll()
                 )
-                .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler()))
 
-                // Required for H2 console to work (frames + POST requests)
-                .csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))
-                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));  // or .disable() for dev
+                .exceptionHandling(ex -> ex
+                        .accessDeniedPage("/403")
+                )
+
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
-    }
-
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, accessDeniedException) ->
-                response.sendRedirect("/403");
     }
 }

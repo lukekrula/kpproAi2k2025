@@ -1,25 +1,44 @@
 #!/bin/bash
-echo "Importuji ARES CSV data..."
+echo "=== Importuji ARES CSV data ==="
 
-mongoimport \
-  --db appdb \
-  --collection organizations \
-  --type csv \
-  --headerline \
-  --file /data/ares/spolky.csv
+# Spolky
+if [ -f /data/ares/spolky.csv ]; then
+  mongoimport \
+    --db appdb \
+    --collection organizations \
+    --type csv \
+    --headerline \
+    --file /data/ares/spolky.csv
+fi
 
-mongoimport \
-  --db appdb \
-  --collection organizations \
-  --type csv \
-  --headerline \
-  --file /data/ares/firmy.csv
+# Firmy
+if [ -f /data/ares/firmy.csv ]; then
+  mongoimport \
+    --db appdb \
+    --collection organizations \
+    --type csv \
+    --headerline \
+    --file /data/ares/firmy.csv
+fi
 
-mongoimport \
-  --db appdb \
-  --collection organizations \
-  --type csv \
-  --headerline \
-  --file /data/ares/statni_org.csv
+# Statní organizace
+if [ -f /data/ares/statni_org.csv ]; then
+  mongoimport \
+    --db appdb \
+    --collection organizations \
+    --type csv \
+    --headerline \
+    --file /data/ares/statni_org.csv
+fi
 
-echo "Import ARES CSV hotov."
+# Velký dataset subjektů podle IČO
+if [ -f /data/ares/res_data_subjekty_ico.csv ]; then
+  mongoimport \
+    --db appdb \
+    --collection organizations \
+    --type csv \
+    --headerline \
+    --file /data/ares/res_data_subjekty_ico.csv
+fi
+
+echo "=== Import ARES CSV hotov ==="

@@ -4,7 +4,6 @@ import cz.uhk.kppro.model.Role;
 import cz.uhk.kppro.model.User;
 import cz.uhk.kppro.repository.RoleRepository;
 import cz.uhk.kppro.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ public class UserController {
     private final UserService userService;
     private final RoleRepository roleRepository;
 
-    @Autowired
     public UserController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
         this.roleRepository = roleRepository;
@@ -38,14 +36,13 @@ public class UserController {
 
     // EDIT USER FORM
     @GetMapping("/edit/{id}")
-    public String edit(Model model, @PathVariable Long id) {
+    public String edit(Model model, @PathVariable String id) {
         User user = userService.get(id);
 
         if (user == null) {
             return "redirect:/users";
         }
 
-        // Ensure role object exists for binding
         if (user.getRole() == null) {
             user.setRole(new Role());
         }
@@ -59,7 +56,7 @@ public class UserController {
     @PostMapping("/save")
     public String updateUser(
             @ModelAttribute User formUser,
-            @RequestParam Long roleId,
+            @RequestParam String roleId,
             @RequestParam(required = false) String newPassword) {
 
         userService.updateUser(formUser, newPassword, roleId);
@@ -67,13 +64,12 @@ public class UserController {
         return "redirect:/users/detail/" + formUser.getId();
     }
 
-
-
+    // CREATE USER
     @PostMapping("/create")
     public String create(
             @RequestParam String username,
             @RequestParam String password,
-            @RequestParam Long roleId) {
+            @RequestParam String roleId) {
 
         User user = new User();
         user.setUsername(username);
@@ -83,10 +79,9 @@ public class UserController {
         return "redirect:/users";
     }
 
-
     // USER DETAIL PAGE
     @GetMapping("/detail/{id}")
-    public String detail(Model model, @PathVariable Long id) {
+    public String detail(Model model, @PathVariable String id) {
         User user = userService.get(id);
         if (user == null) {
             return "redirect:/users";
@@ -97,7 +92,7 @@ public class UserController {
 
     // DELETE USER
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
+    public String delete(@PathVariable String id) {
         userService.delete(id);
         return "redirect:/users";
     }

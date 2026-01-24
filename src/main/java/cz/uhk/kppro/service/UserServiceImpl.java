@@ -1,11 +1,12 @@
 package cz.uhk.kppro.service;
 
+import cz.uhk.kppro.model.Organization;
 import cz.uhk.kppro.model.Role;
 import cz.uhk.kppro.model.User;
+import cz.uhk.kppro.repository.OrganizationRepository;
 import cz.uhk.kppro.repository.RoleRepository;
 import cz.uhk.kppro.repository.UserRepository;
 import cz.uhk.kppro.security.MyUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,14 +20,16 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final OrganizationRepository organizationRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
+                           OrganizationRepository organizationRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.organizationRepository =organizationRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -46,9 +49,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-
     @Override
-    public User get(Long id) {
+    public User get(String id) {
         return userRepository.findById(id).orElse(null);
     }
 
@@ -58,19 +60,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(String id) {
         userRepository.deleteById(id);
     }
 
     @Override
-    public User findById(Long id) {
+    public User findById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
     }
 
-    //  CREATE USER (clean version)
     @Override
-    public void createUser(User user, String password, long roleId) {
+    public void createUser(User user, String password, String roleId) {
 
         Role role = roleRepository.findById(roleId)
                 .orElseThrow();
@@ -84,8 +85,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(String username, String email, String rawPassword) {
 
-        Role defaultRole = roleRepository.findByName("ROLE_USER")
-                .orElseThrow(() -> new IllegalStateException("Default role ROLE_USER not found"));
+        Role defaultRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new IllegalStateException("Default role USER not found"));
 
         User user = new User();
         user.setUsername(username);
@@ -96,28 +97,23 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-
     @Override
     public Optional<User> getByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-
-    //  UPDATE USER (clean version)
     @Override
-    public void updateUser(User updatedUser, String newPassword, long roleId) {
+    public void updateUser(User updatedUser, String newPassword, String roleId) {
 
         User existing = userRepository.findById(updatedUser.getId())
                 .orElseThrow();
 
         existing.setUsername(updatedUser.getUsername());
 
-        //  Set role from roleId (not from updatedUser)
         Role role = roleRepository.findById(roleId)
                 .orElseThrow();
         existing.setRole(role);
 
-        //  Encode password only if provided
         if (newPassword != null && !newPassword.isBlank()) {
             existing.setPassword(passwordEncoder.encode(newPassword));
         }
@@ -125,5 +121,22 @@ public class UserServiceImpl implements UserService {
         userRepository.save(existing);
     }
 
+    public void addUserToOrganization(String userId, String orgId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Organization org = organizationRepository.findById(orgId)
+                .orElseThrow(() -> new RuntimeException("Organization not found"));
+
+        if (!user.getOrganizationIds().contains(orgId)) {
+            user.getOrganizationIds().add(orgId);
+            userRepository.save(user);
+        }
+
+        if (!org.getMemberUserIds().contains(userId)) {
+            org.getMemberUserIds().add(userId);
+            organizationRepository.save(org);
+        }
+    }
 
 }

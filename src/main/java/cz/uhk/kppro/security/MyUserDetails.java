@@ -20,10 +20,9 @@ public class MyUserDetails implements UserDetails {
         return user;
     }
 
-    public long getUserId() {
-        return user.getId();
+    public String getUserId() {
+        return user.getId(); // Mongo ID je String
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -57,8 +56,6 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.isEnabled(); // používáme Mongo pole enabled
     }
-
-
 }

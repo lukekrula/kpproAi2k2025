@@ -7,11 +7,11 @@ public interface RoleService {
 
     List<Role> findAll();
 
-    Role findById(Long id);
+    Role findById(String id);
 
     Role findByName(String name);
 
     Role save(Role role);
 
-    void deleteById(Long id);
+    void deleteById(String id);
 }

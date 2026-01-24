@@ -10,21 +10,19 @@ public interface UserService extends UserDetailsService {
 
     User save(User user);
 
+    void updateUser(User user, String newPassword, String roleId);
 
-    void updateUser(User user, String newPassword, long roleId);
-
-    User get(Long id);
+    User get(String id);
 
     List<User> getAll();
 
-    void delete(Long id);
+    void delete(String id);
 
-    void createUser(User user, String password, long roleId);
+    void createUser(User user, String password, String roleId);
+
     User createUser(String username, String email, String rawPassword);
-
-
 
     Optional<User> getByEmail(String email);
 
-    User findById(Long id);
+    User findById(String id);
 }

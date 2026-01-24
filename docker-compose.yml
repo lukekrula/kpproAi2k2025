@@ -1,25 +1,31 @@
-version: "3.9"
-
 services:
   mongo:
     image: mongo:7
-    container_name: mongo
+    container_name: kppro-mongo
     restart: always
     ports:
       - "27017:27017"
-    environment:
-      MONGO_INITDB_DATABASE: appdb
     volumes:
-      - ./mongo-data:/data/db
-      - ./mongo-init:/docker-entrypoint-initdb.d
+      - mongo_data:/data/db
+      - ./data/ares:/data/ares
+      - ./docker/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   app:
     build: .
-    container_name: springboot-app
+    container_name: kppro-app
     restart: always
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://root:secret@mongo:27017/kppro?authSource=admin
     ports:
       - "8080:8080"
-    environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/appdb
+
+volumes:
+  mongo_data:

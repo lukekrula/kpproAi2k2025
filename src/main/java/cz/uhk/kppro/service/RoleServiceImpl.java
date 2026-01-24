@@ -22,7 +22,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role findById(Long id) {
+    public Role findById(String id) {
         return roleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Role not found with id: " + id));
     }
@@ -30,7 +30,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findByName(String name) {
         return roleRepository.findByName(name)
-                .orElseThrow(() -> new IllegalStateException("Default role ROLE_USER not found"));
+                .orElseThrow(() -> new IllegalStateException("Role not found: " + name));
     }
 
     @Override
@@ -39,7 +39,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         roleRepository.deleteById(id);
     }
 }

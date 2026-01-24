@@ -1,55 +1,64 @@
 package cz.uhk.kppro.config;
 
-import cz.uhk.kppro.model.*;
-import cz.uhk.kppro.repository.*;
-import cz.uhk.kppro.service.TaskService;
+import cz.uhk.kppro.model.Role;
+import cz.uhk.kppro.model.User;
+import cz.uhk.kppro.repository.RoleRepository;
+import cz.uhk.kppro.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class DataInitializer {
 
-  /*  @Bean
-    CommandLineRunner sampleData(
-            CommunityRepository communityRepo,
-            MemberRepository memberRepo,
-            ProgramRepository programRepo,
-            TaskService taskService
+    @Bean
+    CommandLineRunner initData(
+            RoleRepository roleRepository,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
     ) {
         return args -> {
 
-            // 1. Load an existing community from your DB
-            Community community = communityRepo.findAll().stream()
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("No communities exist in DB!"));
+            // --- ROLES -------------------------------------------------------
 
-            // 2. Create a member
-            Member manager = new Member();
-            manager.setName("John Manager");
-            manager.setEmail("john@example.com");
-            manager.setRole("manager");
+            Role adminRole = roleRepository.findByName("ADMIN")
+                    .orElseGet(() -> roleRepository.save(new Role("ADMIN")));
 
-            // 3. Assign the existing community
-            manager.getCommunities().add(community);
-            memberRepo.save(manager);
+            Role userRole = roleRepository.findByName("USER")
+                    .orElseGet(() -> roleRepository.save(new Role("USER")));
 
-            // 4. Create a program
-            Program program = new Program();
-            program.setName("Sample Program");
-            program.setDescription("Demo program");
-            program.setCreator(community);     // existing community
-            program.setManager(manager);
-            programRepo.save(program);
+            // --- ADMIN USER --------------------------------------------------
 
-            // 5. Create tasks
-            Task root = new Task("Root Task");
-            taskService.createTask(program.getId(), manager.getId(), root);
+            if (userRepository.findByUsername("admin").isEmpty()) {
 
-            taskService.addSubtask(root.getId(), new Task("Subtask A"));
-            taskService.addSubtask(root.getId(), new Task("Subtask B"));
+                User admin = new User();
+                admin.setUsername("admin");
+                admin.setEmail("admin@example.com");
+                admin.setPassword(passwordEncoder.encode("admin"));
+                admin.setRole(adminRole);
+                admin.setEnabled(true);
 
-            System.out.println("✅ Sample data created using existing community ID: " + community.getId());
+                userRepository.save(admin);
+
+                System.out.println("✔ Default admin user created: admin / admin");
+            }
+
+            // --- NORMAL USER -------------------------------------------------
+
+            if (userRepository.findByUsername("user").isEmpty()) {
+
+                User user = new User();
+                user.setUsername("user");
+                user.setEmail("user@example.com");
+                user.setPassword(passwordEncoder.encode("user123"));
+                user.setRole(userRole);
+                user.setEnabled(true);
+
+                userRepository.save(user);
+
+                System.out.println("✔ Default user created: user / user123");
+            }
         };
-    }*/
+    }
 }

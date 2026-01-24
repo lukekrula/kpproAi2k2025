@@ -1,51 +1,44 @@
 package cz.uhk.kppro.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "users")
+import java.util.ArrayList;
+import java.util.List;
+
+@Document(collection = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(unique = true, nullable = false)
     private String username;
-
-    @Column(nullable = false)
     private String password;
-
     private String email;
 
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
+    @DBRef
     private Role role;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private Member member;
+    private boolean enabled = true;
 
-
-    public Member getMember() {
-        return member;
+    public List<String> getOrganizationIds() {
+        return organizationIds;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setOrganizationIds(List<String> organizationIds) {
+        this.organizationIds = organizationIds;
     }
 
+    private List<String> organizationIds = new ArrayList<>();
 
-    public User() {
-        this.role = new Role();
-    }
+    public User() {}
 
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -81,4 +74,11 @@ public class User {
         this.email = email;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }
